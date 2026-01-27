@@ -1,0 +1,469 @@
+<app-nav-bar></app-nav-bar>
+<div style="display: flex; flex-direction: row;">
+    <app-side-bar></app-side-bar>
+
+
+        <!-- Layaout principal -->
+        <div class="pagos-content">
+            <header class="pagos__header">
+                <h1 class="ofertas-title pagos__title">Reporte de Pagos</h1>
+              </header>
+            <div class="row mt-1">
+
+                <div class="pagos-form-col">
+                  <div class="card pagos-form-card">
+                    <div class="card-body">
+                      <!-- Sección de Métodos de Pago -->
+                      <div class="payment-section">
+                        <h4 class="section-title">Seleccione el tipo de moneda</h4>
+                        <div class="payment-methods">
+                          <div class="payment-method" *ngFor="let metodo of ['VES', '$']">
+                            <input type="radio" name="metodoPago" [id]="'metodo-'+metodo" 
+                                   [value]="metodo" [checked]="metodoPagoSeleccionado === metodo"
+                                   (change)="seleccionarMetodoPago(metodo)" class="payment-method-input">
+                            <label [for]="'metodo-'+metodo" class="payment-method-label">
+                              <span class="payment-method-icon">{{metodo === 'VES' ? 'Bs' : '$'}}</span>
+                              <span class="payment-method-name">{{metodo === 'VES' ? 'Bolívares' : 'Dólares'}}</span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                
+                      <!-- Sección de Tipos de Pago -->
+                      <div class="payment-section" *ngIf="metodoPagoSeleccionado">
+                        <h4 class="section-title">Seleccione el método de pago</h4>
+                        <div class="payment-types">
+                          <div class="payment-type" *ngFor="let tipo of tiposPago">
+                            <input type="radio" name="tipo_pago" [id]="tipo" [value]="tipo"
+                                   [checked]="tipoPagoSeleccionado === tipo" (change)="seleccionarTipoPago(tipo)"
+                                   class="payment-type-input">
+                            <label [for]="tipo" class="payment-type-label">{{tipo}}</label>
+                          </div>
+                        </div>
+                      </div>
+                
+                      <!-- Sección de Registro de Pago -->
+                      <form class="payment-form" *ngIf="tipoPagoSeleccionado">
+                        <h4 class="section-title">Complete los datos del pago</h4>
+                
+                        <!-- Selección de Cuenta -->
+                        <div class="form-group" *ngIf="mostrarSelectorCuenta">
+                          <label class="form-label">Cuenta bancaria</label>
+                          <select class="form-select" (change)="seleccionarCuenta($event.target)">
+                            <option value="">Seleccione una cuenta</option>
+                            <option *ngFor="let cuenta of cuentas" [value]="cuenta.codbanc">
+                              {{cuenta.banco}} ({{cuenta.numcuent}})
+                            </option>
+                          </select>
+                        </div>
+                
+                        <!-- Info de la Cuenta Seleccionada -->
+                        <div class="account-card" *ngIf="cuentaSeleccionada">
+                          <div class="account-header">
+                            <img src="./../../../assets/images/logobanc/{{cuentaSeleccionada.numcuent.substring(0, 4)}}.png" 
+                                 alt="Logo banco" class="account-logo">
+                            <div class="account-info">
+                              <h5 class="account-name">
+                                {{cuentaSeleccionada.banco}}
+                                <button class="copy-btn" (click)="copiarAlPortapapeles(cuentaSeleccionada.banco)" title="Copiar nombre del banco">
+                                </button>
+                              </h5>
+                              
+                              <div class="account-details">
+                                <!-- Número de Cuenta -->
+                                <div class="detail-row">
+                                  <span class="detail-label">N. de Cuenta:</span>
+                                  <span class="detail-value">
+                                    {{cuentaSeleccionada.numcuent}}
+                                    <button class="copy-btn" (click)="copiarAlPortapapeles(cuentaSeleccionada.numcuent)" title="Copiar número de cuenta">
+                                      <i class="fas fa-copy"></i>
+                                    </button>
+                                  </span>
+                                </div>
+                                
+                                <!-- Teléfono -->
+                                <div class="detail-row" *ngIf="cuentaSeleccionada.telefono">
+                                  <span class="detail-label">Teléfono:</span>
+                                  <span class="detail-value">
+                                    {{cuentaSeleccionada.telefono}}
+                                    <button class="copy-btn" (click)="copiarAlPortapapeles(cuentaSeleccionada.telefono)" title="Copiar teléfono">
+                                      <i class="fas fa-copy"></i>
+                                    </button>
+                                  </span>
+                                </div>
+                                
+                                <!-- Cédula/RIF -->
+                                <div class="detail-row" *ngIf="cuentaSeleccionada.cedula">
+                                  <span class="detail-label">{{cuentaSeleccionada.cedula.length <= 8 ? 'Cédula' : 'RIF'}}:</span>
+                                  <span class="detail-value">
+                                    {{cuentaSeleccionada.cedula}}
+                                    <button class="copy-btn" (click)="copiarAlPortapapeles(cuentaSeleccionada.cedula)" title="Copiar cédula">
+                                      <i class="fas fa-copy"></i>
+                                    </button>
+                                  </span>
+                                </div>
+                                
+                                <!-- Titular -->
+                                <div class="detail-row" *ngIf="cuentaSeleccionada.titular">
+                                  <span class="detail-label">Titular:</span>
+                                  <span class="detail-value">
+                                    {{cuentaSeleccionada.titular}}
+                                    <button class="copy-btn" (click)="copiarAlPortapapeles(cuentaSeleccionada.titular)" title="Copiar nombre del titular">
+                                      <i class="fas fa-copy"></i>
+                                    </button>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <!-- Nota importante -->
+                          <div class="account-note mt-4">
+                            <i class="fas fa-info-circle text-danger"></i>
+                            <span class="text-danger">Verifique cuidadosamente los datos antes de realizar la transferencia.</span>
+                          </div>
+                        </div>
+                
+                        <!-- Monto a Cancelar - Destacado -->
+                        <div class="form-group amount-group" >
+                          <label class="form-label">Total Pagado</label>
+                          <div class="amount-display"  *ngIf="metodoPagoSeleccionado == 'VES'">
+                            {{formatearMonto(montoACancelar)}}
+                            <span class="currency-symbol">{{metodoPagoSeleccionado === 'VES' ? 'Bs' : '$'}}</span>
+                          </div>
+
+                          <div class="amount-display"  *ngIf="metodoPagoSeleccionado != 'VES'">
+                            {{formatearMonto(montoACancelard)}}
+                            <span class="currency-symbol">{{metodoPagoSeleccionado === 'VES' ? 'Bs' : '$'}}</span>
+                          </div>
+                          <span class="amount-note">Monto calculado según facturas seleccionadas</span>
+                          <div class="account-note mt-4">
+                            <i class="fas fa-info-circle text-danger"></i>
+                            <span class="text-danger">Asegurese de pagar el monto exacto indicado por el sistema.</span>
+                          </div>
+                        </div>
+
+                        <!-- Indicador de division de montos -->
+                        <!-- <div class="form-group amount-group">
+                          <h3 class="ofertas-title pagos__title">Monto pagado</h3>
+                          <input type="number" class="form-control" 
+                                 [(ngModel)]="montoPagado" 
+                                 name="monto_pagado" 
+                                 (change)="actualizarSaldoDisponible()"
+                                 [min]="0.01"
+                                 [step]="0.01"
+                                 required>
+                          
+                                 <div class="saldo-info">
+                                  <div *ngIf="montoPagado > 0" class="d-flex flex-column gap-2">
+                                    <div class="progress" style="height: 10px;">
+                                      <div class="progress-bar bg-success" 
+                                           [style.width]="(montoACancelar / montoPagado * 100) + '%'"
+                                           role="progressbar"
+                                           [attr.aria-valuenow]="montoACancelar"
+                                           aria-valuemin="0"
+                                           [attr.aria-valuemax]="montoPagado">
+                                      </div>
+                                    </div>
+                                
+                                    <div *ngIf="montoACancelar > 0" class="saldo-aplicado d-flex align-items-center">
+                                      <span class="badge bg-success me-2">
+                                        <i class="fas fa-check-circle me-1"></i>
+                                      </span>
+                                      <span class="me-2 fw-bold">Aplicado:</span>
+                                      <span class="text-success fw-bold">
+                                        {{ formatearMonto(montoACancelar) }} {{ metodoPagoSeleccionado === 'VES' ? 'Bs' : '$' }}
+                                      </span>
+                                      <span class="ms-2 text-muted small">
+                                        ({{ (montoACancelar / montoPagado * 100).toFixed(0) }}% del total)
+                                      </span>
+                                    </div>
+                                
+                                    <div class="saldo-disponible d-flex align-items-center">
+                                      <span class="badge bg-primary me-2">
+                                        <i class="fas fa-coins me-1"></i>
+                                      </span>
+                                      <span class="me-2 fw-bold">Disponible:</span>
+                                      <span class="text-primary fw-bold">
+                                        {{ formatearMonto(saldoDisponible) }} {{ metodoPagoSeleccionado === 'VES' ? 'Bs' : '$' }}
+                                      </span>
+                                      <span class="ms-2 text-muted small">
+                                        ({{ (saldoDisponible / montoPagado * 100).toFixed(0) }}% restante)
+                                      </span>
+                                    </div>
+                                
+                                    <div class="saldo-total d-flex align-items-center mt-2 pt-2 border-top">
+                                      <span class="badge bg-dark me-2">
+                                        <i class="fas fa-wallet me-1"></i>
+                                      </span>
+                                      <span class="me-2 fw-bold">Total transferido:</span>
+                                      <span class="text-dark fw-bold">
+                                        {{ formatearMonto(montoPagado) }} {{ metodoPagoSeleccionado === 'VES' ? 'Bs' : '$' }}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                          
+                          <small class="amount-note">Ingrese el monto total que va a pagar</small>
+                        </div> -->
+                                  
+                        <!-- Indicadores factura a factura -->
+                        <!-- <div *ngIf="selectedCount > 0" class="selected-invoices-section mt-4">
+                          <h3 class="ofertas-title pagos__title">Montos pagado por factura</h3>
+
+                          <div *ngFor="let key of getSelectedKeys()" class="invoice-payment-row mb-3 p-3 rounded" 
+                              [ngClass]="{
+                                'border-success bg-success-light': isFacturaPagadaCompleta(key),
+                                'border-warning bg-warning-light': !isFacturaPagadaCompleta(key)
+                              }">
+                            <div class="d-flex align-items-center justify-content-between">
+                              <div class="invoice-info">
+                                <div class="d-flex align-items-center">
+                                  <span class="badge me-2" [ngClass]="{
+                                        'bg-success': isFacturaPagadaCompleta(key),
+                                        'bg-warning': !isFacturaPagadaCompleta(key)
+                                      }">
+                                    <i class="fas" [ngClass]="{
+                                          'fa-check-circle': isFacturaPagadaCompleta(key),
+                                          'fa-exclamation-circle': !isFacturaPagadaCompleta(key)
+                                        }"></i>
+                                  </span>
+                                  
+                                  <strong>{{ selectedRowsMap[key].data.tipo_doc }}-{{ selectedRowsMap[key].data.numero }}</strong>
+                                </div>
+                                
+                                <div class="d-flex flex-wrap gap-3 mt-2">
+                                  <div class="saldo-info">
+                                    <span class="text-muted small">Saldo total:</span>
+                                    <span class="fw-bold">{{ (selectedRowsMap[key].data.saldo + selectedRowsMap[key].data.difc) | currency:(metodoPagoSeleccionado === 'VES' ? 'Bs ' : '$ ') }}</span>
+                                  </div>
+                                  
+                                  <div class="aplicado-info">
+                                    <span class="text-muted small">Aplicado:</span>
+                                    <span class="fw-bold text-success">{{ selectedRowsMap[key].montoAPagar | currency:(metodoPagoSeleccionado === 'VES' ? 'Bs ' : '$ ') }}</span>
+                                  </div>
+                                  
+                                  <div *ngIf="!isFacturaPagadaCompleta(key)" class="pendiente-info">
+                                    <span class="text-muted small">Pendiente:</span>
+                                    <span class="fw-bold text-danger">
+                                      {{ (selectedRowsMap[key].data.saldo + selectedRowsMap[key].data.difc - selectedRowsMap[key].montoAPagar) | currency:(metodoPagoSeleccionado === 'VES' ? 'Bs ' : '$ ') }}
+                                    </span>
+                                  </div>
+                                  
+                                  <div class="w-100 mt-1">
+                                    <div class="progress" style="height: 6px;">
+                                      <div class="progress-bar" 
+                                          [ngClass]="{
+                                            'bg-success': isFacturaPagadaCompleta(key),
+                                            'bg-warning': !isFacturaPagadaCompleta(key)
+                                          }"
+                                          [style.width]="getPorcentajePagado(key) + '%'">
+                                      </div>
+                                    </div>
+                                    <small class="text-muted">{{ getPorcentajePagado(key) }}% pagado</small>
+                                  </div>
+                                </div>
+                              </div>
+                              
+
+                            </div>
+                          </div>
+                        </div> -->
+
+                        <!-- Datos de Transferencia -->
+                        <div class="form-row">
+                          <!-- <div class="form-group col-md-6">
+                            <label class="form-label">Fecha de transferencia</label>
+                            <input [(ngModel)]="fechaTransferencia" type="date" class="form-control" name="fecha_transferencia" required>
+                          </div> -->
+                          <div class="form-group col-md-6">
+                            <label class="form-label">Número de referencia</label>
+                            <input type="text" class="form-control" placeholder="123456789" 
+                            [(ngModel)]="numeroReferencia" 
+                            name="numero_referencia" required>
+                          </div>
+                        </div>
+
+                        <!-- Facturas a Cancelar -->
+                        <div class="form-group">
+                          <label class="form-label">Facturas incluidas en este pago</label>
+                          <textarea class="form-control" rows="3" 
+                                    placeholder="Listado de facturas a cancelar"
+                                    [(ngModel)]="facturasACancelar" name="facturas" readonly></textarea>
+                        </div>
+                
+                        <!-- Comprobante -->
+                        <div class="form-group">
+                          <label class="form-label">Comprobante de pago</label>
+                          <div class="file-upload">
+                            <input type="file" id="comprobante" name="comprobante" 
+                                   (change)="handleFileUpload($event)" accept=".jpg,.jpeg,.png,.pdf">
+                            <label for="comprobante" class="upload-label">
+                              <i class="fas fa-cloud-upload-alt"></i>
+                              <span>{{ archivoComprobante ? archivoComprobante.name : 'Seleccionar archivo' }}</span>
+                            </label>
+                          </div>
+                          <small class="file-note">Formatos aceptados: JPG, PNG, PDF (Máx. 5MB)</small>
+                        </div>
+                
+                        <!-- Botón de Envío -->
+                        <button type="submit" class="submit-btn" [disabled]="!numeroReferencia && !archivoComprobante" (click)="enviapago()">
+                          Registrar Pago
+                          <i class="fas fa-paper-plane"></i>
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                
+                  
+                </div>
+
+                <!-- Selector de facturas -->
+                <div class="col pagos-table-col">
+                  <h1 class="ofertas-title pagos__title">Facturas a cancelar</h1>
+
+                    <!-- Información del Cliente -->
+                    <div class="container-fluid">
+                      <div class="row align-items-center">
+                        <!-- Tarjetas pequeñas -->
+                        <div class="col-md-4">
+                          <div class="card mb-2">
+                            <div class="card-body py-2">
+                              <h4 class="card-title text-primary">Días Crédito</h4>
+
+                              <p class="mb-0 fw-bold">{{(portalcliLogicaService.clienteData$ | async)?.formap}}</p>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                          <div class="card mb-2">
+                            <div class="card-body py-2">
+                              <h4 class="card-title text-primary">Monto Factura</h4>
+                              <p class="mb-0 fw-bold">{{(portalcliLogicaService.clienteData$ | async)?.mfactura}}</p>
+                            </div>
+                          </div>
+                        </div>
+                    
+                        <!-- Componente clicard al lado -->
+                        <div class="col-md-4">
+                          <app-clicard></app-clicard>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="container-fluid w-100 mt-4">
+                        <div class="login-container">
+                            <div class="d-flex justify-content-center align-items-center" *ngIf="isLoading">
+                              <div class="spinner-border text-success" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                              </div>
+                            </div>
+                          </div>
+
+                        <div class="row">
+                            <div class="container">
+                            <div class="d-flex align-items-center justify-content-left gap-3">
+                                <mat-form-field appearance="outline" class="mr-2" style="max-width: 300px;">
+                                <mat-label>Buscar documento..</mat-label>
+                                <input matInput (keyup)="applyFilters($event)" placeholder="Buscar por documento o número">
+                                </mat-form-field>
+
+                                <mat-checkbox [(ngModel)]="showSelectedOnly" (change)="toggleShowSelectedOnly($event)">Mostrar Seleccionadas</mat-checkbox>      
+                              
+                                <div class="rowd-flex justify-content-between align-items-center mb-3">
+                                  <div>
+                                    <label for="sortField">Ordenar por:</label>
+                                    <select id="sortField" [(ngModel)]="sortColumn" (change)="toggleSortDirection()">
+                                      <option value="numero">Documento</option>
+                                      <option value="emision">Emisión</option>
+                                      <option value="entregado">Entregado</option>
+                                      <option value="vence">Vence</option>
+                                      <option value="monto">Monto</option>
+                                      <option value="impuesto">I.V.A.</option>
+                                      <option value="reteiva">Ret/IVA</option>
+                                      <option value="saldo">Saldo</option>
+                                      <option value="ppago">P.Pago</option>
+                                      <option value="difc">D/Cambio</option>
+                                      <option value="emidolar">Cambio</option>
+                                      <option value="monto_dolar">Monto $</option>
+                                      <option value="saldo_dolar">Saldo $</option>
+                                    </select>
+                                    <button class="btn btn-sm btn-outline-secondary ml-2" (click)="toggleSortDirection()">
+                                      <i class="fas" [ngClass]="{'fa-sort-up': sortDirection === 'asc', 'fa-sort-down': sortDirection === 'desc'}"></i>
+                                    </button>
+                                  </div>
+                                </div>
+
+                                
+                              </div>
+                            </div>
+                        </div>
+                  
+                        <div *ngIf="showSelectedOnly && pagedPagos.length === 0">
+                            <p>No has seleccionado ninguna fila.</p>
+                        </div>
+                  
+                      <div class="table-responsive">
+                        <table class="table table-bordered pagos-table">
+                          <thead>
+                            <tr class="text-center">
+                              <th scope="col" class="align-middle">
+                                <mat-checkbox (change)="selectAll($event)"></mat-checkbox>
+                              </th>
+                              <th scope="col" class="align-middle" (click)="sortData({ active: 'numero', direction: sortColumn === 'numero' && sortDirection === 'asc' ? 'desc' : 'asc' })">Documento</th>
+                              <th scope="col" class="align-middle" (click)="sortData({ active: 'emision', direction: sortColumn === 'emision' && sortDirection === 'asc' ? 'desc' : 'asc' })">Emisión</th>
+                              <th scope="col" class="align-middle" (click)="sortData({ active: 'entregado', direction: sortColumn === 'entregado' && sortDirection === 'asc' ? 'desc' : 'asc' })">Entregado</th>
+                              <th scope="col" class="align-middle" (click)="sortData({ active: 'vence', direction: sortColumn === 'vence' && sortDirection === 'asc' ? 'desc' : 'asc' })">Vence</th>
+                              <th scope="col" class="align-middle" (click)="sortData({ active: 'dias', direction: sortColumn === 'dias' && sortDirection === 'asc' ? 'desc' : 'asc' })">Dias vencida</th>
+                              <th scope="col" class="align-middle" (click)="sortData({ active: 'monto', direction: sortColumn === 'monto' && sortDirection === 'asc' ? 'desc' : 'asc' })">Monto</th>
+                              <th scope="col" class="align-middle" (click)="sortData({ active: 'impuesto', direction: sortColumn === 'impuesto' && sortDirection === 'asc' ? 'desc' : 'asc' })">I.V.A.</th>
+                              <th scope="col" class="align-middle" (click)="sortData({ active: 'reteiva', direction: sortColumn === 'reteiva' && sortDirection === 'asc' ? 'desc' : 'asc' })">Ret/IVA</th>
+                              <th scope="col" class="align-middle" (click)="sortData({ active: 'saldo', direction: sortColumn === 'saldo' && sortDirection === 'asc' ? 'desc' : 'asc' })">Saldo</th>
+                              <th scope="col" class="align-middle" (click)="sortData({ active: 'ppago', direction: sortColumn === 'ppago' && sortDirection === 'asc' ? 'desc' : 'asc' })">P.Pago</th>
+                              <th scope="col" class="align-middle" (click)="sortData({ active: 'difc', direction: sortColumn === 'difc' && sortDirection === 'asc' ? 'desc' : 'asc' })">D/Cambio</th>
+                              <th scope="col" class="align-middle" (click)="sortData({ active: 'emidolar', direction: sortColumn === 'emidolar' && sortDirection === 'asc' ? 'desc' : 'asc' })">Cambio</th>
+                              <th scope="col" class="align-middle" (click)="sortData({ active: 'monto_dolar', direction: sortColumn === 'monto_dolar' && sortDirection === 'asc' ? 'desc' : 'asc' })">Monto $</th>
+                              <th scope="col" class="align-middle" (click)="sortData({ active: 'saldo_dolar', direction: sortColumn === 'saldo_dolar' && sortDirection === 'asc' ? 'desc' : 'asc' })">Saldo $</th>
+                              <th scope="col" class="align-middle" (click)="sortData({ active: 'preabono', direction: sortColumn === 'mfactura' && sortDirection === 'asc' ? 'desc' : 'asc' })">M.fact</th>
+                            </tr>
+                            
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let row of pagedPagos; let i = index" [ngClass]="{'table-primary': row.selected}" class="pagos-row">
+                              <td class="align-middle text-center">
+                                <mat-checkbox 
+                                  [(ngModel)]="row.selected" 
+                                  (change)="toggleRowSelection(row)"
+                                  > <!-- [disabled]="saldoDisponible <= 0 && !row.selected"  -->
+                                </mat-checkbox>
+                              </td>
+                              <td class="align-middle">{{ row.tipo_doc }}-{{ row.numero }}</td>
+                              <td class="align-middle">{{ row.emision }}</td>
+                              <td class="align-middle">{{ row.entregado ? row.entregado : 'No entregado' }}</td>
+                              <td class="align-middle">{{ row.vence }}</td>
+                              <td class="align-middle text-center">{{ row.dias }}</td>
+                              <td class="align-middle">{{ portalcliLogicaService.formatCurrency((row.monto))}}</td>
+                              <td class="align-middle">{{ portalcliLogicaService.formatCurrency((row.impuesto)) }}</td>
+                              <td class="align-middle">{{ portalcliLogicaService.formatCurrency((row.reteiva )) }}</td>
+                              <td class="align-middle" [ngStyle]="{'color': row.dias != 0 ? 'red' : 'green'}">{{ portalcliLogicaService.formatCurrency((row.saldo))  }}</td>                              <td class="align-middle">{{ row.ppago ? row.ppago : 0 }}</td>
+                              <td class="align-middle">{{ portalcliLogicaService.formatCurrency((row.difc )) }}</td>
+                              <td class="align-middle text-center">{{ portalcliLogicaService.formatCurrency(row.cdolar) }}</td>
+                              <td class="align-middle">{{ portalcliLogicaService.formatCurrency((row.monto / row.cdolar)) }}</td>
+                              <td class="align-middle">{{ portalcliLogicaService.formatCurrency(((row.saldo - row.preabono) / row.cdolar)) }}</td>
+                              <td class="align-middle">{{ row.mfactura }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                  
+                      <mat-paginator [length]="totalPages * itemsPerPage" [pageSize]="itemsPerPage" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons (page)="pageChanged($event)"></mat-paginator>
+                      <p>Total de filas seleccionadas: {{ selectedCount }}</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+</div>
+
+<app-footer></app-footer>

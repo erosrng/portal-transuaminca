@@ -1,0 +1,730 @@
+<app-nav-bar></app-nav-bar>
+
+<div style="display: flex; flex-direction: row;">
+  <app-side-bar></app-side-bar>
+  
+  <div class="container-fluid container-max">
+    <!-- Encabezado -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <header class="pagos__header">
+            <h1 class="ofertas-title pagos__title">Gestión de Reclamos</h1>
+        </header>
+      </div>
+    </div>
+
+    <!-- Stepper -->
+    <mat-stepper [linear]="isLinear" #stepper (selectionChange)="onStepChange($event)">
+      <!-- PASO 1: SELECCIÓN DE FACTURA -->
+      <mat-step [stepControl]="facturaForm" label="Buscar Factura">
+        <form [formGroup]="facturaForm">
+          <div class="row">
+            <div class="col-md-8">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Número de Factura</mat-label>
+                <input matInput 
+                  formControlName="numeroFactura" 
+                  (keyup.enter)="buscarFactura()"
+                  (input)="onNumeroFacturaChange()">
+                
+                <button matSuffix 
+                  mat-icon-button 
+                  (click)="buscarFactura()"
+                  [disabled]="isLoadingFactura || !facturaForm.get('numeroFactura')?.value">
+                  <mat-icon *ngIf="!isLoadingFactura">search</mat-icon>
+                  <div class="login-container">
+                    <span *ngIf="isLoadingFactura" class="ms-2">
+                      <span class="spinner-border spinner-border-sm text-success" role="status"></span>
+                    </span>
+                  </div>                
+                </button>
+                
+                <mat-hint>Ingrese el número de la factura</mat-hint>
+                <mat-error *ngIf="facturaForm.get('numeroFactura')?.hasError('required')">
+                  Este campo es requerido
+                </mat-error>
+                <mat-error *ngIf="facturaForm.get('numeroFactura')?.hasError('minlength')">
+                  Mínimo 3 caracteres
+                </mat-error>
+              </mat-form-field>
+              
+              <!-- Mensaje de error -->
+              <div *ngIf="errorFactura" class="alert alert-danger mt-2">
+                <mat-icon>error</mat-icon> {{errorFactura}}
+              </div>
+            </div>
+          </div>
+      
+          <!-- Información de factura encontrada -->
+          <div class="row mt-4" *ngIf="facturaEncontrada">
+            <div class="col-12">
+              <mat-card class="info-card">
+                <mat-card-header>
+                  <mat-card-title>
+                    <mat-icon class="me-2 text-success">check_circle</mat-icon>
+                    Factura Encontrada
+                  </mat-card-title>
+                  <mat-card-subtitle>Puede proceder con el reclamo</mat-card-subtitle>
+                </mat-card-header>
+                
+                <mat-card-content>
+                  <div class="table-responsive">
+                    <table class="table table-sm table-borderless mb-0">
+                      <tbody>
+                        <tr>
+                          <!-- Número de factura -->
+                          <td class="border-end pe-3" style="width: 15%;">
+                            <div class="text-muted">NÚMERO</div>
+                            <div class="fw-bold">{{facturaEncontrada.numero}}</div>
+                          </td>
+                          
+                          <!-- Fecha -->
+                          <td class="border-end pe-3" style="width: 15%;">
+                            <div class="text-muted">FECHA</div>
+                            <div>{{facturaEncontrada.fecha | date:'dd/MM/yyyy'}}</div>
+                          </td>
+                          
+                          <!-- Cliente -->
+                          <td class="border-end pe-3" style="width: 25%;">
+                            <div class="text-muted">CLIENTE</div>
+                            <div class="text-truncate" title="{{facturaEncontrada.cliente}}">
+                              {{facturaEncontrada.cliente}}
+                            </div>
+                          </td>
+                          
+                          <!-- Almacén -->
+                          <td class="border-end pe-3" style="width: 15%;">
+                            <div class="text-muted">ALMACÉN</div>
+                            <div>{{facturaEncontrada.almacendes || 'N/A'}}</div>
+                          </td>
+                          
+                          <!-- Total -->
+                          <td style="width: 15%;">
+                            <div class="text-muted">TOTAL</div>
+                            <div class="fw-bold text-primary">
+                              ${{facturaEncontrada.total | number:'1.2-2'}}
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+      
+          <!-- Mensaje si no hay factura -->
+          <div class="row mt-4" *ngIf="!facturaEncontrada && !isLoadingFactura">
+            <div class="col-12">
+              <mat-card class="info-card">
+                <mat-card-content class="text-center">
+                  <mat-icon class="text-muted" style="font-size: 48px; height: 48px; width: 48px;">
+                    receipt
+                  </mat-icon>
+                  <h5 class="mt-2">Busque una factura</h5>
+                  <p class="">Ingrese el número de factura para comenzar el proceso de reclamo</p>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+      
+          <!-- Sección de reclamos anteriores (SIEMPRE VISIBLE) -->
+          <div class="row mt-4">
+            <div class="col-12">
+              <mat-card>
+                <mat-card-header>
+                  <mat-card-title>
+                    <mat-icon class="me-2">history</mat-icon>
+                    Mis Reclamos Anteriores
+                    <span *ngIf="isLoadingReclamos" class="ms-2">
+                      <span class="spinner-border spinner-border-sm text-success" role="status"></span>
+                    </span>
+                  </mat-card-title>
+                  <mat-card-subtitle>Últimos 10 reclamos realizados</mat-card-subtitle>
+                  <button mat-icon-button matTooltip="Refrescar lista" 
+                          (click)="refrescarReclamos()" 
+                          class="ms-auto">
+                    <mat-icon>refresh</mat-icon>
+                  </button>
+                </mat-card-header>
+                
+                <mat-card-content>
+                  <!-- Mensaje si no hay reclamos -->
+                  <div *ngIf="!isLoadingReclamos && reclamosAnteriores.length === 0" class="text-center py-4">
+                    <mat-icon class="text-muted" style="font-size: 48px;">inventory_2</mat-icon>
+                    <p class="mt-2">No tiene reclamos anteriores</p>
+                  </div>
+                  
+                  <!-- Tabla de reclamos -->
+                  <div *ngIf="reclamosAnteriores.length > 0" class="table-responsive">
+                    <table class="table table-sm table-hover">
+                      <thead class="table-light">
+                        <tr>
+                          <th width="15%">N° Reclamo</th>
+                          <th width="15%">Factura</th>
+                          <th width="15%">Fecha</th>
+                          <th width="15%">Almacén</th>
+                          <th width="15%" class="text-end">Total</th>
+                          <th width="10%">Estado</th>
+                          <th width="15%" class="text-center">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let reclamo of reclamosAnteriores" 
+                            [class.table-active]="mostrarDetalle && reclamoSeleccionado?.numero === reclamo.numero">
+                          <td class="fw-bold">{{reclamo.numero}}</td>
+                          <td>{{reclamo.factura}}</td>
+                          <td>{{reclamo.fecha | date:'dd/MM/yyyy'}}</td>
+                          <td>{{reclamo.almacen}}</td>
+                          <td class="text-end fw-bold">${{reclamo.total_reclamado | number:'1.2-2'}}</td>
+                          <td>
+                            <span class="badge" 
+                                  [ngClass]="{'bg-warning': reclamo.estado === 'A',
+                                             'bg-success': reclamo.estado === 'C'}">
+                              {{reclamo.estado === 'A' ? 'Abierto' : 
+                                reclamo.estado === 'C' ? 'Cerrado' : 
+                                reclamo.estado}}
+                            </span>
+                          </td>
+                          <td class="text-center">
+                            <button mat-button color="primary" 
+                                    (click)="cargarDetalleReclamo(reclamo.numero, reclamo)">
+                              <span *ngIf="isLoadingDetalle && reclamoSeleccionado?.numero === reclamo.numero">
+                                <span class="spinner-border spinner-border-sm" role="status"></span>
+                              </span>
+                              <span *ngIf="!(isLoadingDetalle && reclamoSeleccionado?.numero === reclamo.numero)">
+                                {{mostrarDetalle && reclamoSeleccionado?.numero === reclamo.numero ? 'Ocultar' : 'Ver'}} Detalle
+                              </span>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+          
+          <!-- Detalle de reclamo seleccionado (se despliega debajo) -->
+          <div *ngIf="mostrarDetalle && reclamoSeleccionado" class="row mt-3">
+            <div class="col-12">
+              <mat-card class="bg-light detalle-expandido">
+                <mat-card-header>
+                  <mat-card-title>
+                    <mat-icon class="me-2">description</mat-icon>
+                    Detalle del Reclamo {{reclamoSeleccionado.numero}}
+                  </mat-card-title>
+                  <mat-card-subtitle>
+                    Factura: {{reclamoSeleccionado.factura}} | 
+                    Fecha: {{reclamoSeleccionado.fecha | date:'dd/MM/yyyy'}} | 
+                    Estado: {{reclamoSeleccionado.estado}}
+                  </mat-card-subtitle>
+                  <button mat-icon-button (click)="cerrarDetalle()" class="ms-auto">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-card-header>
+                
+                <mat-card-content>
+                  <!-- Información general -->
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <p><strong>Cliente:</strong> {{reclamoSeleccionado.nombre_cliente}}</p>
+                      <p><strong>Almacén:</strong> {{reclamoSeleccionado.almacen}}</p>
+                    </div>
+                    <div class="col-md-6">
+                      <p><strong>Total Reclamado:</strong> ${{reclamoSeleccionado.total_reclamado | number:'1.2-2'}}</p>
+                      <p><strong>Observaciones:</strong> {{reclamoSeleccionado.observaciones}}</p>
+                    </div>
+                  </div>
+                  
+                  <!-- Tabla de productos del reclamo -->
+                  <div *ngIf="detalleReclamo.length > 0">
+                    <h6 class="border-bottom pb-2 mb-3">Productos Reclamados</h6>
+                    <div class="table-responsive">
+                      <table class="table table-sm">
+                        <thead class="table-light">
+                          <tr>
+                            <th width="10%">Código</th>
+                            <th width="25%">Descripción</th>
+                            <th width="10%" class="text-center">Lote</th>
+                            <th width="10%" class="text-end">Cantidad</th>
+                            <th width="15%" class="text-end">Precio</th>
+                            <th width="15%" class="text-end">Subtotal</th>
+                            <th width="15%">Motivo</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let item of detalleReclamo">
+                            <td class="fw-semibold">{{item.codigo}}</td>
+                            <td>{{item.desca}}</td>
+                            <td class="text-center">{{item.lote || 'N/A'}}</td>
+                            <td class="text-end">{{item.cana | number:'1.0-0'}}</td>
+                            <td class="text-end">${{item.precad | number:'1.2-2'}}</td>
+                            <td class="text-end fw-bold">${{item.totad | number:'1.2-2'}}</td>
+                            <td>
+                              <span class="badge bg-secondary">{{item.motivo}}</span>
+                            </td>
+                          </tr>
+                        </tbody>
+                        <tfoot class="table-light">
+                          <tr>
+                            <td colspan="5" class="text-end fw-bold">Total:</td>
+                            <td class="text-end fw-bold text-primary">
+                              ${{reclamoSeleccionado.total_reclamado | number:'1.2-2'}}
+                            </td>
+                            <td></td>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
+                  
+                  <!-- Mensaje si no hay detalle -->
+                  <div *ngIf="!isLoadingDetalle && detalleReclamo.length === 0" class="text-center py-3">
+                    <p class="text-muted">No se encontró detalle para este reclamo</p>
+                  </div>
+                  
+                  <!-- Loading -->
+                  <div *ngIf="isLoadingDetalle" class="text-center py-3">
+                    <span class="spinner-border spinner-border-sm text-success" role="status"></span>
+                    <span class="ms-2">Cargando detalle...</span>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+      
+          <div class="row mt-4">
+            <div class="col-12 text-end">
+              <button mat-raised-button 
+                      color="primary" 
+                      matStepperNext 
+                      [disabled]="!facturaForm.valid || !facturaEncontrada">
+                Siguiente: Productos
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- PASO 2: PRODUCTOS DEL RECLAMO -->
+      <mat-step [stepControl]="productosForm" label="Productos del Reclamo">
+            <form [formGroup]="productosForm">
+            <div class="row mb-4">
+                <div class="col-12">
+                <h3>Productos de la factura {{facturaEncontrada?.numero}}</h3>
+                <p class="">
+                    Seleccione los productos a reclamar y especifique la cantidad
+                    <span *ngIf="isLoadingProductos" class="ms-2">
+                    <span class="spinner-border spinner-border-sm text-success" role="status"></span>
+                    Cargando productos...
+                    </span>
+                </p>
+                </div>
+            </div>
+        
+            <!-- Mensaje si no hay productos -->
+            <div *ngIf="!isLoadingProductos && productosFactura.length === 0" class="alert alert-info">
+                <mat-icon class="me-2">info</mat-icon>
+                No se encontraron productos para esta factura
+            </div>
+        
+            <!-- Tabla de productos -->
+            <div class="table-responsive" *ngIf="productosFactura.length > 0">
+                <table class="table table-hover table-sm mb-3">
+                <thead class="table-light">
+                    <tr>
+                    <th width="50">
+                        <mat-checkbox (change)="toggleAll($event)"></mat-checkbox>
+                    </th>
+                    <th width="100">Código</th>
+                    <th>Descripción</th>
+                    <th width="100" class="text-end">Cant.</th>
+                    <th width="100" class="text-end">Precio</th>
+                    <th width="100" class="text-end">Lote</th>
+                    <th width="100">Vence</th>
+                    <th width="120" class="text-center">Reclamar</th>
+                    <th width="150">Motivo</th>
+                    </tr>
+                </thead>
+                <tbody formArrayName="productos">
+                    <tr *ngFor="let producto of productosFactura; let i = index" [formGroupName]="i">
+                    <!-- Selección -->
+                    <td>
+                        <mat-checkbox formControlName="seleccionado"
+                                    (change)="toggleProducto(producto, i)"></mat-checkbox>
+                    </td>
+                    
+                    <!-- Código -->
+                    <td class="fw-semibold">{{producto.codigo}}</td>
+                    
+                    <!-- Descripción -->
+                    <td>{{producto.descripcion}}</td>
+                    
+                    <!-- Cantidad -->
+                    <td class="text-end">{{producto.cantidad | number:'1.0-0'}}</td>
+                    
+                    <!-- Precio -->
+                    <td class="text-end">${{producto.preciod | number:'1.2-2'}}</td>
+                    
+                    <!-- Lote -->
+                    <td class="text-end ">{{producto.lote || 'N/A'}}</td>
+                    
+                    <!-- Fecha vencimiento -->
+                    <td>
+                        <span *ngIf="producto.flote" class="badge" 
+                            [ngClass]="{'bg-success': esFechaFutura(producto.flote),
+                                        'bg-warning': !esFechaFutura(producto.flote)}">
+                        {{producto.flote | date:'dd/MM/yyyy'}}
+                        </span>
+                        <span *ngIf="!producto.flote" class="">N/A</span>
+                    </td>
+                    
+                    <!-- Cantidad a reclamar -->
+                    <td>
+                        <mat-form-field appearance="outline" class="w-100">
+                        <input matInput type="number" 
+                                formControlName="cantidadReclamar"
+                                [min]="0" 
+                                [max]="producto.cantidad"
+                                (change)="actualizarCantidad(producto, i, $event)">
+                        </mat-form-field>
+                    </td>
+                    
+                    <!-- Motivo -->
+                    <td>
+                        <mat-form-field appearance="outline" class="w-100">
+                          <!-- Opción A: Enviar solo el ID -->
+                          <mat-select formControlName="motivoId" 
+                            (selectionChange)="actualizarMotivo(producto, i, $event)">
+                            <mat-option value="">Seleccione motivo</mat-option>
+                            <mat-option *ngFor="let motivo of motivosReclamo" 
+                                        [value]="motivo.id">
+                              {{motivo.motivo}} 
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                    </td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+        
+            <!-- Resumen de productos seleccionados -->
+            <div class="row mt-4" *ngIf="productosSeleccionados.length > 0">
+                <div class="col-12">
+                <mat-card class="summary-card">
+                    <mat-card-header>
+                    <mat-card-title>
+                        <mat-icon class="me-2">shopping_cart</mat-icon>
+                        Resumen del Reclamo
+                    </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                    <div class="row">
+                        <div class="col-md-4">
+                        <p><strong>Productos seleccionados:</strong> {{productosSeleccionados.length}}</p>
+                        </div>
+                        <div class="col-md-4">
+                        <p><strong>Total reclamado:</strong> ${{calcularTotalReclamadoD() | number:'1.2-2'}}</p>
+                        </div>
+                        <div class="col-md-4">
+                        <p><strong>Cantidad total:</strong> {{calcularCantidadTotal() | number:'1.0-0'}}</p>
+                        </div>
+                    </div>
+                    </mat-card-content>
+                </mat-card>
+                </div>
+            </div>
+        
+            <div class="row mt-4">
+                <div class="col-6">
+                <button mat-stroked-button matStepperPrevious>
+                    <mat-icon>arrow_back</mat-icon>
+                    Anterior
+                </button>
+                </div>
+                <div class="col-6 text-end">
+                <button mat-raised-button color="primary" matStepperNext 
+                        [disabled]="productosSeleccionados.length === 0">
+                    Siguiente: Resumen
+                    <mat-icon>arrow_forward</mat-icon>
+                </button>
+                </div>
+            </div>
+            </form>
+      </mat-step>
+
+      <!-- PASO 3: RESUMEN Y OBSERVACIONES -->
+      <!-- PASO 3: RESUMEN Y OBSERVACIONES -->
+<mat-step [stepControl]="resumenForm" label="Resumen y Envío">
+  <form [formGroup]="resumenForm">
+    <div class="row">
+      <div class="col-12">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Observaciones Generales del Reclamo</mat-label>
+          <textarea matInput 
+            formControlName="observacionesGenerales" 
+            rows="4"
+            placeholder="Describa detalladamente el problema encontrado..."></textarea>
+          <mat-error *ngIf="resumenForm.get('observacionesGenerales')?.hasError('required')">
+            Las observaciones son requeridas
+          </mat-error>
+          <mat-error *ngIf="resumenForm.get('observacionesGenerales')?.hasError('minlength')">
+            Mínimo 10 caracteres
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    
+    <!-- Sección para subir foto -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon class="me-2">photo_camera</mat-icon>
+              Foto del Reclamo (Opcional)
+            </mat-card-title>
+            <mat-card-subtitle>
+              Adjunte una foto que evidencie el problema (máx. 5MB - JPG, PNG, GIF)
+            </mat-card-subtitle>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <div class="row">
+              <div class="col-md-8">
+                <!-- Input para subir archivo -->
+                <div class="file-upload-container">
+                  <input type="file" 
+                         id="fileInput"
+                         accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif"
+                         (change)="onFileSelected($event)"
+                         style="display: none;">
+                  
+                  <div class="d-flex align-items-center">
+                    <!-- Solo HTML, sin cambios en TypeScript -->
+                      <input type="file" 
+                      #fileInput
+                      accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif"
+                      (change)="onFileSelected($event)"
+                      style="display: none;">
+
+                      <button mat-raised-button 
+                      color="primary" 
+                      type="button"
+                      (click)="fileInput.click()">
+                      <mat-icon class="me-2">attach_file</mat-icon>
+                      Seleccionar Foto
+                      </button>
+                    
+                    <div class="ms-3" *ngIf="archivoSeleccionado">
+                      <div class="d-flex align-items-center">
+                        <mat-icon class="text-success me-2">check_circle</mat-icon>
+                        <span class="fw-bold">{{nombreArchivo}}</span>
+                        <button mat-icon-button 
+                                color="warn" 
+                                class="ms-2"
+                                (click)="limpiarArchivo()"
+                                matTooltip="Quitar archivo">
+                          <mat-icon>close</mat-icon>
+                        </button>
+                      </div>
+                      <small class="text-muted">
+                        Tamaño: {{archivoSeleccionado ? formatFileSize(archivoSeleccionado.size) : ''}}
+                      </small>
+                    </div>
+                  </div>
+                  
+                  <!-- Loading cuando se sube -->
+                  <div *ngIf="isLoadingArchivo" class="mt-2">
+                    <div class="d-flex align-items-center">
+                      <span class="spinner-border spinner-border-sm text-success me-2" role="status"></span>
+                      <span>Subiendo foto...</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-4">
+                <div class="alert alert-info">
+                  <mat-icon class="float-start me-2">info</mat-icon>
+                  <small>
+                    <strong>Recomendaciones:</strong><br>
+                    • Tome foto clara del producto<br>
+                    • Enfóquese en el problema<br>
+                    • Incluya lote y fecha si es posible
+                  </small>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+    
+    <!-- Resumen final con tabla -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <mat-card class="final-summary">
+          <mat-card-header>
+            <mat-card-title class="d-flex align-items-center">
+              <mat-icon class="me-2">summarize</mat-icon>
+              Resumen Final del Reclamo
+            </mat-card-title>
+            <mat-card-subtitle>Revise los detalles antes de enviar</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            
+            <!-- Información de la factura -->
+            <div class="row mb-4">
+              <div class="col-12">
+                <h3 class="border-bottom pb-2 mb-3">
+                  <mat-icon class="me-2">receipt</mat-icon>
+                  Información de Factura
+                </h3>
+                <div class="table-responsive">
+                  <table class="table table-sm table-bordered">
+                    <tbody>
+                      <tr>
+                        <td class="bg-light fw-bold" width="20%">Número de Factura</td>
+                        <td width="30%">{{facturaEncontrada?.numero || 'N/A'}}</td>
+                        <td class="bg-light fw-bold" width="20%">Fecha</td>
+                        <td width="30%">{{facturaEncontrada?.fecha | date:'dd/MM/yyyy'}}</td>
+                      </tr>
+                      <tr>
+                        <td class="bg-light fw-bold">Cliente</td>
+                        <td>{{facturaEncontrada?.cliente || 'N/A'}}</td>
+                        <td class="bg-light fw-bold">Almacén</td>
+                        <td>{{facturaEncontrada?.almacendes || 'N/A'}}</td>
+                      </tr>
+                      <tr>
+                        <td class="bg-light fw-bold">Total Factura</td>
+                        <td>${{facturaEncontrada?.total | number:'1.2-2'}}</td>
+                        <td class="bg-light fw-bold">Total a Reclamar</td>
+                        <td class="fw-bold text-primary">${{totalReclamado | number:'1.2-2'}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+    
+            <!-- Tabla de productos a reclamar -->
+            <div class="row">
+              <div class="col-12">
+                <h3 class="border-bottom pb-2 mb-3">
+                  <mat-icon class="me-2">shopping_cart</mat-icon>
+                  Productos a Reclamar ({{productosSeleccionados.length}})
+                </h3>
+                <div class="table-responsive">
+                  <table class="table table-sm table-hover">
+                    <thead class="table-light">
+                      <tr>
+                        <th width="10%" class="text-center">#</th>
+                        <th width="15%">Código</th>
+                        <th width="30%">Descripción</th>
+                        <th width="10%" class="text-center">Lote</th>
+                        <th width="10%" class="text-end">Cant. Fact.</th>
+                        <th width="10%" class="text-end">Cant. Recl.</th>
+                        <th width="15%" class="text-end">Precio</th>
+                        <th width="15%" class="text-end">Subtotal</th>
+                        <th width="15%">Motivo</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let producto of productosSeleccionados; let i = index">
+                        <td class="text-center fw-bold">{{i + 1}}</td>
+                        <td class="fw-semibold">{{producto.codigo}}</td>
+                        <td>{{producto.descripcion}}</td>
+                        <td class="text-center">{{producto.lote || 'N/A'}}</td>
+                        <td class="text-end">{{producto.cantidad | number:'1.0-0'}}</td>
+                        <td class="text-end fw-bold">{{producto.cantidadReclamar | number:'1.0-0'}}</td>
+                        <td class="text-end">${{producto.preciod | number:'1.2-2'}}</td>
+                        <td class="text-end fw-bold text-primary">
+                          ${{(producto.cantidadReclamar * producto.preciod) | number:'1.2-2'}}
+                        </td>
+                        <td>
+                          <span class="badge bg-secondary fs-3">{{producto.motivoReclamo}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tfoot class="table-light">
+                      <tr>
+                        <td colspan="6" class="text-end fw-bold">TOTAL RECLAMADO:</td>
+                        <td colspan="3" class="text-end fw-bold fs-4 text-primary">
+                          ${{totalReclamado | number:'1.2-2'}}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="9" class="">
+                          <mat-icon class="align-text-bottom me-1" style="font-size: 16px;">info</mat-icon>
+                          Se reclaman {{productosSeleccionados.length}} producto(s) de {{productosFactura.length}} en la factura
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </div>
+    
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+    
+    <div class="row mt-4">
+      <div class="col-6">
+        <button mat-stroked-button matStepperPrevious>
+          <mat-icon>arrow_back</mat-icon>
+          Anterior
+        </button>
+      </div>
+      <div class="col-6 text-end">
+        <button mat-raised-button 
+                color="primary" 
+                (click)="enviarReclamo()" 
+                [disabled]="!resumenForm.valid || isLoadingArchivo">
+          <span *ngIf="isLoadingArchivo" class="me-2">
+            <span class="spinner-border spinner-border-sm" role="status"></span>
+          </span>
+          <mat-icon>send</mat-icon>
+          {{isLoadingArchivo ? 'Enviando...' : 'Enviar Reclamo'}}
+        </button>
+      </div>
+    </div>
+  </form>
+</mat-step>
+
+    </mat-stepper>
+
+    <!-- Información adicional -->
+    <!-- <div class="row mt-5">
+      <div class="col-12">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon class="me-2">info</mat-icon>
+              Información importante sobre reclamos
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <ul>
+              <li>Los reclamos serán atendidos en un plazo máximo de 48 horas hábiles</li>
+              <li>Para productos perecederos, debe adjuntar fotos del estado actual</li>
+              <li>Conserve el empaque original hasta que el reclamo sea resuelto</li>
+              <li>Para medicamentos controlados, se requiere documentación adicional</li>
+              <li>Puede consultar el estado de su reclamo en la sección "Mis Reclamos"</li>
+            </ul>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div> -->
+    
+  </div>
+</div>
+
+<app-footer></app-footer>

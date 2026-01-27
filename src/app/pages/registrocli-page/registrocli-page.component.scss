@@ -1,0 +1,224 @@
+/*
+ * PROTEO ERP
+ * Desarrollador: © EROS RANGEL
+ */
+
+ @use '../../../styles/variables.scss' as vars;
+ .loader {
+     display: flex;
+     flex-direction: column; 
+     justify-content: center;
+     align-items: center;
+     position: fixed; 
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(255, 255, 255, 0.8); 
+     z-index: 5; 
+ }
+ 
+ .loader-icon {
+     width: 50px;
+     height: 50px;
+     border: 5px solid vars.$background-fondo; 
+     border-top: 5px solid vars.$menu-color; 
+     border-radius: 50%;
+     animation: spin 1s linear infinite; 
+     margin-bottom: 20px; 
+ }
+ 
+ /* Animación de giro */
+ @keyframes spin {
+     0% { transform: rotate(0deg); }
+     100% { transform: rotate(360deg); }
+ }
+ 
+ /* Estilo del texto del loader */
+ .loader-text {
+     font-size: 1.2em;
+     color: #333;
+     text-align: center;
+ }
+ /*FIN DEL LOADER*/
+ 
+ .portal {
+     display: flex;
+     width: 100%;
+     height: 100%;
+     background-color: vars.$background-fondo;
+ }
+ 
+ .portal__login,
+ .portal__registro {
+     flex: 1;
+     padding: 2rem 0 0 0;
+     display: flex;
+     flex-direction: column;
+     /*justify-content: space-between;  Distribuye los elementos en tres secciones */
+     align-items: center;
+     background-color: vars.$background-fondo;
+ }
+ 
+ .portal__logo {
+     width: 10%;
+     margin-bottom: 1rem;
+ }
+ 
+ .portal__title {
+     font-size: 2rem;
+     color: vars.$menu-color;
+     margin-bottom: 2rem;
+     text-align: center;
+ }
+ 
+ .portal__form {
+     width: 70%;
+     max-width: 80%;
+     margin-top: 20%;
+     margin-bottom: auto;
+ }
+ 
+ .portal__input {
+     width: 100%;
+     padding: 0.75rem;
+     margin-bottom: 1rem;
+     border: 1px solid #ccc;
+     border-radius: 5px;
+     font-size: 1rem;
+     display: flex;
+     align-items: center;
+ }
+ 
+ .portal__input-icon {
+     margin-right: 0.5rem;
+ }
+ 
+ .portal__footer {
+     margin-top: 1rem;
+     text-align: center;
+     color: vars.$menu-color;
+     font-size: 2.5rem;
+     font-weight: 1;
+ }
+ 
+
+ .login__background{
+     height: 100%;
+     width: 100%;
+     position: absolute;
+     background-size: cover;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     overflow: hidden;
+ }
+
+ /* Contenedor principal de inputs */
+ .container_input_custom {
+     display: flex;
+     flex-direction: column;
+     gap: 20px;
+ }
+ .login__container{
+     width: 100%;
+ }
+
+ /* Estilo de los select inputs */
+ .input_dropdown select {
+     width: 100%;
+     min-width: 7rem;
+     padding: 12px;
+     border: 1px solid #ccc;
+     border-radius: 5px;
+     background-color: vars.$background-fondo;
+     font-size: 14px;
+     box-sizing: border-box;
+ }
+ .modelo2 {
+     width: 74vh;
+ }
+ .input_button{
+     display: flex;
+     flex-direction: column;
+     justify-items: center;
+     align-items: center;
+     width: 100%;
+     margin-bottom: 2.5rem;
+ }
+ 
+ .input_button button {
+     width: 100%;
+     padding: 1rem;
+     background-color: vars.$text-color2;
+     border: none;
+     border-radius: 1rem;
+     color: vars.$background-fondo;
+     font-size: 1.5rem;
+     cursor: pointer;
+     transition: background-color 0.3s ease;
+ }
+ 
+ .input_button button:hover {
+     background-color: vars.$menu-color;
+     color: vars.$background-fondo;
+ }
+ .register_link{
+     display: flex;
+     flex-direction: column; 
+     justify-content: center;
+     align-items: center;
+ }
+ 
+ .register_link_item {
+     margin: 1.3rem 0;
+     text-decoration: none;
+     color: vars.$menu-color;
+     font-size: 1.5rem;
+ }
+     /*ESTILOS REGISTRO DE CLIENTES*/
+     .registrate__boton_custom {
+         color: vars.$resaltador; /* Color estético para resaltar */
+         font-weight: bold; /* Texto en negrita */
+     }
+ 
+     .registrate__boton {
+         color: vars.$resaltador; 
+         font-weight: bold; 
+         cursor: pointer; 
+         transition: transform 0.3s ease-in-out;
+     }
+ 
+     @media (max-width: 600px) {
+         /* .portal{
+             flex-direction: column-reverse;
+         }
+         .portal__login{
+             height: 80%;
+             padding: 1rem;
+             margin: 0;
+         } */
+         .portal__title{
+             margin-bottom: 0;
+         }
+         .portal__registro {
+             flex: unset;
+             height: 92%;
+         }
+         .portal__image {
+             display: none;
+         }
+         .portal__logo {
+             width: 20%;
+             margin-top: 1rem;
+         }
+         .portal__form {
+             margin-top: 1%;
+             display: flex;
+             flex-direction: column;
+             gap: 2rem;
+         }
+         .portal__footer {
+             margin-bottom: 10rem;
+         }
+     }

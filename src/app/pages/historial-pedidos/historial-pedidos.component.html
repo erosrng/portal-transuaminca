@@ -1,0 +1,166 @@
+<app-nav-bar></app-nav-bar>
+
+<div style="display: flex; flex-direction: row;">
+      <app-side-bar></app-side-bar>
+      <div class="container-fluid container-max">
+        <div class="row mb-5">
+          <div class="col-12">
+            <h3 class="card-title text-primary"><i class="fas fa-circle-nodes"></i><span> Historial de pedidos</span></h3>
+          </div>
+        </div>
+
+        <!-- <div class="col-12 flex-row">
+            <div class="card box-detail">
+                <div class="card-body box-ped">
+                    <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="task" class="icon"></mat-icon>
+                    Pedidos Procesados: <span>{{historialPedidos.length | number}}</span>
+                </div>
+            </div>
+
+            <div class="card box-detail">
+                <div class="card-body box-ped">
+                    <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="inventory" class="icon"></mat-icon>
+                    Unidades vendidas: <span>{{totalUnidades | number}}</span>
+                </div>
+            </div>
+
+            <div class="card box-detail">
+                <div class="card-body box-ped">
+                    <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="attach_money" class="icon"></mat-icon>
+                    Valor $: <span>{{totalValorDolar | number: '1.0-3'}}</span>
+                </div>
+            </div>
+
+        </div> -->
+
+        <div class="row mt-5" *ngIf="historialPedidos && historialPedidos.length > 0">
+          <div class="col-12">
+            <table class="historialped__historial-table">
+              <thead>
+                <tr>
+                  <th scope="col" class="border-left-top">Número</th>
+                  <th scope="col">Cliente</th>
+                  <th scope="col">Fecha</th>
+                  <th scope="col">Total</th>
+                  <th scope="col">IVA</th>
+                  <th scope="col" style="text-align: right;">Total General</th>
+                  <th scope="col" style="text-align: right;">Total General $</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col" style="text-align: center;">Detalle</th>
+                  <th scope="col" class="border-right-top" style="text-align: center;">Descargar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let pedido of historialPedidos">
+                  <td>{{ pedido.numero }}</td>
+                  <td>{{ pedido.nombre }}</td>
+                  <td>{{ pedido.fecha }}</td>
+                  <td>{{ pedido.totals | number: '1.2-2'}}</td>
+                  <td>{{ pedido.iva | number:'1.2-2' }}</td>
+                  <td>{{ pedido.totalg | number:'1.2-2' }}</td>
+                  <td>{{ pedido.totalg / authService.getTasa() | number:'1.2-2'}}</td>
+                  <td>{{ pedido.unidades | number:'1.0-0' }}</td>
+                  <td  style="text-align: center; cursor: pointer;">
+                    <i class="show__detail fa-solid fa-eye"
+                        title="Mostrar detalle"
+                        data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop"
+                        (click)="openDetail(pedido)"
+                      ></i>
+                  </td>
+                  <td style="text-align: center; cursor: pointer;">
+                    <i class="fa-solid fa-file-pdf"
+                       title="Ver en Excel"
+                       (click)="abrirEnlaceExcel(pedido.idpedido)"
+                       style="color: #217346; font-size: 1.2em;">
+                    </i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="row mt-5" *ngIf="!historialPedidos || historialPedidos.length === 0">
+          <h3>Aun no se encontraron pedidos</h3>
+        </div>
+      </div>
+
+
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl"> <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Detalle de pedido</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" *ngIf="pedidoActivo">
+          <div class="row">
+            <div class="col-md-6 box-modal">
+              <div class="div-text">
+                <label><strong>Cliente:</strong> {{pedidoActivo.nombre }}</label><br>
+                <label><strong>Número:</strong> {{pedidoActivo.numero }}</label><br>
+                <label><strong>Fecha:</strong> {{pedidoActivo.fecha }}</label><br>
+                <label><strong>Total General:</strong> {{pedidoActivo.totalg | number: '1.2-2'}}</label>
+                <label><strong>Total General $:</strong> {{pedidoActivo.totalg / authService.getTasa() | number: '1.2-2'}}</label>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- <div class="row mt-3">
+            <div class="col-12">
+              <p><strong>Rif/CI:</strong> {{ pedidoActivo?.rifci }}</p>
+              <p><strong>Dirección:</strong> {{ pedidoActivo?.direccion }}</p>
+              <p><strong>Vendedor:</strong> {{ pedidoActivo?.nomvend }}</p>
+              <p><strong>Email:</strong> {{ pedidoActivo?.email }}</p>
+              <p><strong>Grupo:</strong> {{ pedidoActivo?.grupo }}</p>
+              <p><strong>Observaciones:</strong> {{ pedidoActivo?.observ1 }}</p>
+            </div>
+          </div> -->
+
+          <div class="row mt-5" *ngIf="detallePedidoActivo && detallePedidoActivo.length > 0">
+            <div class="col-12">
+              <h5 class="mb-3">Detalle de Productos</h5>
+              <table class="historialped__historial-table">
+                <thead>
+                  <tr>
+                    <th scope="col" class="border-left-top">Código</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Precio Unitario</th>
+                    <th scope="col">Precio Unitario $</th>
+                    <th scope="col">Descuento 3</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Total $</th>
+                    <th scope="col" class="border-right-top">IVA</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let detalle of detallePedidoActivo">
+                    <td>{{ detalle.codigo }}</td>
+                    <td>{{ detalle.desca }}</td>
+                    <td>{{ detalle.cana  | number: '1.2-2' }}</td>
+                    <td>{{ detalle.preca | number: '1.2-2'}}</td>
+                    <td>{{ detalle.precad| number: '1.2-2'}}</td>
+                    <td>{{ detalle.descu3 }}%</td>
+                    <td>{{ detalle.tota | number: '1.2-2'}}</td>
+                    <td>{{ detalle.totad| number: '1.2-2'}}</td>
+                    <td>{{ detalle.iva }}%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row mt-3" *ngIf="!detallePedidoActivo || detallePedidoActivo.length === 0">
+            <div class="col-12">
+              <p>No hay detalles disponibles para este pedido.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

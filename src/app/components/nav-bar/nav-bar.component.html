@@ -1,0 +1,53 @@
+<!---Pantalla principal---->
+<section class="navbar__general">
+
+    <nav class="navbar__content navbar__primary">
+
+        <div class="navbar__hamburger">
+            <img src="./assets/images/chiquitoblanco.png" (click)="toggleMenu()" alt="">
+            <i id="hamburger" class="hamburguer__icon fa-solid fa-bars" (click)="toggleMenu()"></i>
+        </div>
+
+        <div class="navbar__links">
+            <div class="container-fluid container__details">
+                <div class="d-flex justify-content-end">
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown__toggle" type="button" id="idcli" data-bs-toggle="dropdown" aria-expanded="false">
+                          {{ getNombreClienteSeleccionado() }} <i *ngIf="clientes" class="fas fa-solid fa-angle-down"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="idcli" *ngIf="clientes">
+                          <li *ngFor="let cliente of clientes">
+                            <a class="dropdown-item" href="javascript:void(0)" [attr.data-value]="cliente.cliente" (click)="onClienteSeleccionado(cliente)">
+                              ({{ cliente.cliente }}) {{ cliente.nombre }}
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                </div>
+
+                <div class="container text-center">
+                    <div class="row flex-nowrap">
+                        <div class="col details__cli">
+                            BCV<br>
+                            {{ authService.getTasa() }}
+                        </div>
+                        <!-- <div class="col details__cli">
+                            SEGMENTO<br>
+                            {{ (portalcliLogicaService.clienteData$ | async)?.descripseg }}
+                        </div> -->
+                        <!-- <div class="col details__cli">
+                            SEGMENTO:<br>
+                            {{ (portalcliLogicaService.clienteData$ | async)?.descvol }} %
+                        </div>
+                        <div *ngIf="authService.getCmatriz()" class="col details__cli">
+                            GRUPO<br>
+                            {{ authService.getCmatriz() }}
+                        </div> -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </nav>
+</section>

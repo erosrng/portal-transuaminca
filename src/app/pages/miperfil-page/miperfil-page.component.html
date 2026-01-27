@@ -1,0 +1,145 @@
+<app-nav-bar></app-nav-bar>
+
+<div style="display: flex; flex-direction: row;">
+  <app-side-bar></app-side-bar>
+
+  <div class="mi-perfil">
+      <header class="mi-perfil__header">
+        <h1 class="ofertas-title mi-perfil__title">Mi perfil</h1>
+      </header>
+    
+      <div class="mi-perfil__content">
+        <aside class="mi-perfil__sidebar">
+          <section class="mi-perfil__datos">
+          <h3 class="card-title text-primary">Datos del cliente</h3>
+            <p>Cliente: {{ (portalcliLogicaService.clienteData$ | async)?.nombre }}</p>
+            <p>RIF: {{ (portalcliLogicaService.clienteData$ | async)?.rifci }}</p>
+            <p>Días de crédito: {{ (portalcliLogicaService.clienteData$ | async)?.formap }}</p>
+            <p>Código SICM:  {{ (portalcliLogicaService.clienteData$ | async)?.sicm }}</p>
+            <p>Correo Electrónico: {{ (portalcliLogicaService.clienteData$ | async)?.email }}</p>
+            <p>Usuario: {{ authService.getUsuario() }}</p>
+            <p>Teléfono: {{ (portalcliLogicaService.clienteData$ | async)?.email }}</p>
+            <div class="text-center">
+              <a href="#" class="btn btn__showpeds" data-bs-toggle="modal" data-bs-target="#actualizarDatosModal">Actualizar datos</a>
+            </div>
+          </section>
+        </aside>
+    
+        <main class="mi-perfil__main">
+          <div class="mi-perfil__left">
+  
+                  <div class="card card__info">
+                    <app-clicard></app-clicard>
+                  </div>
+              
+                  <div class="card mt-4 card__info">
+                      <div class="card-body ">
+                          <h3 class="card-title text-primary">Asesor Comercial</h3>
+                          <p class="card-text">
+                              <span class="cardinfo__text">NOMBRE: <b>{{ (portalcliLogicaService.clienteData$ | async)?.nombrevd }}</b></span><br>
+                              <span class="cardinfo__text">TELÉFONO: <b>{{ (portalcliLogicaService.clienteData$ | async)?.telefonovd }}</b></span><br>
+                              <span class="cardinfo__text">CORREO: <span class="title__limit">{{ (portalcliLogicaService.clienteData$ | async)?.emailvd }}</span>                                    
+                            </span>
+                          </p>
+                      </div>
+                  </div>
+          </div>
+  
+          <!-- <div class="mi-perfil__right">
+              <app-historialped></app-historialped>
+          </div> -->
+  
+        </main>
+
+        
+
+      </div>
+  
+      <div class="pre__footer"></div>
+  
+  </div>
+</div>
+
+<div class="modal fade" id="actualizarDatosModal" tabindex="-1" aria-labelledby="actualizarDatosModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-light">
+        <h1 class="card-title text-primary" id="actualizarDatosModalLabel">Actualizar datos</h1>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form #updateForm="ngForm" (ngSubmit)="actualizarDatos(updateForm.value)">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="cliente" class="form-label text-muted">Cliente</label>
+              <input type="text" class="form-control p-3" id="cliente" name="cliente" [(ngModel)]="fichaData.cliente" placeholder="Nombre del contacto" disabled="true">
+            </div>
+            <div class="col-md-7 mb-3">
+              <label for="nombre" class="form-label text-muted">Nombre</label>
+              <input type="text" class="form-control p-3" id="nombre" name="nombre" [(ngModel)]="fichaData.nombre" placeholder="" disabled="true">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="correoElectronico" class="form-label text-muted">Correo electrónico</label>
+              <input type="email" class="form-control p-3" id="correoElectronico" name="correoElectronico" [(ngModel)]="fichaData.correoElectronico" placeholder="ejemplo@correo.com">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="telefono" class="form-label text-muted">Teléfono</label>
+              <div class="input-group">
+                <select class="form-select" [(ngModel)]="prefijoTelefono" name="prefijoTelefono" style="max-width: 80px;">
+                  <option value="0414">0414</option>
+                  <option value="0424">0424</option>
+                  <option value="0412">0412</option>
+                  <option value="0416">0416</option>
+                  <option value="0426">0426</option>
+                </select>
+                <input type="text" maxlength="7" class="form-control p-3" id="telefono" name="telefono" [(ngModel)]="fichaData.telefono" placeholder="">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="contacto" class="form-label text-muted">Contacto</label>
+              <input type="text" class="form-control p-3" id="contacto" name="contacto" [(ngModel)]="fichaData.contacto" placeholder="Nombre del contacto">
+            </div>
+            <!-- <div class="col-md-12 mb-3">
+              <label for="direccion" class="form-label text-muted">Dirección</label>
+              <input type="text" class="form-control p-3" id="direccion" name="direccion" [(ngModel)]="fichaData.dire11" placeholder="">
+            </div> -->
+          </div>
+          <div class="row">
+            <div class="col-md-8 mb-3">
+              <label for="contrasenaActual" class="form-label text-muted">Contraseña actual</label>
+              <div class="input-group">
+                <input type="password" class="form-control p-3" (keyup)="verificarContrasena();" id="contrasenaActual" name="contrasenaActual" [(ngModel)]="contrasenaActual" placeholder="Contraseña actual">
+                <!-- <button type="button" class="btn btn-outline-secondary" (click)="verificarContrasena()">Verificar Contraseña</button> -->
+              </div>
+              <div *ngIf="contrasenaInvalida" class="text-danger">Contraseña incorrecta.</div>
+              <div *ngIf="contrasenaValida" class="text-success">Contraseña correcta.</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="nuevaContrasena" class="form-label text-muted">Nueva contraseña</label>
+              <input type="password" class="form-control p-3" id="nuevaContrasena" name="nuevaContrasena" [(ngModel)]="nuevaContrasena" placeholder="Nueva contraseña" [disabled]="!contrasenaValida">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="confirmarContrasena" class="form-label text-muted">Confirmar contraseña</label>
+              <input type="password" class="form-control p-3" id="confirmarContrasena" name="confirmarContrasena" [(ngModel)]="confirmarContrasena" placeholder="Confirmar contraseña" [disabled]="!contrasenaValida">
+              <div *ngIf="nuevaContrasena !== confirmarContrasena && (updateForm.controls['confirmarContrasena']?.dirty || updateForm.controls['confirmarContrasena']?.touched)" class="text-danger">
+                Las contraseñas no coinciden.
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn__showpeds btn-primary w-100" [disabled]="nuevaContrasena !== confirmarContrasena || !contrasenaValida"> <i class="fa-solid fa-check"></i> Guardar cambios</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

@@ -1,0 +1,84 @@
+<section class="menu__general"  id="menu" [class.open]="portalcliLogicaService.isMenuOpen">
+    <div class="menu__content">
+        <img src="./../../../assets/images/bannerlogoeros.png" style="width: 20rem;position: relative;margin: 0 auto;" alt="">
+
+        <ul class="nav flex-column menu__nav">
+            <li class="nav-item" >
+                <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/home')">
+                    <i class="fas fa-home"></i><span *ngIf="portalcliLogicaService.isMenuOpen"> Inicio</span>
+                </a>
+            </li>
+
+            <!-- <li class="nav-item">
+                <a class="nav-link menu__link" href="#" data-bs-toggle="collapse" data-bs-target="#pedidosDropdown" aria-expanded="false">
+                    <i class="fas fa-shopping-cart"></i><span *ngIf="portalcliLogicaService.isMenuOpen"> Toma de pedidos</span> <i class="fas fa-solid fa-angle-down menu__dropdown-icon"></i>
+                </a>
+                <div class="collapse menu__dropdown-content" id="pedidosDropdown">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link menu__dropdown-link" href="javascript:void(0)" (click)="navigateTo('/pedidos')">
+                                <i class="fas fa-boxes"></i><span *ngIf="portalcliLogicaService.isMenuOpen"> Inventario</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu__dropdown-link" href="javascript:void(0)" (click)="navigateTo('/tomaexcel')">
+                                <i class="fas fa-file-excel"></i><span *ngIf="portalcliLogicaService.isMenuOpen"> Por Excel</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li> -->
+
+            <li class="nav-item">
+                <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/miperfil')">
+                    <i class="fas fa-user"></i><span *ngIf="portalcliLogicaService.isMenuOpen"> Encomiendas</span>
+                </a>
+            </li>
+
+            <!-- <li class="nav-item">
+                <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/pagos')">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span *ngIf="portalcliLogicaService.isMenuOpen"> Pagos</span>
+                    <span class="badge bg-danger ms-2" *ngIf="portalcliLogicaService.isMenuOpen">NUEVO!</span>
+                </a>
+            </li> -->
+
+            <li class="nav-item">
+                <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/miperfil')">
+                    <i class="fas fa-user"></i><span *ngIf="portalcliLogicaService.isMenuOpen"> Perfil</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/historialpedidos')">
+                    <i class="fas fa-history"></i><span *ngIf="portalcliLogicaService.isMenuOpen"> Historial de pedidos</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/reclamos')">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span *ngIf="portalcliLogicaService.isMenuOpen"> Reclamos</span>
+                    <span class="translate-middle badge rounded-pill bg-danger nuevo-badge"
+                    *ngIf="portalcliLogicaService.isMenuOpen">
+                        NUEVO!
+                    </span>
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link menu__link" href="javascript:void(0)" (click)="logout()">
+                    <i class="fas fa-sign-out-alt"></i><span *ngIf="portalcliLogicaService.isMenuOpen"> Cerrar sesión</span>
+                </a>
+            </li>
+        </ul>
+
+
+        <div class="menu__footer" *ngIf="portalcliLogicaService.isMenuOpen">
+            Insuaminca, + cerca de ti
+        </div>
+    </div>
+</section>
+
+<div class="overlay" [class.active]="portalcliLogicaService.isMenuOpen" (click)="portalcliLogicaService.closeMenu()"></div>

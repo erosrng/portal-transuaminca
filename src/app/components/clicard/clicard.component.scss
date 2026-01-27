@@ -1,0 +1,70 @@
+@use '../../../styles/variables.scss' as vars;
+
+.card-title {
+    border-bottom: 1px solid vars.$lineas-separetor; 
+    padding-bottom: 10px;
+  }
+.text-primary{
+    color: vars.$menu-color !important;
+}
+.title__limit{
+    color: vars.$menu-color-seconday;
+}
+.cardinfo__text{
+    color: vars.$menu-color;
+}
+.saldo__content {
+    border-radius: 1rem !important;
+}
+.rounded {
+    background-color: vars.$text-color2;
+}
+
+.col-md-4 {
+    border-right: 1px solid vars.$lineas-separetor; 
+}
+
+.col-md-4:last-child {
+    border-right: none;
+}
+
+* {
+    font-size: 13px !important;
+}
+
+.th-top-green {
+    background: #6bc32c;
+    color: #FFF;
+    border-bottom: 2px solid #ededed;
+    border-left: 2px solid #ededed;
+}
+
+.th-center-green {
+    background: #6bc32c;
+    color: #FFF;
+}
+
+.th-bottom-green {
+
+}
+
+.th-border-grey {
+    border-bottom: 1px solid #CCC;
+}
+
+.th-center {
+    border-bottom: 2px solid #ededed;
+    background: #0084c5;
+    color: #FFF;
+}
+
+.th-center-no-border {
+
+}
+
+.blue {
+    background: #0084c5;
+    color: #FFF;
+    border-bottom: 2px solid #ededed;
+
+}

@@ -1,0 +1,197 @@
+@use '../../../styles/variables.scss' as vars;
+@use './../home-page/home-page.component.scss';
+@use '../../components/nav-bar/nav-bar.component.scss';
+@use './../carrito-page/carrito-page.component.scss';
+
+.mi-perfil {
+    background-color: vars.$background-fondo;
+    width: 100%;
+    padding: 2rem;
+    margin-top: 5rem;
+    padding: 20px;
+    z-index: 1;
+  
+    &__header {
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+    }
+  
+    &__title {
+        font-size: 3rem;
+        color: vars.$menu-color;
+    }
+  
+    &__content {
+      display: flex;
+      margin: 3rem;
+    }
+  
+    &__sidebar {
+      width: 25%;
+      padding-right: 20px;
+    }
+  
+    &__main {
+        width: 75%;
+        display: flex;
+        flex-direction: row;
+        gap: 2rem;
+    }
+  
+    &__subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    &__datos {
+      color: vars.$menu-color;
+    }
+    .mi-perfil__left{
+        width: 33%;
+    }
+    .mi-perfil__right{
+        width: 70%;
+    }
+    &__datos,
+    &__informacion,
+    &__asesor,
+    &__filtros,
+    &__pedidos {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      color: vars.$menu-color;
+    }
+    &__filtros{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    &__informacion-items {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+  
+    &__informacion-item {
+      text-align: center;
+    }
+  
+    &__informacion-saldo {
+      margin-top: 15px;
+      text-align: center;
+    }
+    .busca__pedido {
+        background-color: vars.$text-color2;
+        color: vars.$background-fondo;
+        font-size: 1.2rem;
+        border: none;
+        padding: 5px 12px;
+        cursor: pointer;
+        border-radius: 1rem; 
+    }
+    .busca__pedido:hover {
+        background-color: vars.$text-color2-hover;
+    }
+    
+  }
+
+@media screen and (max-width: 768px) {
+  .mi-perfil {
+    background-color: vars.$background-fondo;
+    width: 100%;
+    padding: 2rem;
+    margin-top: 5rem;
+    padding: 20px;
+    z-index: 1;
+
+    &__header {
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+    }
+
+    &__title {
+      font-size: 3rem;
+      color: vars.$menu-color;
+    }
+
+    &__content {
+      display: flex;
+      margin: 3rem;
+      flex-direction: column;
+    }
+
+    &__sidebar {
+      width: 100%;
+      padding-right: 20px;
+    }
+
+    &__main {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      gap: 2rem;
+    }
+
+    &__subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    &__datos {
+      color: vars.$menu-color;
+    }
+    .mi-perfil__left{
+      width: 100%;
+    }
+    .mi-perfil__right{
+      width: 100%;
+    }
+    &__datos,
+    &__informacion,
+    &__asesor,
+    &__filtros,
+    &__pedidos {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      color: vars.$menu-color;
+    }
+    &__filtros{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    &__informacion-items {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    &__informacion-item {
+      text-align: center;
+    }
+
+    &__informacion-saldo {
+      margin-top: 15px;
+      text-align: center;
+    }
+    .busca__pedido {
+      background-color: vars.$text-color2;
+      color: vars.$background-fondo;
+      font-size: 1.2rem;
+      border: none;
+      padding: 5px 12px;
+      cursor: pointer;
+      border-radius: 1rem;
+    }
+    .busca__pedido:hover {
+      background-color: vars.$text-color2-hover;
+    }
+
+  }
+}

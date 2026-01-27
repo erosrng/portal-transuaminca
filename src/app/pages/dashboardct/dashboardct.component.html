@@ -1,0 +1,346 @@
+<app-nav-bar (openMenu)="openMenu($event)"></app-nav-bar>
+
+<div style="display: flex; flex-direction: row;">
+    <mat-sidenav-container>
+        <mat-sidenav mode="over" [opened]="toggleMenu">
+            <app-side-bar></app-side-bar>
+        </mat-sidenav>
+        <mat-sidenav-content class="w-100">
+            <div class="container-fluid container-max">
+                <!-- Header del CT -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="mb-4">
+                                    <mat-icon class="me-2" style="vertical-align: middle;">dashboard</mat-icon>
+                                    Centro de Transferencia - Seguimiento de Pedidos
+                                </h2>
+                                
+                                <!-- Filtros -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-3">
+                                        <mat-form-field appearance="outline" class="w-100">
+                                            <mat-label>Fecha Desde</mat-label>
+                                            <input matInput [matDatepicker]="pickerInicio" 
+                                                   [(ngModel)]="fechaInicio" 
+                                                   (dateChange)="filtrarPedidos()">
+                                            <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+                                            <mat-datepicker #pickerInicio></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    
+                                    <div class="col-md-3">
+                                        <mat-form-field appearance="outline" class="w-100">
+                                            <mat-label>Fecha Hasta</mat-label>
+                                            <input matInput [matDatepicker]="pickerFin" 
+                                                   [(ngModel)]="fechaFin" 
+                                                   (dateChange)="filtrarPedidos()">
+                                            <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+                                            <mat-datepicker #pickerFin></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    
+                                    <div class="col-md-3">
+                                        <mat-form-field appearance="outline" class="w-100">
+                                            <mat-label>Estado</mat-label>
+                                            <mat-select [(ngModel)]="estadoFiltro" (selectionChange)="filtrarPedidos()">
+                                                <mat-option value="TODOS">Todos los estados</mat-option>
+                                                <mat-option value="COMPLETO">Completo</mat-option>
+                                                <mat-option value="PARCIAL">Parcial</mat-option>
+                                                <mat-option value="PENDIENTE">Pendiente</mat-option>
+                                                <mat-option value="RECHAZADO">Rechazado</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    
+                                    <div class="col-md-3">
+                                        <mat-form-field appearance="outline" class="w-100">
+                                            <mat-label>Representante</mat-label>
+                                            <mat-select [(ngModel)]="representanteFiltro" (selectionChange)="filtrarPedidos()">
+                                                <mat-option value="TODOS">Todos los representantes</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    
+                                    <div class="col-12 d-flex justify-content-between mt-2">
+                                        <div>
+                                            <button mat-button (click)="resetFiltros()" class="me-2">
+                                                <mat-icon>restart_alt</mat-icon>
+                                                Limpiar Filtros
+                                            </button>
+                                            <button mat-raised-button color="primary" (click)="exportarExcel()">
+                                                <mat-icon>download</mat-icon>
+                                                Exportar a Excel
+                                            </button>
+                                        </div>
+                                        
+                                        <div class="text-muted">
+                                            Mostrando {{pedidosFiltrados.length}} pedidos
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumen por Representante -->
+                <div class="row mt-4" *ngIf="resumenRepresentantes.length > 0">
+                    <div class="col-12">
+                        <h4 class="mb-3">
+                            <mat-icon class="me-2" style="vertical-align: middle;">people</mat-icon>
+                            Resumen por Representante
+                        </h4>
+                    </div>
+                    
+                    <div class="col-12">
+                        <div class="row g-3">
+                            <div class="col-md-4 col-lg-3" *ngFor="let resumen of resumenRepresentantes">
+                                <div class="card h-100 resumen-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{resumen.representanteNombre}}</h5>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="text-muted">Pedidos:</span>
+                                            <strong>{{resumen.totalPedidos}}</strong>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="text-muted">Solicitado:</span>
+                                            <strong>{{resumen.totalSolicitado | number}}</strong>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="text-muted">Cargado:</span>
+                                            <strong>{{resumen.totalCargado | number}}</strong>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <span class="text-muted">% Otorgado:</span>
+                                            <strong [ngClass]="getClasePorcentaje(resumen.porcentajePromedio)">
+                                                {{resumen.porcentajePromedio | number:'1.1-1'}}%
+                                            </strong>
+                                        </div>
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar" 
+                                                 role="progressbar" 
+                                                 [style.width]="resumen.porcentajePromedio + '%'"
+                                                 [attr.aria-valuenow]="resumen.porcentajePromedio" 
+                                                 aria-valuemin="0" 
+                                                 aria-valuemax="100">
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <small class="text-muted">Valor: {{resumen.valorTotal | currency:'USD':'symbol':'1.0-0'}}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla de Pedidos -->
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="mb-3">
+                                    <mat-icon class="me-2" style="vertical-align: middle;">list_alt</mat-icon>
+                                    Detalle de Pedidos
+                                </h4>
+                                
+                                <div class="table-responsive">
+                                    <table mat-table [dataSource]="pedidosFiltrados" class="mat-elevation-z8">
+                                        
+                                        <!-- Número de Pedido -->
+                                        <ng-container matColumnDef="numeroPedido">
+                                            <th mat-header-cell *matHeaderCellDef> N° Pedido </th>
+                                            <td mat-cell *matCellDef="let pedido" class="fw-bold">
+                                                {{pedido.numeroPedido}}
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Fecha -->
+                                        <ng-container matColumnDef="fecha">
+                                            <th mat-header-cell *matHeaderCellDef> Fecha </th>
+                                            <td mat-cell *matCellDef="let pedido">
+                                                {{pedido.fechaPedido | date:'dd/MM/yyyy'}}
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Representante -->
+                                        <ng-container matColumnDef="representante">
+                                            <th mat-header-cell *matHeaderCellDef> Representante </th>
+                                            <td mat-cell *matCellDef="let pedido">
+                                                <div class="d-flex align-items-center">
+                                                    <mat-icon class="me-2" style="font-size: 18px;">person</mat-icon>
+                                                    {{pedido.representante.nombre}}
+                                                    <small class="text-muted ms-2">({{pedido.representante.codigo}})</small>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Cliente -->
+                                        <ng-container matColumnDef="cliente">
+                                            <th mat-header-cell *matHeaderCellDef> Cliente </th>
+                                            <td mat-cell *matCellDef="let pedido">
+                                                <div>
+                                                    <strong>{{pedido.cliente.nombre}}</strong>
+                                                    <div class="text-muted small">
+                                                        {{pedido.cliente.codigo}} • {{pedido.cliente.ciudad}}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Solicitado -->
+                                        <ng-container matColumnDef="solicitado">
+                                            <th mat-header-cell *matHeaderCellDef> Solicitado </th>
+                                            <td mat-cell *matCellDef="let pedido" class="text-center">
+                                                <span class="badge bg-secondary">
+                                                    {{pedido.cantidadSolicitada | number}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Cargado -->
+                                        <ng-container matColumnDef="cargado">
+                                            <th mat-header-cell *matHeaderCellDef> Cargado </th>
+                                            <td mat-cell *matCellDef="let pedido" class="text-center">
+                                                <span class="badge" 
+                                                      [ngClass]="pedido.cantidadCargada === pedido.cantidadSolicitada ? 'bg-success' : 'bg-warning'">
+                                                    {{pedido.cantidadCargada | number}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Porcentaje Otorgado -->
+                                        <ng-container matColumnDef="porcentaje">
+                                            <th mat-header-cell *matHeaderCellDef> % Otorgado </th>
+                                            <td mat-cell *matCellDef="let pedido">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                                        <div class="progress-bar" 
+                                                             [ngClass]="getClasePorcentaje(pedido.porcentajeOtorgado)"
+                                                             role="progressbar" 
+                                                             [style.width]="pedido.porcentajeOtorgado + '%'">
+                                                        </div>
+                                                    </div>
+                                                    <span [ngClass]="getClasePorcentaje(pedido.porcentajeOtorgado)">
+                                                        {{pedido.porcentajeOtorgado | number:'1.1-1'}}%
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Valor Total -->
+                                        <ng-container matColumnDef="valorTotal">
+                                            <th mat-header-cell *matHeaderCellDef> Valor Total </th>
+                                            <td mat-cell *matCellDef="let pedido" class="text-end">
+                                                {{pedido.valorTotal | currency:'USD':'symbol':'1.0-0'}}
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Estado -->
+                                        <ng-container matColumnDef="estado">
+                                            <th mat-header-cell *matHeaderCellDef> Estado </th>
+                                            <td mat-cell *matCellDef="let pedido">
+                                                <span class="badge" 
+                                                      [ngClass]="{
+                                                        'bg-success': pedido.estado === 'COMPLETO',
+                                                        'bg-warning': pedido.estado === 'PARCIAL',
+                                                        'bg-info': pedido.estado === 'PENDIENTE',
+                                                        'bg-danger': pedido.estado === 'RECHAZADO'
+                                                      }">
+                                                    {{pedido.estado}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Acciones -->
+                                        <ng-container matColumnDef="acciones">
+                                            <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                                            <td mat-cell *matCellDef="let pedido">
+                                                <button mat-icon-button 
+                                                        color="primary" 
+                                                        (click)="verDetallePedido(pedido)"
+                                                        matTooltip="Ver detalle">
+                                                    <mat-icon>visibility</mat-icon>
+                                                </button>
+                                                <button mat-icon-button 
+                                                        color="accent"
+                                                        matTooltip="Imprimir remito">
+                                                    <mat-icon>print</mat-icon>
+                                                </button>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+                                    </table>
+                                </div>
+
+                                <!-- Mensaje si no hay datos -->
+                                <div *ngIf="pedidosFiltrados.length === 0" class="text-center py-5">
+                                    <mat-icon class="display-1 text-muted">inbox</mat-icon>
+                                    <h5 class="mt-3">No hay pedidos que coincidan con los filtros</h5>
+                                    <p class="text-muted">Intenta con otros criterios de búsqueda</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Totales Generales -->
+                <div class="row mt-4">
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <mat-icon class="display-6 text-primary">receipt_long</mat-icon>
+                                <h3 class="mt-2">{{pedidosFiltrados.length}}</h3>
+                                <p class="text-muted mb-0">Total Pedidos</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <mat-icon class="display-6 text-success">inventory</mat-icon>
+                                <h3 class="mt-2">
+                                    {{ getPorcentajeGeneral() | number:'1.1-1' }}%
+                                </h3>
+                                <p class="text-muted mb-0">Unidades Solicitadas</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <mat-icon class="display-6 text-info">check_circle</mat-icon>
+                                <h3 class="mt-2">
+                                    {{ getPorcentajeGeneral() | number:'1.1-1' }}%
+                                </h3>
+                                <p class="text-muted mb-0">Unidades Cargadas</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <mat-icon class="display-6 text-warning">percent</mat-icon>
+                                <h3 class="mt-2">
+                                    {{ getPorcentajeGeneral() | number:'1.1-1' }}%
+                                </h3>
+                                <p class="text-muted mb-0">% Promedio Otorgado</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <app-footer></app-footer>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

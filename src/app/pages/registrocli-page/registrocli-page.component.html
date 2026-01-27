@@ -1,0 +1,153 @@
+<div class="portal" id="login__container">
+
+  <div class="loader-overlay" *ngIf="isLoading">
+    <div class="d-flex justify-content-center align-items-center h-100">
+      <div class="spinner-border text-success" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="portal__login">
+      <img src="./assets/images/InsuamincaLogo.png" alt="Logo Insuanet" class="portal__logo" />
+      <h1 class="portal__title">¡Regístrate en Insuanet!</h1>
+
+      <section class="login__container d-flex justify-content-center align-items-center vh-100 mt-5">
+          <div class="card shadow" style="max-width: 500px; width: 100%;">
+
+            <div class="card-body">
+              <form [formGroup]="registerForm">
+        
+                <div class="row g-3 mb-3 d-flex align-items-end">
+                  <div class="col-md-5">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Tipo</mat-label>
+                      <mat-select formControlName="idType">
+                        <mat-option *ngFor="let type of idTypes" [value]="type">{{ type }}</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="registerForm.get('idType')?.hasError('required') && registerForm.get('idType')?.touched">
+                        El tipo es requerido.
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-7 d-flex">
+                    <mat-form-field appearance="outline" class="w-100 me-2">
+                      <mat-label>RIF</mat-label>
+                      <input matInput formControlName="rif" placeholder="123456789" type="text" maxlength="10"> <mat-error *ngIf="registerForm.get('rif')?.hasError('required') && registerForm.get('rif')?.touched">
+                        El RIF es requerido.
+                      </mat-error>
+                      <mat-error *ngIf="registerForm.get('rif')?.hasError('pattern') && registerForm.get('rif')?.touched">
+                        El RIF debe contener solo números (7-10 dígitos).
+                      </mat-error>
+                    </mat-form-field>
+                    <button mat-raised-button color="primary" type="button" (click)="checkRif()"
+                            [disabled]="registerForm.get('idType')?.invalid || registerForm.get('rif')?.invalid || isLoading"
+                            style="height: 56px;"> Verificar
+                    </button>
+                  </div>
+                </div>
+
+                <h3 *ngIf="nombreCli"  style="text-align: center;color: #053354; margin-top: -10px; font-size: 1.2em;">{{ nombreCli }}</h3>
+
+                <p *ngIf="msjRif" [style.color]="isRifChecked ? '#28a745' : 'red'" style="text-align: center; margin-top: -10px; margin-bottom: 15px; font-size: 0.95em;">
+                  {{ msjRif }}
+                </p>
+      
+                <mat-form-field appearance="outline" class="w-100 mb-3">
+                  <mat-label>Nombre del Contacto</mat-label>
+                  <input matInput formControlName="nombre" placeholder="(Contacto de la farmacia)" type="text" [disabled]="!isRifChecked">
+                  <mat-error *ngIf="registerForm.get('nombre')?.hasError('required') && registerForm.get('nombre')?.touched">
+                    El nombre del contacto es requerido.
+                  </mat-error>
+                </mat-form-field>
+      
+                <mat-form-field appearance="outline" class="w-100 mb-3">
+                  <mat-label>Apellido del Contacto</mat-label>
+                  <input matInput formControlName="apellido" placeholder="(Apellido del contacto de la farmacia)" type="text" [disabled]="!isRifChecked">
+                  <mat-error *ngIf="registerForm.get('apellido')?.hasError('required') && registerForm.get('apellido')?.touched">
+                    El apellido del contacto es requerido.
+                  </mat-error>
+                </mat-form-field>
+      
+                <mat-form-field appearance="outline" class="w-100 mb-3">
+                  <mat-label>Email del Contacto</mat-label>
+                  <input matInput formControlName="email" type="email" placeholder="(Aquí se enviará su usuario)" [disabled]="!isRifChecked">
+                  <mat-error *ngIf="registerForm.get('email')?.hasError('required') && registerForm.get('email')?.touched">
+                    El email es requerido.
+                  </mat-error>
+                  <mat-error *ngIf="registerForm.get('email')?.hasError('email') && registerForm.get('email')?.touched">
+                    Introduce un email válido.
+                  </mat-error>
+                </mat-form-field>
+      
+                <div class="row g-3 mb-3">
+                  <div class="col-md-4">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Prefijo</mat-label>
+                      <mat-select formControlName="phonePrefix" [disabled]="!isRifChecked">
+                        <mat-option *ngFor="let prefix of phonePrefixes" [value]="prefix">{{ prefix }}</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="registerForm.get('phonePrefix')?.hasError('required') && registerForm.get('phonePrefix')?.touched">
+                        El prefijo es requerido.
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-8">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Número de Celular</mat-label>
+                      <input matInput formControlName="phoneNumber" placeholder="Ej: 4141234567 (Del contacto de la farmacia)" type="text" maxlength="7" [disabled]="!isRifChecked">
+                      <mat-error *ngIf="registerForm.get('phoneNumber')?.hasError('required') && registerForm.get('phoneNumber')?.touched">
+                        El número es requerido.
+                      </mat-error>
+                      <mat-error *ngIf="registerForm.get('phoneNumber')?.hasError('pattern') && registerForm.get('phoneNumber')?.touched">
+                        El número debe contener 7 dígitos numéricos.
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+      
+                <mat-form-field appearance="outline" class="w-100 mb-3">
+                  <mat-label>Contraseña</mat-label>
+                  <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" [disabled]="!isRifChecked">
+                  <button mat-icon-button matSuffix (click)="togglePasswordVisibility('password')" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword" [disabled]="!isRifChecked">
+                    <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  </button>
+                  <mat-error *ngIf="registerForm.get('password')?.hasError('required') && registerForm.get('password')?.touched">
+                    La contraseña es requerida.
+                  </mat-error>
+                  <mat-error *ngIf="registerForm.get('password')?.hasError('minlength') && registerForm.get('password')?.touched">
+                    La contraseña debe tener al menos 6 caracteres.
+                  </mat-error>
+                </mat-form-field>
+      
+                <mat-form-field appearance="outline" class="w-100 mb-4">
+                  <mat-label>Confirmar Contraseña</mat-label>
+                  <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword" [disabled]="!isRifChecked">
+                  <button mat-icon-button matSuffix (click)="togglePasswordVisibility('confirmPassword')" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideConfirmPassword" [disabled]="!isRifChecked">
+                    <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  </button>
+                  <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('required') && registerForm.get('confirmPassword')?.touched">
+                    Confirmar contraseña es requerido.
+                  </mat-error>
+                  <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('mismatch') && registerForm.get('confirmPassword')?.touched">
+                    Las contraseñas no coinciden.
+                  </mat-error>
+                </mat-form-field>
+      
+                <div class="input_button">
+                  <button type="submit" (click)="creausuario()" class="btn_primary" [disabled]="!isRifChecked || registerForm.invalid || isLoading">
+                    <span *ngIf="!isLoading">Registrarse</span>
+                    <span *ngIf="isLoading">Registrando...</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+    
+      <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-atom" [fullScreen]="true">
+        <p style="color: white">Cargando...</p>
+      </ngx-spinner>
+    
+      <p class="portal__footer">Insuaminca, + cerca de ti</p>
+    </div>

@@ -1,0 +1,84 @@
+<div class="modal fade" id="detallesPedidoModal" tabindex="-1" aria-labelledby="detallesPedidoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-light">
+        <h1 class="card-title text-primary" id="detallesPedidoModalLabel">Detalles del Pedido {{ pedidoSeleccionado?.pedido }}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <table class="table" *ngIf="detallesPedido && detallesPedido.length > 0; else noData">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Lote</th>
+              <th>Vence</th>
+              <th>Esc.Producto</th>
+              <th>Esc.Proveedor</th>
+              <th>Precio Unitario</th>
+              <th>Importe</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let detalle of detallesPedido">
+              <td>{{ detalle.desca || 'N/A' }}</td>
+              <td>{{ detalle.cana || 0 }}</td>
+              <td>{{ detalle.lote || 'N/A' }}</td>
+              <td>{{ detalle.vence || 'N/A' }}</td>
+              <td>{{ detalle.descu2 || 0 }}</td>
+              <td>{{ detalle.descu3 || 0 }}</td>
+              <td>{{ detalle.preca || 0 }}</td>
+              <td>{{ detalle.tota || 0 }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <ng-template #noData>
+          <p>No se encontraron detalles para este pedido.</p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<main class="historialped__main">
+  <div class="login-container">
+    <div class="d-flex justify-content-center align-items-center" *ngIf="isLoading">
+      <div class="spinner-border text-success" role="status"></div>
+    </div>
+  </div>
+  <section class="historialped__historial">
+    <h3 class="card-title text-primary">Ultimos 10 pedidos enviados</h3>
+    <table class="historialped__historial-table">
+      <thead>
+        <tr>
+          <th scope="col">Nro. Pedido</th>
+          <th scope="col">Origen</th>
+          <th scope="col">Unidades</th>
+          <th scope="col">Factura</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Estatus</th>
+          <th scope="col">Ver</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pedido of historialPedidos">
+          <td>{{ pedido.pedido }}</td>
+          <td>{{ pedido.origen ? pedido.origen : 'Asesor Ventas' }}</td>
+          <td>{{ pedido.cantidad }}</td>
+          <td>{{ pedido.factura }}</td>
+          <td>{{ pedido.fecha }}</td>
+          <td>{{ pedido.factura ? 'FACTURADO' : 'PENDIENTE' }}</td>
+          <td style="text-align: center; cursor: pointer;" (click)="showdetail(pedido)">
+            <i class="show__detail fa-solid fa-eye" title="Mostrar detalle"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  <section class="historialped__pedidos">
+    <button class="historialped__checkout-button">Bajar historico de pedidos</button>
+  </section>
+
+
+</main>

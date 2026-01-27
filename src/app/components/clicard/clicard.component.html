@@ -1,0 +1,65 @@
+<div class="card-body" *ngIf="!minimal">
+    <h3 class="card-title text-primary">Información</h3>
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <span class="title__limit">LÍMITE DE CRÉDITO:</span>
+            <span class="float-end cardinfo__text">Bs. {{ formatCurrency((portalcliLogicaService.clienteData$ | async)?.limite) }}</span>
+            <br>
+            <span class="float-end cardinfo__text">US$. {{ formatCurrency((portalcliLogicaService.clienteData$ | async)?.limite / tasa) }}</span>
+        </div>
+    </div>
+    <!-- <div class="row mb-3">
+        <div class="col-md-4 text-center">
+            <span class="cardinfo__text">Bs. 100.000,00</span><br>
+            <span class="cardinfo__text">US$ 10.000</span><br>
+            <span class="text-danger">VENCIDO</span>
+        </div>
+        <div class="col-md-4 text-center">
+            <span class="cardinfo__text">Bs. 100.000,00</span><br>
+            <span class="cardinfo__text">US$ 10000</span><br>
+            <span>POR VENCER</span>
+        </div>
+        <div class="col-md-4 text-center">
+            <span class="cardinfo__text">Bs. 100.000,00</span><br>
+            <span class="cardinfo__text">US$ 10.000</span><br>
+            <span>EN TRÁNSITO</span>
+        </div>
+    </div> -->
+    <div class="row text-white p-2 rounded saldo__content">
+        <div class="col-md-12">
+            <span class="fw-bold">SALDO DISPONIBLE:</span>
+            <span class="float-end">Bs. {{ formatCurrency((portalcliLogicaService.clienteData$ | async)?.saldo) }}
+                <br>US$ {{ formatCurrency((portalcliLogicaService.clienteData$ | async)?.saldo / tasa) }}</span>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="minimal">
+    <table class="w-100 th-border-grey">
+        <thead>
+        <tr>
+            <th colspan="2" class="text-center p-2 th-center blue">Información del cliente</th>
+        </tr>
+            <tr>
+                <th class="text-center p-1 th-center">LÍMITE DE CRÉDITO:</th>
+                <th class="text-center p-1 th-top-green " >SALDO DISPONIBLE:</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="text-start p-2 th-center-no-border">
+                    <span class="cardinfo__text">Bs. {{ formatCurrency((portalcliLogicaService.clienteData$ | async)?.limite) }}</span>
+                    <br>
+                    <span class="cardinfo__text">US$. {{ formatCurrency((portalcliLogicaService.clienteData$ | async)?.limite / tasa) }}</span>
+                </td>
+
+                <td class="text-start th-bottom-green p-2" >
+                    <span>Bs. {{ formatCurrency((portalcliLogicaService.clienteData$ | async)?.saldo) }}</span>
+                        <br>
+                    <span>US$ {{ formatCurrency((portalcliLogicaService.clienteData$ | async)?.saldo / tasa) }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

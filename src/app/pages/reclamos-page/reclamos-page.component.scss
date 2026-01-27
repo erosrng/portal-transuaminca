@@ -1,0 +1,220 @@
+@use '../../../styles/variables.scss' as vars;
+
+.container-max {
+  padding: 2rem;
+  margin-top: 5rem;
+  min-height: 90vh;
+}
+.text-primary{
+    color: vars.$menu-color !important;
+  }
+.ofertas-title {
+    color: vars.$menu-color;
+    border-bottom: 3px solid vars.$text-color2;
+    padding-bottom: 5px;
+    display: inline-block;
+    width: fit-content;
+}
+
+// Tarjetas de información
+.info-card, .summary-card, .final-summary {
+  border: 1px solid vars.$bordes-claros;
+  border-radius: 10px;
+  margin: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  mat-card-header {
+    background-color: rgba(vars.$background-fondo, 0.1);
+    padding: 1rem;
+    border-bottom: 1px solid vars.$bordes-claros;
+    
+    mat-card-title {
+      color: vars.$text-color2;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+  }
+  
+  mat-card-content {
+    padding: 1.5rem;
+  }
+}
+
+.final-summary {
+  background-color: rgba(vars.$background-fondo, 0.05);
+  border-left: 4px solid vars.$text-color2;
+}
+
+// Tabla personalizada
+.table-responsive {
+  border: 1px solid vars.$bordes-claros;
+  border-radius: 8px;
+  overflow: hidden;
+  
+  table {
+    width: 100%;
+    
+    th {
+      background-color: vars.$background-fondo;
+      color: vars.$menu-color;
+      font-weight: 600;
+      padding: 1rem;
+      text-align: left;
+      
+      &:first-child {
+        width: 60px;
+      }
+    }
+    
+    td {
+      padding: 0.75rem;
+      border-bottom: 1px solid vars.$bordes-claros;
+      vertical-align: middle;
+      
+      mat-form-field {
+        margin: 0;
+        
+        .mat-form-field-wrapper {
+          padding-bottom: 0;
+        }
+      }
+    }
+    
+    tr:hover {
+      background-color: rgba(vars.$background-fondo, 0.1);
+    }
+  }
+}
+
+// Formularios
+mat-form-field {
+  margin-bottom: 1rem;
+  
+  &.w-100 {
+    width: 100%;
+  }
+}
+
+// Botones
+button[mat-raised-button] {
+  padding: 0.5rem 2rem;
+  border-radius: 25px;
+  
+  mat-icon {
+    margin-left: 0.5rem;
+  }
+}
+
+button[mat-stroked-button] {
+  padding: 0.5rem 1.5rem;
+  border-radius: 25px;
+  
+  mat-icon {
+    margin-right: 0.5rem;
+  }
+}
+
+// Alertas y mensajes
+.text-muted {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .container-max {
+    padding: 1rem;
+    margin-top: 4rem;
+  }
+  
+  .table-responsive {
+    overflow-x: auto;
+    
+    table {
+      min-width: 800px;
+    }
+  }
+}
+
+// Estilos específicos para reclamos
+.reclamo-high-priority {
+  border-left: 4px solid #dc3545;
+}
+
+.reclamo-medium-priority {
+  border-left: 4px solid #ffc107;
+}
+
+.reclamo-low-priority {
+  border-left: 4px solid #28a745;
+}
+
+// Iconos
+mat-icon {
+  &.warning {
+    color: #ffc107;
+  }
+  
+  &.success {
+    color: #28a745;
+  }
+  
+  &.error {
+    color: #dc3545;
+  }
+}
+
+// Lista de información
+ul {
+  padding-left: 1.5rem;
+  
+  li {
+    margin-bottom: 0.5rem;
+    color: vars.$menu-color;
+    
+    &:before {
+      content: "•";
+      color: vars.$text-color2;
+      font-weight: bold;
+      display: inline-block;
+      width: 1em;
+      margin-left: -1em;
+    }
+  }
+}
+
+// Campos requeridos
+.required-field::after {
+  content: " *";
+  color: #dc3545;
+}
+
+// Estado del reclamo
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  
+  &.pendiente {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+  
+  &.en-proceso {
+    background-color: #d1ecf1;
+    color: #0c5460;
+  }
+  
+  &.resuelto {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  &.rechazado {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+}

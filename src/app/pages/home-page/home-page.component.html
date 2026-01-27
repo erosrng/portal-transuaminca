@@ -1,0 +1,247 @@
+<app-nav-bar></app-nav-bar>
+
+<div class="principal__pantalla">
+    <!-- Modal Flotante Simple -->
+    <!-- <div *ngIf="showFloatingModal" class="modal-overlay" (click)="closeModal()">
+  
+        <div class="modal-container" (click)="$event.stopPropagation()">
+          
+          <button class="modal-close-btn" (click)="closeModal()">
+            <i class="fas fa-times"></i>
+          </button>
+          
+          <img src="./../../../assets/images/reclamos-insuanet.jpg" alt="Publicidad" class="modal-image">
+          
+        </div>
+        
+      </div> -->
+
+    
+     <app-side-bar></app-side-bar>
+
+     <div class="layout__principal">
+
+        <!---Pantalla de carga----->
+        <div id="loader" class="loader" style="display: none;">
+            <div class="loader-icon"></div>
+            <div class="loader-text">Procesando su solicitud, un momento por favor...</div>
+        </div>
+            <div class="content__general">
+                <main class="main__general">
+                    <div class="container mt-5">
+                        <div class="row mt-3">
+
+                            <!-- CARRUSEL -->
+                            <div class="col-8">
+                                <h3 class="text-primary">¡Bienvenido a Transuaminca!</h3>
+                                
+
+                                <!---CARRUSEL ALEATORIO-->
+                                <div class="carrusel1__container main-carousel" style="margin-right: 1rem;">
+                                    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+                                    <!-- Indicadores -->
+                                    <div class="carousel-indicators">
+                                        <button *ngFor="let image of shuffledMainImages; let i = index" 
+                                                type="button" 
+                                                data-bs-target="#carouselExampleIndicators" 
+                                                [attr.data-bs-slide-to]="i" 
+                                                [class.active]="i === 0" 
+                                                [attr.aria-label]="'Slide ' + (i + 1)">
+                                        </button>
+                                    </div>
+                                
+                                    <!-- Imágenes del carrusel -->
+                                    <div class="carousel-inner">
+                                        <div *ngFor="let image of shuffledMainImages; let i = index" 
+                                            class="carousel-item" 
+                                            [class.active]="i === 0">
+                                        <img [src]="image.src" class="d-block w-100 main-img" [alt]="image.alt">
+                                        </div>
+                                    </div>
+                                
+                                    <!-- Controles -->
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <h3 class="text-primary">Informacion del cliente</h3>
+                                <div class="container-fluid mt-5">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="card card__info">
+                                                <app-clicard></app-clicard>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 mt-2">
+                                            <div class="card mt-4 card__info">
+                                                <div class="card-body ">
+                                                    <h3 class="card-title text-primary">Asesor Comercial</h3>
+                                                    <p class="card-text">
+                                                        <span class="cardinfo__text">NOMBRE: <b>{{ (portalcliLogicaService.clienteData$ | async)?.nombrevd }}</b></span><br>
+                                                        <span class="cardinfo__text">TELÉFONO: <b>{{ (portalcliLogicaService.clienteData$ | async)?.telefonovd }}</b></span><br>
+                                                        <span class="cardinfo__text">CORREO: <span class="title__limit">{{ (portalcliLogicaService.clienteData$ | async)?.emailvd }}</span>
+                                      </span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="container mt-5">
+                        <!-- Carrusel de dos  -->
+                        <div class="ofertas__carrusel-low">
+                            <!---EL DE LA IZQUIERDA-->
+                            <div id="promotionCarousel3" class="carousel slide-lown" data-bs-ride="carousel">
+                              <div class="carousel-indicators">
+                                <button *ngFor="let image of shuffledLeftImages; let i = index" 
+                                        type="button" 
+                                        data-bs-target="#promotionCarousel3" 
+                                        [attr.data-bs-slide-to]="i" 
+                                        [class.active]="i === 0" 
+                                        [attr.aria-label]="'Slide ' + i">
+                                </button>
+                              </div>
+                          
+                              <div class="carousel-inner">
+                                <div *ngFor="let image of shuffledLeftImages; let i = index" 
+                                     class="carousel-item" 
+                                     [class.active]="i === 0">
+                                  <img [src]="image.src" class="d-block w-100 slide-min" [alt]="image.alt">
+                                </div>
+                              </div>
+                          
+                              <button class="carousel-control-prev" type="button" data-bs-target="#promotionCarousel3" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                              </button>
+                              <button class="carousel-control-next" type="button" data-bs-target="#promotionCarousel3" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                              </button>
+                            </div>
+                          
+                            <!---EL DE LA DERECHA-->
+                            <div id="promotionCarousel4" class="carousel slide-lown" data-bs-ride="carousel">
+                              <div class="carousel-indicators">
+                                <button *ngFor="let image of shuffledRightImages; let i = index" 
+                                        type="button" 
+                                        data-bs-target="#promotionCarousel4" 
+                                        [attr.data-bs-slide-to]="i" 
+                                        [class.active]="i === 0" 
+                                        [attr.aria-label]="'Slide ' + i">
+                                </button>
+                              </div>
+                          
+                              <div class="carousel-inner">
+                                <div *ngFor="let image of shuffledRightImages; let i = index" 
+                                     class="carousel-item" 
+                                     [class.active]="i === 0">
+                                  <img [src]="image.src" class="d-block w-100 slide-min" [alt]="image.alt">
+                                </div>
+                              </div>
+                              
+                              <button class="carousel-control-prev" type="button" data-bs-target="#promotionCarousel4" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                              </button>
+                              <button class="carousel-control-next" type="button" data-bs-target="#promotionCarousel4" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                              </button>
+                            </div>
+                          </div>
+                          
+                    </div>
+
+                    <div class="container mt-5">
+                        <!-- Carrusel de proveedores -->
+                        <!-- <div class="product-carousel-section">
+                            <h3 class="ofertas-title text-primary">NUESTROS PROVEEDORES</h3>
+
+                            <mat-progress-bar mode="indeterminate" *ngIf="isLoadingProviders"></mat-progress-bar>
+
+                            <owl-carousel-o [options]="providersCarouselOptions">
+                                <ng-template carouselSlide >
+                                    <div class="carousel-proveedor-item" >
+                                        <img src="../../../assets/images/logoprv/00023.png" alt="00023">
+                                    </div>
+                                </ng-template>
+                                <ng-template carouselSlide >
+                                    <div class="carousel-proveedor-item" >
+                                        <img src="../../../assets/images/logoprv/00036.png" alt="00036">
+                                    </div>
+                                </ng-template>
+                                <ng-template carouselSlide >
+                                    <div class="carousel-proveedor-item" >
+                                        <img src="../../../assets/images/logoprv/00066.png" alt="00066">
+                                    </div>
+                                </ng-template>
+                                 <ng-template carouselSlide >
+                                    <div class="carousel-proveedor-item" >
+                                        <img src="../../../assets/images/logoprv/00076.png" alt="00076">
+                                    </div>
+                                 </ng-template>
+                                 <ng-template carouselSlide >
+                                    <div class="carousel-proveedor-item" >
+                                        <img src="../../../assets/images/logoprv/00077.png" alt="00077">
+                                    </div>
+                                 </ng-template>
+                                 <ng-template carouselSlide >
+                                    <div class="carousel-proveedor-item" >
+                                        <img src="../../../assets/images/logoprv/00089.png" alt="00089">
+                                    </div>
+                                 </ng-template>
+                                 <ng-template carouselSlide >
+                                    <div class="carousel-proveedor-item" >
+                                        <img src="../../../assets/images/logoprv/00205.png" alt="00205">
+                                    </div>
+                                 </ng-template>
+                                 <ng-template carouselSlide >
+                                    <div class="carousel-proveedor-item" >
+                                        <img src="../../../assets/images/logoprv/00226.png" alt="00226">
+                                    </div>
+                                 </ng-template>
+                                 <ng-template carouselSlide >
+                                    <div class="carousel-proveedor-item" >
+                                        <img src="../../../assets/images/logoprv/00290.png" alt="00290">
+                                    </div>
+                                 </ng-template>
+                                 <ng-template carouselSlide >
+                                    <div class="carousel-proveedor-item" >
+                                        <img src="../../../assets/images/logoprv/00233.png" alt="00233">
+                                    </div>
+                                 </ng-template>
+                                 <ng-template carouselSlide >
+                                    <div class="carousel-proveedor-item" >
+                                        <img src="../../../assets/images/logoprv/00302.png" alt="00302">
+                                    </div>
+                                 </ng-template>
+                            </owl-carousel-o>
+                        </div> -->
+                    </div>
+
+                </main>
+            </div>
+
+        
+    </div>
+</div>
+
+<!-- <p>home-page works!</p> -->
+
+<app-footer></app-footer>

@@ -1,0 +1,155 @@
+@use '../../../styles/variables.scss' as vars;
+
+.c6 {
+    display: flex;
+    width: 100%;
+    height: 35rem;
+}
+
+.c6 section{
+    display: flex;
+    width: 50%;
+    justify-content: center;
+    align-items: center;
+}
+.footer {
+    background-color: vars.$principal-color;
+    color: vars.$background-fondo;
+    padding-top: 5rem;
+    min-height: 25vh;
+}
+
+/* Contenido del footer */
+.footer-content {
+    display: flex;
+    justify-content: space-around;
+    width: 88%;
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* Estilos para las secciones */
+.footer-section {
+    flex: 1;
+    margin: 0 20px;
+}
+
+.footer-section h3 {
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: vars.$background-fondo;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+    color: vars.$background-fondo;
+    text-decoration: none;
+    transition: color 0.3s ease-out;
+}
+
+.footer-section ul li a:hover {
+    color: vars.$principal-color;
+}
+/* Estilos para la sección del logo */
+.logo-section {
+    text-align: center;
+}
+
+.logo-section .logo {
+    width: 90%;
+    margin-bottom: 10px;
+}
+
+.logo-section p {
+/* margin: 5px 0;*/
+    font-size: 14px;
+}
+
+/* Estilos para el logo del desarrollador */
+.dev-logo {
+    width: 15rem;
+    cursor: pointer;
+    vertical-align: middle;
+    margin-left: 5px;
+    transition: filter 0.3s ease-out;
+    filter: brightness(42.1%);
+}
+
+.dev-logo:hover {
+    filter: brightness(1); /* Efecto de aclarado */
+}
+
+/* Estilos para los iconos de redes sociales */
+.social-icons {
+    display: flex;
+    justify-content: start;
+    gap: 2rem;
+    margin-top: 2rem;
+    margin-left: 3rem;
+}
+
+.text {
+    margin-top: 2rem;
+    margin-left: 3rem;
+}
+
+.social-icon {
+    color: white;
+    font-size: 2.5rem;
+    text-decoration: none;
+    transition: transform 0.3s ease-out, color 0.3s ease-out, filter 0.3s ease-out;
+}
+
+.social-icon:hover {
+    color: var(--principal-color);
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Efecto profesional y minimalista en los iconos */
+@keyframes subtle-move {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-2px);
+    }
+}
+
+.social-icon:hover i {
+    animation: subtle-move 0.5s ease-in-out;
+}
+
+.left p{
+    padding-left: 14rem;
+    font-size: 1.5rem;
+}
+
+.right{
+    gap: 1rem;
+}
+.social_logo-container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: end;
+    padding-right: 14rem;
+}
+.social_logo{
+    font-size: 3rem;
+    color: #303030;
+}
+
+.logo {
+    width: 25rem !important;
+}
