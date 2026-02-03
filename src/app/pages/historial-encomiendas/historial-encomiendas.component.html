@@ -1,0 +1,86 @@
+<app-nav-bar></app-nav-bar>
+
+<div class="main-layout">
+  <app-side-bar></app-side-bar>
+  
+  <div class="container-fluid content-area">
+    <div class="row mb-4">
+      <div class="col-12">
+        <h2 class="section-title">
+          <i class="fa-solid fa-boxes-stacked me-2"></i>Seguimiento de Encomiendas
+        </h2>
+        <p class="text-muted">Consulta el estado actual e historial de tus envíos.</p>
+      </div>
+    </div>
+
+    <div class="table-header-info d-flex justify-content-between align-items-center mb-3">
+      <span class="text-muted">Mostrando <strong>{{getPaginatedData().length}}</strong> de <strong>{{historialPedidos.length}}</strong> registros</span>
+      <div class="d-flex align-items-center">
+        <span class="me-2">Mostrar</span>
+        <select class="form-select form-select-sm select-custom" (change)="onPageSizeChange($event)">
+          <option [value]="10">10</option>
+          <option [value]="20">20</option>
+          <option [value]="50">50</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="custom-table-card shadow-sm">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Encomienda</th>
+              <th>Descripción</th>
+              <th>Fecha</th>
+              <th>Destinatario</th>
+              <th>Tracking</th>
+              <th>Factura</th>
+              <th>Etiqueta</th>
+              <th>Imp Guía</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pedido of getPaginatedData()">
+              <td class="text-center-custom">{{ pedido.numero }}</td>
+              <td class="small">{{ pedido.nrofact || 'N/E' }}</td>
+              <td>{{ pedido.fecha | date:'dd-MM-yyyy' }}</td>
+              <td class="text-start-custom">({{pedido.codcli_des}}) {{ pedido.nomcli_des }}</td>
+              <td>
+                <span class="badge-tracking">EN TRÁNSITO</span>
+              </td>
+              <td>
+                <span class="text-muted small fw-bold">{{ pedido.factura || 'POR FACTURAR' }}</span>
+              </td>
+              
+              <td>
+                <button class="btn-action" (click)="imprimirEtiquetas(pedido.numero)" title="Imprimir Etiqueta">
+                  <i class="fa-solid fa-bookmark"></i>
+                </button>
+              </td>
+
+              <td>
+                <button class="btn-action" (click)="abrirReparto(pedido.reparto)" title="Ver Guía">
+                  <i class="fa-solid fa-truck-fast"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="historialPedidos.length === 0">
+              <td colspan="9" class="py-5 text-muted">No se encontraron registros de encomiendas.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end mt-3">
+      <mat-paginator [length]="historialPedidos.length"
+                     [pageSize]="pageSize"
+                     [hidePageSize]="true"
+                     (page)="onPageChange($event)">
+      </mat-paginator>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

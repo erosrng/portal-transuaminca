@@ -1,0 +1,168 @@
+<app-nav-bar></app-nav-bar>
+
+<div class="main-layout">
+  <app-side-bar></app-side-bar>
+
+  <div class="container-fluid py-4" style="margin-top: 5rem;">
+    <mat-card class="destinatario-card shadow-lg">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon color="primary" class="me-2">person_add</mat-icon>
+          Registrar Nuevo Destinatario
+        </mat-card-title>
+        <mat-card-subtitle>Complete los datos para los envíos de encomiendas</mat-card-subtitle>
+      </mat-card-header>
+  
+      <mat-divider></mat-divider>
+  
+      <mat-card-content class="mt-4">
+        <form [formGroup]="destinatarioForm" (ngSubmit)="guardarDestinatario()">
+          <div class="row">
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Nombre o Razón Social</mat-label>
+                <input matInput formControlName="nombre" placeholder="">
+                <mat-error *ngIf="destinatarioForm.get('nombre')?.hasError('required')">El nombre es obligatorio</mat-error>
+              </mat-form-field>
+            </div>
+  
+            <div class="col-md-3">
+                <div class="row g-2"> <div class="col-4">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Tipo</mat-label>
+                      <mat-select formControlName="idType">
+                        <mat-option *ngFor="let type of idTypes" [value]="type">
+                          {{ type }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="destinatarioForm.get('idType')?.hasError('required')">
+                        *
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+              
+                  <div class="col-8">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>RIF / Cédula</mat-label>
+                      <input matInput formControlName="rif" maxlength="10" placeholder="500144997">
+                      <mat-error *ngIf="destinatarioForm.get('rif')?.hasError('required')">
+                        Requerido
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+              
+                </div>
+                <mat-hint style="font-size: 11px; position: relative; top: -15px;">Solo números, sin guiones</mat-hint>
+              </div>
+
+            <div class="col-md-3">
+                <div class="row g-0">
+                  <div class="col-4">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Prefijo</mat-label>
+                      <mat-select formControlName="phonePrefix">
+                        <mat-option *ngFor="let prefix of phonePrefixes" [value]="prefix">
+                          {{ prefix }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-8">
+                    <mat-form-field appearance="outline" class="w-100" style="padding-left: 5px;">
+                      <mat-label>Teléfono</mat-label>
+                      <input matInput formControlName="telefono" placeholder="" maxlength="7">
+                      <mat-error *ngIf="destinatarioForm.get('telefono')?.hasError('required')">Requerido</mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Estado</mat-label>
+                    <input type="text" matInput formControlName="estado" [matAutocomplete]="autoEst">
+                    <mat-icon matSuffix>search</mat-icon>
+                    <mat-autocomplete #autoEst="matAutocomplete" [displayWith]="displayEstado">
+                        <mat-option *ngFor="let e of filteredEstados | async" [value]="e">
+                            {{e.entidad}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="destinatarioForm.get('estado')?.hasError('required')">El estado es requerido</mat-error>
+                </mat-form-field>
+            </div>
+  
+            <div class="col-md-4">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Ciudad</mat-label>
+                    <input type="text" matInput formControlName="ciudad" [matAutocomplete]="autoDes">
+                    <mat-icon matSuffix>search</mat-icon>
+                    <mat-autocomplete #autoDes="matAutocomplete" [displayWith]="displayCiudad">
+                        <mat-option *ngFor="let c of filteredCiudades | async" [value]="c">
+                            {{c.ciudad}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="destinatarioForm.get('ciudad')?.hasError('required')">La ciudad es requerida</mat-error>
+                </mat-form-field>
+            </div>
+
+            <!-- <div class="col-md-4">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Ruta de Entrega</mat-label>
+                <input matInput formControlName="ruta" placeholder="8547">
+              </mat-form-field>
+            </div> -->
+
+            <!-- <div class="col-md-4">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Ruta de Entrega</mat-label>
+                  <input type="text" matInput formControlName="ruta" [matAutocomplete]="autoRut">
+                  <mat-icon matSuffix>search</mat-icon>
+                    <mat-autocomplete #autoRut="matAutocomplete" [displayWith]="displayRuta">
+                      <mat-option *ngFor="let c of filteredRutas | async" [value]="c" (onSelectionChange)="onCiudadSeleccionada(c)">
+                        {{c.descrip}}
+                      </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                <mat-hint style="font-size: 11px; position: relative; top: -15px;">Consulte a que ruta asignar</mat-hint>
+              </div> -->
+              <div class="col-md-4">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Ruta de Entrega</mat-label>
+                    <input type="text" matInput formControlName="ruta" [matAutocomplete]="autoRut">
+                    <mat-icon matSuffix>search</mat-icon>
+                    <mat-autocomplete #autoRut="matAutocomplete" [displayWith]="displayRuta">
+                        <mat-option *ngFor="let r of filteredRutas | async" [value]="r">
+                            {{r.descrip}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="destinatarioForm.get('ruta')?.hasError('required')">La ruta es requerida</mat-error>
+                </mat-form-field>
+            </div>
+  
+            <div class="col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Dirección Completa</mat-label>
+                <textarea matInput formControlName="direccion" rows="3"></textarea>
+              </mat-form-field>
+            </div>
+  
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Contacto Adicional</mat-label>
+                <input matInput formControlName="contacto">
+              </mat-form-field>
+            </div>
+          </div>
+  
+          <div class="d-flex justify-content-end gap-2 mt-3">
+            <button mat-stroked-button type="button" (click)="limpiarForm()">Cancelar</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="destinatarioForm.invalid">
+              <mat-icon>save</mat-icon> Guardar Destinatario
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<app-footer></app-footer>

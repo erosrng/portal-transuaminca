@@ -1,6 +1,15 @@
 import {
-  Breakpoints
-} from "./chunk-JTW6OXIX.js";
+  Overlay,
+  OverlayConfig,
+  OverlayModule
+} from "./chunk-ODIBXVSX.js";
+import "./chunk-OIBNGD5S.js";
+import {
+  TemplatePortal
+} from "./chunk-SEHE432P.js";
+import {
+  MAT_FORM_FIELD
+} from "./chunk-DU4ILE2B.js";
 import {
   MAT_OPTGROUP,
   MAT_OPTION_PARENT_COMPONENT,
@@ -10,34 +19,22 @@ import {
   MatOptionSelectionChange,
   _countGroupLabelsBeforeOption,
   _getOptionScrollPosition
-} from "./chunk-5MCNEMXD.js";
-import {
-  Overlay,
-  OverlayConfig,
-  OverlayModule
-} from "./chunk-OE5EOD6T.js";
-import {
-  MAT_FORM_FIELD
-} from "./chunk-GL5KN5Y4.js";
-import "./chunk-OIBNGD5S.js";
-import {
-  TemplatePortal
-} from "./chunk-SEHE432P.js";
-import {
-  CdkScrollableModule,
-  ViewportRuler
-} from "./chunk-RCUZMYT5.js";
-import "./chunk-E4HL2ZB3.js";
+} from "./chunk-TMYQYMN5.js";
 import {
   NG_VALUE_ACCESSOR
 } from "./chunk-ICPKW7RO.js";
+import {
+  CdkScrollableModule,
+  ViewportRuler
+} from "./chunk-Y74NMOIS.js";
 import "./chunk-GR7O7RFV.js";
-import "./chunk-XJLDY5P7.js";
-import "./chunk-KALY6NLT.js";
+import "./chunk-URR64EMI.js";
+import "./chunk-OQCJZQQ6.js";
+import "./chunk-EFDTSNSQ.js";
 import "./chunk-B5YVGRO6.js";
 import "./chunk-42FJBLFI.js";
 import "./chunk-JXBCBRYI.js";
-import "./chunk-EFDTSNSQ.js";
+import "./chunk-2O4WY5GE.js";
 import {
   ActiveDescendantKeyManager,
   BreakpointObserver,
@@ -47,23 +44,20 @@ import {
   MatCommonModule,
   TAB,
   UP_ARROW,
+  _IdGenerator,
+  _getEventTarget,
+  _getFocusedElementPierceShadowDom,
   addAriaReferencedId,
   hasModifierKey,
   removeAriaReferencedId
-} from "./chunk-2LIH6Z3G.js";
-import {
-  _IdGenerator,
-  _getEventTarget,
-  _getFocusedElementPierceShadowDom
-} from "./chunk-HGZ7LVHZ.js";
-import "./chunk-2O4WY5GE.js";
-import "./chunk-3HJGUOFY.js";
-import {
-  Platform
-} from "./chunk-MLI6XZAK.js";
+} from "./chunk-C2FKF5N7.js";
 import {
   Directionality
 } from "./chunk-527BK6SM.js";
+import "./chunk-6RPVILFR.js";
+import {
+  Platform
+} from "./chunk-MLI6XZAK.js";
 import "./chunk-7YAHMRHR.js";
 import "./chunk-45ANH3K6.js";
 import {
@@ -113,11 +107,11 @@ import {
   ɵɵtemplate,
   ɵɵviewQuery
 } from "./chunk-3NAA7VHD.js";
-import "./chunk-WMWTRTCA.js";
 import {
   defer,
   merge
 } from "./chunk-QO67QQ3F.js";
+import "./chunk-WMWTRTCA.js";
 import {
   Observable,
   Subject,
@@ -132,6 +126,39 @@ import {
   tap
 } from "./chunk-PADBOZH3.js";
 import "./chunk-WDMUDEB6.js";
+
+// node_modules/@angular/cdk/fesm2022/layout.mjs
+var LayoutModule = class _LayoutModule {
+  static ɵfac = function LayoutModule_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _LayoutModule)();
+  };
+  static ɵmod = ɵɵdefineNgModule({
+    type: _LayoutModule
+  });
+  static ɵinj = ɵɵdefineInjector({});
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(LayoutModule, [{
+    type: NgModule,
+    args: [{}]
+  }], null, null);
+})();
+var Breakpoints = {
+  XSmall: "(max-width: 599.98px)",
+  Small: "(min-width: 600px) and (max-width: 959.98px)",
+  Medium: "(min-width: 960px) and (max-width: 1279.98px)",
+  Large: "(min-width: 1280px) and (max-width: 1919.98px)",
+  XLarge: "(min-width: 1920px)",
+  Handset: "(max-width: 599.98px) and (orientation: portrait), (max-width: 959.98px) and (orientation: landscape)",
+  Tablet: "(min-width: 600px) and (max-width: 839.98px) and (orientation: portrait), (min-width: 960px) and (max-width: 1279.98px) and (orientation: landscape)",
+  Web: "(min-width: 840px) and (orientation: portrait), (min-width: 1280px) and (orientation: landscape)",
+  HandsetPortrait: "(max-width: 599.98px) and (orientation: portrait)",
+  TabletPortrait: "(min-width: 600px) and (max-width: 839.98px) and (orientation: portrait)",
+  WebPortrait: "(min-width: 840px) and (orientation: portrait)",
+  HandsetLandscape: "(max-width: 959.98px) and (orientation: landscape)",
+  TabletLandscape: "(min-width: 960px) and (max-width: 1279.98px) and (orientation: landscape)",
+  WebLandscape: "(min-width: 1280px) and (orientation: landscape)"
+};
 
 // node_modules/@angular/material/fesm2022/autocomplete.mjs
 var _c0 = ["panel"];

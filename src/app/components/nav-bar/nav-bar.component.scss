@@ -1,91 +1,5 @@
 @use '../../../styles/variables.scss' as vars;
 
-/* Ajuste del menú */
-
- .container__details{
-    padding: 0;
- }
- .col.details__cli {
-    background-color: vars.$background-fondo;
-    color: vars.$menu-color;
-    font-size: 1rem;
-    padding: 0;
-  }
-  .details__cli {
-    border-right: 1px solid #a3a3a3;
-}
-.cart-icon {
-    position: relative;
-    padding: 0.1rem;
-    font-size: 2rem;
-}
-
-/*BORDE INCLINADO A LA IZQUIERDA DE LOS DETALLES*/
-.container__details {
-    position: relative;
-    clip-path: polygon(20px 0px, 100% 0px, 99.83% 1318.18%, -240px 1313.22%);
-}
-
-.dropdown {
-    position: relative;
-    width: 100%;
-    color: vars.$background-fondo;
-    text-decoration: none;
-    transition: color 0.3s, transform 0.3s;
-    font-weight: bold;
-    padding: 0;
-}
-.dropdown__toggle  {
-    width: 100%;
-    background-color: vars.$principal-color;
-    color: vars.$background-fondo;
-    font-size: 1.5rem;
-    text-align: center;
-    border: none;
-    padding: 0.4rem;
-}
-.dropdown-item{
-    font-size: 1.5rem !important;
-    padding: 1rem;
-}
-.dropdown-item:hover {
-    background-color: #cbcbcb;
-}
-.btn-light{
-    color: #a3a3a3;
-}
-
-/* Ajuste del buscador */
-.cont-input-search {
-    transition: left 0.5s ease, width 0.5s ease;
-}
-.menu__close-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.5rem;
-    padding: 0.5rem;
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    z-index: 10;
-}
-/*ESTILOS DE BUSCADOR GENERAL*/
-.content__buscadorprincipal{
-    width: 37%;
-    margin: 0;
-    padding: 0;
-}
-
-.btn-clear-text {
-    background: none;
-    border: none;
-    color: #999;
-    font-size: 16px;
-    cursor: pointer;
-    display: none;
-}
-
 .navbar__general {
     width: 100%;
     display: flex;
@@ -95,10 +9,22 @@
     z-index: 2;
 }
 
+.navbar__title{
+    font-size: 2.5rem;
+    font-weight: 999;
+    font-style: italic;
+}
+.navbar__subtitle{
+    font-weight: 0;
+    font-size: 1.5rem;
+    position: absolute;
+    margin-top: 3.3rem;
+    margin-left: 20rem;
+}
 .navbar__primary{
     width: 100%;
     height: 6rem;
-    background-color: vars.$text-color2;
+    background-color: vars.$menu-color;
     position: relative;
     overflow: visible !important;
     overflow: hidden;
@@ -116,7 +42,7 @@
     padding: 1rem;
     cursor: pointer;
     border-radius: 2rem;
-    color: white;
+    color: vars.$background-fondo;
     font-weight: bold;
     gap: 1rem;
     justify-content: start;
@@ -125,30 +51,10 @@
 .navbar__hamburger img {
     width: 4rem
 }
- .navbar__links {
-    width: 685px;
-    /* height: 100%; */
-
-}
-.cart-icon {
-cursor: pointer;
-transition: transform 0.2s ease-in-out;
-}
-
-.cart-icon:hover {
-transform: scale(1.1);
-}
-
-.cart-count{
-    background-color: vars.$menu-color;
-    width: 2.7rem;
-    border-radius: 3rem;
-    position: absolute;
-    margin: -4rem 0 0 3rem;
+.nom_user{
+    text-align: right;
     color: vars.$background-fondo;
-    text-align: center;
-    font-size: 2rem;
-    font-weight: 999;
+    margin-right: 4rem;
 }
 
 @media (max-width: 768px) {
@@ -163,7 +69,7 @@ transform: scale(1.1);
 }
 
 .content__buscadorprincipal .input-group-append {
-    background-color: white;
+    background-color: vars.$background-fondo;
 }
 
 .content__buscadorprincipal .btn-light {
@@ -192,18 +98,8 @@ transform: scale(1.1);
         width: 110%;
     }
 
-    .dropdown__toggle {
-        width: 100%;
-        background-color: #0084C5;
-        color: white;
-        font-size: 1rem;
-        text-align: center;
-        border: none;
-        padding: 0.4rem;
-    }
-
     .col.details__cli {
-        background-color: white;
+        background-color: vars.$background-fondo;
         color: #053354;
         font-size: 1rem;
         padding: 0;
@@ -219,7 +115,7 @@ transform: scale(1.1);
         padding: 1rem;
         cursor: pointer;
         border-radius: 2rem;
-        color: white;
+        color: vars.$background-fondo;
         font-weight: bold;
         gap: 1rem;
         justify-content: start;

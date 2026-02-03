@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from './../auth.service';
 import { Router } from '@angular/router';
@@ -8,29 +8,44 @@ import { API_URLINTER } from '../app.config';
 import Swal from 'sweetalert2';
 import { Observable, of } from 'rxjs';
 import { Subject } from 'rxjs';
+
+export interface Clienteselect {
+  cliente: string;
+  nombre: string; 
+  rifci: string;  
+  direc: string;  
+  telefono: string;  
+  ciudad: string;  
+  estado: string;  
+  contacto: string;  
+  ruta: string;  
+}
+
+export interface Sucursal {
+    codigo: string;
+    sucursal: string;
+    tipo: string;
+    alma: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
+
 export class PortalcliLogicaService {
   //Para el carrito 
   loading: boolean = false;
-  private productosEnCarritoSubject = new BehaviorSubject<any[]>([]);
-  productosEnCarrito$ = this.productosEnCarritoSubject.asObservable();
-  private unidadesSubject = new BehaviorSubject<string>('');
-  unidades$ = this.unidadesSubject.asObservable();
-  private totalBsSubject = new BehaviorSubject<string>('');
-  totalBs$ = this.totalBsSubject.asObservable();
-  private totalUsdSubject = new BehaviorSubject<string>('');
-  totalUsd$ = this.totalUsdSubject.asObservable();
-  private encarprodSubject = new BehaviorSubject<string>('');
-  encarprod$ = this.encarprodSubject.asObservable();
-  private productosEnCarritoCodigosSubject = new BehaviorSubject<string[]>([]);
-  productosEnCarritoCodigos$ = this.productosEnCarritoCodigosSubject.asObservable();
+
   isMenuOpen: boolean = false;
   //Informacion del cliente
   private clienteDataSource = new BehaviorSubject<any>({});
   clienteData$ = this.clienteDataSource.asObservable();
 
+  private clientesSubject = new BehaviorSubject<Clienteselect[]>([]);
+  public clientes$ = this.clientesSubject.asObservable();
+
+  private sucursalSeleccionadaSubject = new BehaviorSubject<string>('');
+  sucursalSeleccionada$ = this.sucursalSeleccionadaSubject.asObservable();
 
   //private isMenuOpenSubject = new BehaviorSubject<boolean>(true);
   //isMenuOpen$ = this.isMenuOpenSubject.asObservable();
@@ -40,6 +55,19 @@ export class PortalcliLogicaService {
       private http: HttpClient, 
       private router: Router
     ) {}
+
+    setSucursal(id: string) {
+      this.sucursalSeleccionadaSubject.next(id);
+    }
+
+    consultarSucursales(): Observable<Sucursal[]> {
+      const token = this.authService.getToken();
+      const headers = new HttpHeaders({ 'X-Auth-Token': `${token}` });
+  
+      return this.http.post<any>(`${API_URL}portalcli/bdsucu`, {}, { headers }).pipe(
+        map(res => (res.status && res.data) ? res.data : [])
+      );
+    }
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
@@ -61,6 +89,21 @@ export class PortalcliLogicaService {
       // this.isMenuOpenSubject.next(false);
     }
   }
+  
+  consultarTarifasCliente(): Observable<any> {
+    const formData = new FormData();
+    const token = this.authService.getToken();
+    const codCli = this.authService.getCodCli();
+
+    formData.append('codCli', codCli ?? '');
+
+
+    const headers = new HttpHeaders({
+      'X-Auth-Token': token || ''
+    });
+    
+    return this.http.post<any>(`${API_URL}portalcli/traetarifas`,formData, { headers });
+  }
 
 // En portalcli-logica.service.ts
 navigateTo(route: string, queryParams?: any) {
@@ -70,67 +113,6 @@ navigateTo(route: string, queryParams?: any) {
     this.router.navigate([route]);
   }
 }
-  agregarAlCarrito(producto: any, cantidad: number, cliente: any) {
-    let codCli;
-    if(cliente){  
-      codCli=cliente;
-    }else{
-      codCli = this.authService.getCodCli();
-    }
-
-    const token = this.authService.getToken();
-    const formData = new FormData();
-
-    const headers = new HttpHeaders({
-      'X-Auth-Token': `${token}`
-    });
-
-    formData.append('codigo', producto.codigo);
-    formData.append('cana', cantidad.toString());
-    formData.append('codCli', codCli ?? '');
-
-    const apiUrl = `${API_URL}agg_pedido/agg_pedido`;
-
-    return this.http.post(apiUrl, formData, { headers: headers });
-  }
-
-  revisarCarrito(): void { 
-    const codCli = this.authService.getCodCli();
-    this.loading = true;
-    const formData = new FormData();
-
-    const token = this.authService.getToken();
-    const headers = new HttpHeaders({
-      'X-Auth-Token': `${token}`,
-    });
-    formData.append('codCli', codCli ?? '');
-
-    this.http.post(`${API_URL}carrito/revisacar`, formData, { headers: headers } ).subscribe({
-      next: (response: any) => {
-        this.loading = false;
-        if (response && response.encar) {
-          const productosEnCarrito = Object.entries(response.encar).map(([key, value]) => ({
-            key,
-            value,
-          }));
-
-          this.productosEnCarritoSubject.next(productosEnCarrito);
-          this.unidadesSubject.next(response.encar.cana);
-          this.totalBsSubject.next(response.encar.total);
-          this.totalUsdSubject.next(response.encar.totald);
-          this.encarprodSubject.next(response.encar.products);
-          this.productosEnCarritoCodigosSubject.next(response.codigos || []);
-        } else {
-          this.productosEnCarritoSubject.next([]);
-          this.productosEnCarritoCodigosSubject.next([]);
-        }
-      },
-      error: (error) => {
-        this.loading = false;
-        console.error('Error al revisar el carrito:', error);
-      },
-    });
-  }
 
   validateCant(event: any): string {
     const inputValue = event.target.value;
@@ -221,6 +203,59 @@ navigateTo(route: string, queryParams?: any) {
       Swal.close();
     }
 
+    consultarClientesDestino(termino: string = '') {
+      const token = this.authService.getToken();
+      const headers = new HttpHeaders({ 'X-Auth-Token': `${token}` });
+      
+      // Enviamos el término de búsqueda al PHP
+      const body = new FormData();
+      body.append('search', termino);
+    
+      return this.http.post<any>(`${API_URL}portalcli/bdcdest`, body, { headers }).pipe(
+        map(res => (res.status && res.data) ? res.data : [])
+      );
+    }
+
+    consultarCiudades(termino: string = '', estadoCod: string = '') {
+      const token = this.authService.getToken();
+      const headers = new HttpHeaders({ 'X-Auth-Token': `${token}` });
+      
+      const body = new FormData();
+      body.append('search', termino);
+      body.append('estado', estadoCod); // <--- Enviamos el estado seleccionado
+    
+      return this.http.post<any>(`${API_URL}portalcli/ciudades`, body, { headers }).pipe(
+        map(res => (res.status && res.data) ? res.data : [])
+      );
+    }
+
+    consultarEstados(termino: string = '') {
+      const token = this.authService.getToken();
+      const headers = new HttpHeaders({ 'X-Auth-Token': `${token}` });
+      
+      // Enviamos el término de búsqueda al PHP
+      const body = new FormData();
+      body.append('search', termino);
+    
+      return this.http.post<any>(`${API_URL}portalcli/estados`, body, { headers }).pipe(
+        map(res => (res.status && res.data) ? res.data : [])
+      );
+    }
+    
+    consultarRutas(termino: string = '') {
+      const token = this.authService.getToken();
+      const headers = new HttpHeaders({ 'X-Auth-Token': `${token}` });
+      
+      // Enviamos el término de búsqueda al PHP
+      const body = new FormData();
+      body.append('search', termino);
+    
+      return this.http.post<any>(`${API_URL}portalcli/rutas`, body, { headers }).pipe(
+        map(res => (res.status && res.data) ? res.data : [])
+      );
+    }
+    
+    
     formatCurrency(value: number | string): string {
       if (!value) return '';
       const num = typeof value === 'string' ? parseFloat(value) : value;

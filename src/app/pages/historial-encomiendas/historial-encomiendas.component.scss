@@ -1,0 +1,91 @@
+@use '../../../styles/variables.scss' as vars;
+
+.main-layout {
+    display: flex;
+    background-color: vars.$background-fondo;
+    min-height: 100vh;
+  }
+  
+  .content-area {
+    padding: 30px;
+    width: 100%;
+    margin-top: 4rem;
+  }
+  
+  .section-title {
+    color: vars.$menu-color;
+    font-weight: 800;
+    font-size: 1.75rem;
+    margin-bottom: 5px;
+  }
+  
+  .select-custom {
+    border-radius: 20px;
+    background-color: #e9ecef;
+    border: none;
+    font-weight: 600;
+  }
+  
+  .custom-table-card {
+    background: white;
+    border-radius: 20px;
+    border: none;
+    overflow: hidden;
+  
+    .table {
+      margin-bottom: 0;
+        
+      thead th {
+        padding: 12px;
+        font-size: 1.3rem;
+        letter-spacing: 0.5px;
+        color: vars.$menu-color;
+        border-bottom: 2px solid #f1f5f9;
+        text-align: center;
+        background-color: #E9E9E9;
+      }
+  
+      tbody td {
+        padding: 5px 3px;
+        font-size: 1.3rem;
+        border-bottom: 1px solid #f1f5f9;
+        color: vars.$menu-color;
+        background-color: #F4F6F2;
+        text-align: center;
+      }
+    }
+  }
+  
+  .text-start-custom {
+    text-align: left !important;
+    font-size: 0.8rem;
+    max-width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .badge-tracking {
+    background-color: #dcfce7;
+    color: #166534;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.3rem;
+  }
+  
+  .btn-action {
+    background: none;
+    border: none;
+    color: vars.$menu-color;
+    font-size: 1.7rem;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+  
+  ::ng-deep .mat-mdc-paginator {
+    background: transparent !important;
+  }

@@ -1,0 +1,478 @@
+@use '../../../styles/variables.scss' as vars;
+$bg-light: #F4F4F2;     // Fondo general del formulario
+$required-color: #d32f2f;
+
+.main-layout {
+  display: flex;
+  flex-direction: row;
+  min-height: 80vh; // Asegura altura
+  background-color: #fff;
+}
+
+.content-wrapper {
+  flex: 1;
+  padding: 20px;
+  margin-top: 5rem;
+}
+
+.encomienda-container {
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+/* --- Estilos de los Encabezados (Barras Azules) --- */
+.section-header {
+  background-color: vars.$menu-color;
+  color: vars.$background-fondo;
+  padding: 12px 20px;
+  text-align: center;
+  
+  h2 {
+    margin: 0;
+    font-size: 2.1rem;
+    letter-spacing: 0.5px;
+  }
+}
+
+/* --- Contenedor del Formulario (Beige) --- */
+.form-section {
+  background-color: $bg-light;
+  padding: 20px 40px;
+  margin-bottom: 20px; // Espacio entre secciones si hubiera separación blanca
+}
+
+/* --- Grid System --- */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; // Dos columnas iguales
+  column-gap: 40px;
+  row-gap: 15px;
+
+  .full-width {
+    grid-column: 1 / span 2;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr; // Una columna en móvil
+  }
+}
+
+/* Estilo para el input que dispara el autocomplete */
+.input-custom-style {
+    width: 100%;
+    padding: 10px 20px !important;
+    border: none !important;
+    border-radius: 20px !important; // Forma de píldora como los otros
+    background-color: #E8E8E8 !important; // El gris de tus inputs
+    font-size: 2rem; // Ajustado a tu escala de fuente
+    color: vars.$text-claro;
+    outline: none;
+    height: 45px;
+    box-sizing: border-box;
+  
+    &:focus {
+      box-shadow: 0 0 0 2px rgba(31, 45, 61, 0.2);
+    }
+  }
+  
+  /* Estilo para las opciones que caen (el panel) */
+  .opt-container {
+    line-height: 1.2;
+    padding: 8px 0;
+    
+    strong {
+      font-size: 1.8rem;
+      color: vars.$text-claro;
+    }
+    
+    small {
+      font-size: 1.8rem;
+      color: #666;
+    }
+  }
+  
+  /* Forzar que el panel del autocomplete tenga un diseño limpio */
+  ::ng-deep .mat-mdc-autocomplete-panel {
+    background-color: vars.$background-fondo !important;
+    border-radius: 8px !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
+  }
+
+
+/* --- Estilos de Inputs y Labels --- */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+
+  label {
+    font-weight: 700;
+    color: vars.$menu-color;
+    margin-bottom: 5px;
+    font-size: 2rem;
+  }
+
+  .required-text {
+    color: $required-color;
+    font-size: 1.8rem;
+    font-weight: normal;
+    margin-left: 5px;
+  }
+
+}
+.file-upload {
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.file-upload input[type="file"] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.upload-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 2px dashed #ddd;
+  border-radius: 6px;
+  background: vars.$background-fondo;
+  color: vars.$text-claro;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.upload-label:hover {
+  border-color: vars.$principal-color;
+  color: vars.$principal-color;
+}
+
+.file-note {
+  color: #95a5a6;
+  font-size: 1.3rem;
+}
+
+
+
+/* --- Estilos específicos para el Select --- */
+.select-wrapper {
+  position: relative;
+  
+  select {
+    appearance: none; // Quitar flecha por defecto
+    cursor: pointer;
+  }
+
+  // Flecha personalizada (triángulo hacia abajo)
+  &::after {
+    content: "▼";
+    font-size: 0.7rem;
+    color: vars.$menu-color;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+}
+
+/* --- Input de Archivo (Estilo botón "Examinar") --- */
+.file-upload-row {
+  margin-bottom: 15px;
+}
+
+.file-input-custom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.btn-examinar {
+  background-color: #A0A0A0; 
+  color: vars.$background-fondo !important;
+  padding: 6px 15px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: #888;
+  }
+}
+
+.file-msg {
+  font-size: 1.6rem;
+  color: #666;
+}
+
+.hint-text {
+  font-size: 1rem;
+  color: #666;
+  margin-top: 4px;
+  display: block;
+}
+
+/* --- Botón de Guardar --- */
+.actions {
+  text-align: right;
+  padding: 20px;
+  background-color: $bg-light;
+  
+  .btn-submit {
+    background-color: vars.$menu-color;
+    color: vars.$background-fondo;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+::ng-deep .custom-mat-field {
+  .mat-mdc-form-field-icon-prefix {
+    padding-right: 8px;
+    color: #555; // Gris corporativo
+    margin-bottom: 2px;
+  }
+  
+  .monto__input {
+    text-align: right; // Alineación bancaria a la derecha
+    padding-right: 10px !important;
+    font-weight: 600;
+  }
+}
+// Estilos para el componente de subida de archivos
+.file-upload-wrapper {
+  margin-bottom: 1.5rem;
+
+  .file-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+    font-size: 0.875rem;
+    
+    .required-mark {
+      color: #d32f2f;
+      margin-left: 2px;
+    }
+    
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  }
+}
+
+.drag-drop-area {
+  border: 2px dashed #c2c2c2;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  
+  &:hover {
+    border-color: #1976d2;
+    background-color: #f0f7ff;
+  }
+  
+  &.drag-over {
+    border-color: #1976d2;
+    background-color: #e3f2fd;
+    border-style: solid;
+  }
+  
+  &.has-file {
+    border-color: #4caf50;
+    background-color: #f1f8e9;
+  }
+  
+  &.input-error {
+    border-color: #d32f2f;
+    background-color: #ffebee;
+  }
+  
+  .upload-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 1rem;
+    color: #757575;
+    
+    .has-file & {
+      color: #4caf50;
+    }
+    
+    .input-error & {
+      color: #d32f2f;
+    }
+  }
+  
+  .upload-text {
+    margin-bottom: 1rem;
+    
+    .placeholder-text {
+      display: block;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+    
+    .file-info {
+      display: block;
+      color: #333;
+      
+      .file-size {
+        display: block;
+        color: #666;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+      }
+    }
+    
+    .hint-text {
+      display: block;
+      color: #666;
+      font-size: 0.75rem;
+      margin-top: 0.5rem;
+    }
+  }
+  
+  .btn-select {
+    margin-top: 0.5rem;
+    
+    mat-icon {
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+.error-container {
+  margin-top: 0.5rem;
+  
+  .error-msg {
+    color: #d32f2f;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    
+    mat-icon {
+      font-size: 16px;
+      height: 16px;
+      width: 16px;
+    }
+  }
+}
+
+.file-preview {
+  margin-top: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #fafafa;
+  
+  .preview-image {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 4px;
+    display: block;
+    margin: 0 auto 1rem;
+  }
+  
+  .preview-pdf {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    
+    mat-icon {
+      font-size: 64px;
+      height: 64px;
+      width: 64px;
+      color: #d32f2f;
+      margin-bottom: 1rem;
+    }
+    
+    span {
+      color: #666;
+      font-weight: 500;
+    }
+  }
+  
+  .btn-remove {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem auto 0;
+    padding: 0.5rem 1rem;
+    background-color: #ffebee;
+    color: #d32f2f;
+    border: 1px solid #ffcdd2;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background-color: #ffcdd2;
+    }
+    
+    mat-icon {
+      font-size: 18px;
+      height: 18px;
+      width: 18px;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .drag-drop-area {
+    padding: 1.5rem;
+    
+    .upload-icon {
+      font-size: 36px;
+      height: 36px;
+      width: 36px;
+    }
+  }
+  
+  .btn-select {
+    span {
+      display: none;
+    }
+    
+    mat-icon {
+      margin-right: 0 !important;
+    }
+  }
+}

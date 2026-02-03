@@ -1,7 +1,6 @@
 @use '../../../styles/variables.scss' as vars;
 @use './../home-page/home-page.component.scss';
 @use '../../components/nav-bar/nav-bar.component.scss';
-@use './../carrito-page/carrito-page.component.scss';
 
 .mi-perfil {
     background-color: vars.$background-fondo;
@@ -47,7 +46,7 @@
       color: vars.$menu-color;
     }
     .mi-perfil__left{
-        width: 33%;
+        width: 100%;
     }
     .mi-perfil__right{
         width: 70%;

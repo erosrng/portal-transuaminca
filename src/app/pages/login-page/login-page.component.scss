@@ -1,284 +1,211 @@
-/*
- * PROTEO ERP
- * Desarrollador: © EROS RANGEL
- */
-
 @use '../../../styles/variables.scss' as vars;
-.loader {
-    display: flex;
-    flex-direction: column; 
-    justify-content: center;
-    align-items: center;
-    position: fixed; 
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.8); 
-    z-index: 5; 
+:root {
+    --bg-dark-teal: #032b35; /* Fondo oscuro de la página */
+    --primary-blue: #0e3655; /* Azul oscuro del botón y logo */
+    --input-bg: #f2f4f7;     /* Gris claro de los inputs */
+    --text-dark: #1d1d1d;
+    --text-gray: #6b6b6b;
+    --white: #ffffff;
 }
-
-.loader-icon {
-    width: 50px;
-    height: 50px;
-    border: 5px solid vars.$background-fondo; 
-    border-top: 5px solid vars.$menu-color; 
-    border-radius: 50%;
-    animation: spin 1s linear infinite; 
-    margin-bottom: 20px; 
-}
-
-/* Animación de giro */
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Estilo del texto del loader */
-.loader-text {
-    font-size: 1.2em;
-    color: #333;
-    text-align: center;
-}
-/*FIN DEL LOADER*/
 
 .portal {
     display: flex;
-    width: 100%;
-    height: 100%;
-    background-color: vars.$background-fondo;
-}
-
-.portal__login,
-.portal__registro {
-    flex: 1;
-    padding: 8rem 0 0 0;
-    display: flex;
-    flex-direction: column;
-    /*justify-content: space-between;  Distribuye los elementos en tres secciones */
-    align-items: center;
-    background-color: vars.$background-fondo;
-}
-
-.portal__logo {
-    width: 30%;
-    margin-bottom: 1rem;
-}
-
-.portal__title {
-    font-size: 1.8rem;
-    color: vars.$menu-color;
-    margin-bottom: 2rem;
-    text-align: center;
-}
-
-.portal__form {
-    width: 70%;
-    max-width: 80%;
-    margin-top: 20%;
-    margin-bottom: auto;
-}
-
-.portal__input {
-    width: 100%;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-}
-
-.portal__input-icon {
-    margin-right: 0.5rem;
-}
-
-.portal__footer {
-    margin-top: 1rem;
-    text-align: center;
-    color: vars.$menu-color;
-    font-size: 2.5rem;
-    font-weight: 1;
-}
-
-.portal__image {
-    flex: 2;
-    position: relative;
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-    overflow: hidden; 
-}
-
-.login__background{
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    background-size: cover;
-    display: flex;
     justify-content: center;
     align-items: center;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    position: relative; /* Necesario para el fondo absoluto */
     overflow: hidden;
-}
 
-.portal__person {
-    width: 53%;
-    max-width: 60%;
-    height: auto;
-    position: relative;
-    z-index: 2;
-    margin-bottom: -10rem;
+    /* CAPA DE FONDO DIFUMINADA */
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('/assets/images/HOME.jpeg') center/cover no-repeat;
+        filter: blur(8px) brightness(0.7);
+        transform: scale(1.1); 
+        z-index: -1; 
+    }
 }
-
-.portal__person {
-    transform: translateY(10%);
-}
-/* Contenedor principal de inputs */
-.container_input_custom {
+/* La Tarjeta Flotante Central */
+.login-card {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-.login__container{
-    width: 50%;
-}
-/* Estilo para el grupo de inputs */
-.input_group {
-    display: flex;
-    gap: 20px;
-}
-
-/* Estilo para el wrapper de los inputs */
-.input_wrapper {
-    position: relative;
-    flex-grow: 1;
-    width: 100%;
-}
-.custom-input {
-    height: 6rem;
-    font-size: 1.5rem;
-    padding: 1rem 0.75rem;
-}
-/* Estilo de los inputs */
-.input_field {
-    width: 100%;
-    padding-right: 10px; 
-    padding-left: 10px;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    box-sizing: border-box;
-    color: vars.$background-fondo;
+    width: 90%;
+    max-width: 1100px;
+    height: 650px; 
     background-color: vars.$background-fondo;
-    transition: all 0.3s;
+    border-radius: 40px; 
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    padding: 1rem;
 }
 
-/* Espaciado adicional para inputs con errores */
-.input_field + .error-message {
-    margin-top: 5px;
-}
-
-/* Para evitar el solapamiento entre el error y el label */
-.input_field:focus + .input_label,
-.input_field:not(:placeholder-shown) + .input_label,
-.input-error + .input_label {
-    top: -10px;
-    font-size: 10px;
-}
-.input_button{
+/* --- LADO IZQUIERDO (Formulario) --- */
+.portal__left {
+    flex: 1;
+    padding: 3rem;
     display: flex;
     flex-direction: column;
-    justify-items: center;
+    justify-content: center;
     align-items: center;
-    width: 100%;
-    margin-bottom: 2.5rem;
+    background: vars.$background-fondo;
 }
 
-.input_button button {
+.login-content {
     width: 100%;
+    max-width: 380px;
+    text-align: center;
+}
+
+.login-brand {
+    color: vars.$menu-color;
+    font-weight: 900;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.login-title {
+    color: var(--text-dark);
+    font-size: 3.5rem;
+    font-weight: 999;
+    line-height: 1.1;
+    margin-bottom: 17.5rem;
+}
+
+
+.separator-text {
+    font-size: 0.85rem;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+/* ESTILOS DE LOS INPUTS (Override de Angular Material) */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+/* Forzar estilo píldora gris */
+::ng-deep .custom-input .mat-mdc-form-field-flex {
+    background-color: vars.$bordes-claros !important;
+    border-radius: 50px !important; /* Forma de píldora */
+    padding: 0 20px !important;
+    height: 55px;
+    align-items: center;
+}
+
+/* Ocultar underline/outline por defecto de Material */
+::ng-deep .custom-input .mdc-line-ripple { display: none !important; }
+::ng-deep .custom-input .mdc-notched-outline { display: none !important; }
+
+/* Texto del input */
+::ng-deep .custom-input input.mat-mdc-input-element {
+    font-weight: 500;
+    color: #333;
+}
+
+/* Placeholder */
+::ng-deep .custom-input .mat-mdc-input-element::placeholder {
+    color: #999;
+    font-weight: 400;
+}
+
+/* Botón de Submit */
+.btn_primary {
+    width: 80%;
     padding: 1rem;
-    background-color: vars.$text-color2;
-    border: none;
-    border-radius: 1rem;
-    color: vars.$background-fondo;
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.input_button button:hover {
     background-color: vars.$menu-color;
     color: vars.$background-fondo;
+    border: none;
+    border-radius: 50px; /* Píldora */
+    font-size: 1.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 1rem;
 }
-.register_link{
+
+.btn_primary:hover {
+    background-color: #082236;
+}
+
+/* Footer Links */
+.login-footer {
+    margin-top: 1.5rem;
+}
+
+.footer-text {
+    color: var(--text-gray);
+    font-size: 1.4rem;
+}
+
+.login-link-bold {
+    color: #000;
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+/* --- LADO DERECHO (Imagen) --- */
+.portal__right {
+    flex: 1.3; /* Ocupa un poco más de espacio */
+    position: relative;
+    background: url('/assets/images/HOME.jpeg') center/cover no-repeat; 
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
+    justify-content: flex-end; /* Contenido abajo */
+    padding: 3rem;
+    color: white;
+    border-radius: 4rem;
+}
+
+/* Capa oscura sutil sobre la imagen */
+.portal__right::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5));
+    border-radius: 4rem;
+}
+
+/* Logo superpuesto arriba */
+.brand-overlay-logo {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.register_link_item {
-    margin: 1.3rem 0;
-    text-decoration: none;
-    color: vars.$menu-color;
-    font-size: 1.5rem;
+.login__logo{
+    width: 23%;
 }
-    /*ESTILOS REGISTRO DE CLIENTES*/
-    .registrate__boton_custom {
-        color: vars.$resaltador; /* Color estético para resaltar */
-        font-weight: bold; /* Texto en negrita */
-    }
 
-    .registrate__boton {
-        color: vars.$resaltador; 
-        font-weight: bold; 
-        cursor: pointer; 
-        transition: transform 0.3s ease-in-out;
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .login-card {
+        flex-direction: column;
+        height: auto;
+        border-radius: 20px;
     }
-
-    @media (max-width: 600px) {
-        /* .portal{
-            flex-direction: column-reverse;
-        }
-        .portal__login{
-            height: 80%;
-            padding: 1rem;
-            margin: 0;
-        } */
-        .portal {
-            flex-direction: column-reverse;
-        }
-        .portal__title{
-            margin-bottom: 0;
-        }
-        .portal__registro {
-            flex: unset;
-            height: 92%;
-        }
-        .portal__image {
-            display: none;
-        }
-        .portal__logo {
-            width: 20%;
-            margin-top: 1rem;
-        }
-        .portal__form {
-            margin-top: 1%;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-        .portal__footer {
-            margin-bottom: 10rem;
-        }
+    .portal__right {
+        height: 250px;
+        order: -1; /* Imagen arriba en móvil */
     }
-
-@media screen and (max-width: 768px) {
-    .login__container {
-        width: 85%;
-        margin-top: 3rem;
+    .portal__left {
+        padding: 2rem;
     }
 }

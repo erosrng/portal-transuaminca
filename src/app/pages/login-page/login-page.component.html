@@ -1,91 +1,4 @@
-<div class="portal" id="login__container">
 
-    <div class="loader-overlay" *ngIf="isLoading">
-      <div class="d-flex justify-content-center align-items-center h-100">
-        <div class="spinner-border text-success" role="status">
-          <span class="visually-hidden">Cargando...</span>
-        </div>
-      </div>
-    </div>
-  
-    <div class="portal__login">
-      <img src="./assets/images/favicon.png" alt="Logo Insuanet" class="portal__logo" />
-      <h1 class="portal__title">¡Bienvenido a Transuaminca!</h1>
-      <h1 *ngIf="errorMessage" style="color: red; text-align: center;">{{ errorMessage }}</h1>
-      <section class="login__container">
-        <form (ngSubmit)="onSubmit()">
-          <div class="mb-3">
-            <div class="form-floating">
-
-                <mat-form-field style="width: 100%;" appearance="outline">
-                    <mat-label>Usuario</mat-label>
-                    <input matInput #input  placeholder="Usuario"
-                           type="text"
-                           id="user"
-                           name="user"
-                           appearance="outline"
-                           placeholder="Usuario"
-                           required
-                           [(ngModel)]="userData.user"
-                           #userInput
-                    />
-                </mat-form-field>
-            </div>
-          </div>
-        
-          <div class="mb-3">
-            <div class="form-floating">
-                <mat-form-field style="width: 100%;" appearance="outline">
-                    <mat-label>Ingrese su contraseña</mat-label>
-                    <input matInput [type]="hide() ? 'password' : 'text'"
-                           type="password"
-                           id="pws"
-                           name="pws"
-                           placeholder="Contraseña"
-                           required
-                           [(ngModel)]="userData.password"
-                    />
-                    <button
-                            mat-icon-button
-                            matSuffix
-                            (click)="clickEvent($event)"
-                            [attr.aria-label]="'Hide password'"
-                            [attr.aria-pressed]="hide()"
-                    >
-                        <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-                </mat-form-field>
-            </div>
-          </div>
-        
-          <div class="input_button">
-            <button type="submit" class="btn_primary">Ingresar</button>
-          </div>
-        </form>
-      </section>
-  
-      <a href="javascript:void(0)" class="register_link_item" (click)="navigateTo('/registrocli')"
-        >¿No tienes usuario? <span id="registrate__button" class="registrate__boton">Registrar</span></a
-      >
-        <a href="javascript:void(0)" class="register_link_item" (click)="openRecoveryDialog()"
-        >¿Olvidaste tus datos? <span id="registrate__button" class="registrate__boton">Recuperar</span></a
-        >
-      <!-- 
-      <a href="#" class="register_link_item"
-        >Olvidaste tu contraseña? <span id="olpws__button" class="registrate__boton">Recuperar</span></a
-      > -->
-      <p class="portal__footer">Insuaminca, + cerca de ti</p>
-    </div>
-    
-    <div class="portal__image">
-      <img src="./assets/HOME.png" class="login__background" />
-      <div class="portal__overlay"></div>
-
-    </div>
-  </div>
-
-
-<!-- Modal -->
 <ng-template #recoveryDialog>
   <div class="recovery-dialog-container">
     <h2 mat-dialog-title>Recuperación de datos</h2>
@@ -155,4 +68,86 @@
       <button mat-button mat-dialog-close>Cancelar</button>
     </mat-dialog-actions>
   </div>
-</ng-template>
+</ng-template> 
+
+<div class="portal" id="login__container">
+
+  <div class="loader-overlay" *ngIf="isLoading">
+      <div class="d-flex justify-content-center align-items-center h-100">
+          <div class="spinner-border text-success" role="status">
+              <span class="visually-hidden">Cargando...</span>
+          </div>
+      </div>
+  </div>
+
+  <main class="login-card">
+    
+    <div class="portal__left">
+        <div class="login-content">
+            <h1 class="login-brand">TRANSUAMINCA</h1>
+            <h2 class="login-title">¿Listo para tu<br>primer viaje?</h2>
+
+            <h1 *ngIf="errorMessage" class="error-message">{{ errorMessage }}</h1>
+            
+            <section class="login__form-container">
+                <form (ngSubmit)="onSubmit()">
+                    <div class="form-group custom-input">
+                        <mat-form-field appearance="outline" class="w-100 no-label-animation">
+                            <input matInput #input
+                                  type="text"
+                                  id="user"
+                                  name="user"
+                                  placeholder="Usuario"
+                                  required
+                                  [(ngModel)]="userData.user"
+                                  #userInput
+                            />
+                        </mat-form-field>
+                    </div>
+                    
+                    <div class="form-group custom-input">
+                        <mat-form-field appearance="outline" class="w-100 no-label-animation">
+                            <input matInput 
+                                   [type]="hide() ? 'password' : 'text'"
+                                   id="pws"
+                                   name="pws"
+                                   placeholder="Contraseña"
+                                   required
+                                   [(ngModel)]="userData.password">
+                            <button mat-icon-button
+                                    matSuffix
+                                    (click)="clickEvent($event)"
+                                    [attr.aria-label]="'Hide password'"
+                                    [attr.aria-pressed]="hide()">
+                                <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="input_button">
+                      <button type="submit" class="btn_primary">Empezar</button>
+                    </div>
+                </form>
+            </section>
+            
+            <div class="login-footer">
+                <p class="footer-text">¿No tienes usuario? 
+                  <a href="javascript:void(0)" class="login-link-bold"  (click)="navigateTo('/registrocli')">Registrar</a>
+                </p>
+
+                <p class="footer-text">¿Olvidaste tus datos? 
+                  <a href="javascript:void(0)" class="login-link-bold" (click)="openRecoveryDialog()">Recuperar</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="portal__right">
+        <div class="brand-overlay-logo">
+             <img class="login__logo" src="./../../../assets/images/logonegro.png" alt="">
+        </div>
+
+
+    </div>
+  </main>
+</div>

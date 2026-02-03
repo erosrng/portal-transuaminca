@@ -14,8 +14,8 @@
           <h3 class="card-title text-primary">Datos del cliente</h3>
             <p>Cliente: {{ (portalcliLogicaService.clienteData$ | async)?.nombre }}</p>
             <p>RIF: {{ (portalcliLogicaService.clienteData$ | async)?.rifci }}</p>
-            <p>Días de crédito: {{ (portalcliLogicaService.clienteData$ | async)?.formap }}</p>
-            <p>Código SICM:  {{ (portalcliLogicaService.clienteData$ | async)?.sicm }}</p>
+            <!-- <p>Días de crédito: {{ (portalcliLogicaService.clienteData$ | async)?.formap }}</p>
+            <p>Código SICM:  {{ (portalcliLogicaService.clienteData$ | async)?.sicm }}</p> -->
             <p>Correo Electrónico: {{ (portalcliLogicaService.clienteData$ | async)?.email }}</p>
             <p>Usuario: {{ authService.getUsuario() }}</p>
             <p>Teléfono: {{ (portalcliLogicaService.clienteData$ | async)?.email }}</p>
@@ -32,7 +32,7 @@
                     <app-clicard></app-clicard>
                   </div>
               
-                  <div class="card mt-4 card__info">
+                  <!-- <div class="card mt-4 card__info">
                       <div class="card-body ">
                           <h3 class="card-title text-primary">Asesor Comercial</h3>
                           <p class="card-text">
@@ -42,7 +42,7 @@
                             </span>
                           </p>
                       </div>
-                  </div>
+                  </div> -->
           </div>
   
           <!-- <div class="mi-perfil__right">

@@ -32,14 +32,12 @@
                         <div class="row mt-3">
 
                             <!-- CARRUSEL -->
-                            <div class="col-8">
+                            <!-- <div class="col-8">
                                 <h3 class="text-primary">¡Bienvenido a Transuaminca!</h3>
                                 
 
-                                <!---CARRUSEL ALEATORIO-->
                                 <div class="carrusel1__container main-carousel" style="margin-right: 1rem;">
                                     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-                                    <!-- Indicadores -->
                                     <div class="carousel-indicators">
                                         <button *ngFor="let image of shuffledMainImages; let i = index" 
                                                 type="button" 
@@ -50,7 +48,6 @@
                                         </button>
                                     </div>
                                 
-                                    <!-- Imágenes del carrusel -->
                                     <div class="carousel-inner">
                                         <div *ngFor="let image of shuffledMainImages; let i = index" 
                                             class="carousel-item" 
@@ -59,7 +56,6 @@
                                         </div>
                                     </div>
                                 
-                                    <!-- Controles -->
                                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                         <span class="visually-hidden">Previous</span>
@@ -70,9 +66,9 @@
                                     </button>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="col-4">
+                            <div class="col-12">
                                 <h3 class="text-primary">Informacion del cliente</h3>
                                 <div class="container-fluid mt-5">
                                     <div class="row">
@@ -82,19 +78,6 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 mt-2">
-                                            <div class="card mt-4 card__info">
-                                                <div class="card-body ">
-                                                    <h3 class="card-title text-primary">Asesor Comercial</h3>
-                                                    <p class="card-text">
-                                                        <span class="cardinfo__text">NOMBRE: <b>{{ (portalcliLogicaService.clienteData$ | async)?.nombrevd }}</b></span><br>
-                                                        <span class="cardinfo__text">TELÉFONO: <b>{{ (portalcliLogicaService.clienteData$ | async)?.telefonovd }}</b></span><br>
-                                                        <span class="cardinfo__text">CORREO: <span class="title__limit">{{ (portalcliLogicaService.clienteData$ | async)?.emailvd }}</span>
-                                      </span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

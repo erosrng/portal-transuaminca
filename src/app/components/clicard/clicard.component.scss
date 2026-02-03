@@ -1,70 +1,110 @@
+// Paleta Transuaminca
+$blue-dark: #002B45;   
+$green-brand: #08BB14; 
+$white: #ffffff;
+$gray-pill: #f4f7f9;
+$text-main: #002B45;
+$text-muted: #64748b;
 @use '../../../styles/variables.scss' as vars;
 
-.card-title {
-    border-bottom: 1px solid vars.$lineas-separetor; 
-    padding-bottom: 10px;
-  }
-.text-primary{
-    color: vars.$menu-color !important;
-}
-.title__limit{
-    color: vars.$menu-color-seconday;
-}
-.cardinfo__text{
-    color: vars.$menu-color;
-}
-.saldo__content {
-    border-radius: 1rem !important;
-}
-.rounded {
-    background-color: vars.$text-color2;
+.transuaminca-container {
+    background: vars.$menu-color;
+    border-radius: 24px; 
+    padding: 1.6rem;
+    color: $white;
+    position: relative;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
 }
 
-.col-md-4 {
-    border-right: 1px solid vars.$lineas-separetor; 
+.header-section {
+    margin-bottom: 1.5rem;
+    .brand-title {
+        font-weight: 800;
+        font-size: 1.4rem;
+        margin: 0;
+    }
+    .brand-subtitle {
+        font-size: 1.3rem;
+        opacity: 0.8;
+    }
 }
 
-.col-md-4:last-child {
-    border-right: none;
+.tarifa-card {
+    background: $white;
+    border-radius: 16px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    border-left: 6px solid $green-brand;
+    transition: all 0.3s ease;
 }
 
-* {
-    font-size: 13px !important;
+.tarifa-identity {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 200px;
+    border-right: 1px solid #edf2f7;
+    padding-right: 1.5rem;
+
+    .label {
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        color: $text-muted;
+        font-weight: 700;
+        display: block;
+    }
+
+    .tarifa-name {
+        color: $text-main;
+        font-size: 1.3rem;
+        font-weight: 800;
+        margin: 0;
+    }
 }
 
-.th-top-green {
-    background: #6bc32c;
-    color: #FFF;
-    border-bottom: 2px solid #ededed;
-    border-left: 2px solid #ededed;
+.tarifa-values-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    flex: 1;
 }
 
-.th-center-green {
-    background: #6bc32c;
-    color: #FFF;
+// ESTILO ÚNICO PARA TODOS LOS INDICADORES
+.stat-pill {
+    background: $gray-pill;
+    border: 1px solid #e2e8f0;
+    padding: 0.5rem 0.85rem;
+    border-radius: 12px; // Menos circular, más "cápsula moderna"
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+
+    .pill-label {
+        font-size: 1.2rem;
+        color: $text-muted;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+
+    .pill-value {
+        font-weight: 800;
+        color: $text-main;
+        font-size: 1.4rem;
+    }
 }
 
-.th-bottom-green {
-
+.loading-state, .empty-state {
+    padding: 2rem;
+    text-align: center;
+    font-size: 0.9rem;
+    i { font-size: 1.5rem; margin-bottom: 0.5rem; display: block; }
 }
 
-.th-border-grey {
-    border-bottom: 1px solid #CCC;
-}
-
-.th-center {
-    border-bottom: 2px solid #ededed;
-    background: #0084c5;
-    color: #FFF;
-}
-
-.th-center-no-border {
-
-}
-
-.blue {
-    background: #0084c5;
-    color: #FFF;
-    border-bottom: 2px solid #ededed;
-
+@media (max-width: 992px) {
+    .tarifa-card { flex-direction: column; align-items: flex-start; }
+    .tarifa-identity { border: none; padding: 0; margin-bottom: 0.5rem; }
 }

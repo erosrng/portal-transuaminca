@@ -18,10 +18,10 @@ import {
   ɵɵdefineNgModule,
   ɵɵinject
 } from "./chunk-3NAA7VHD.js";
-import "./chunk-WMWTRTCA.js";
 import {
   defer
 } from "./chunk-QO67QQ3F.js";
+import "./chunk-WMWTRTCA.js";
 import {
   map,
   mergeMap,

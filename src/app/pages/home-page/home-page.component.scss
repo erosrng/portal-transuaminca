@@ -1,228 +1,11 @@
 @use '../../../styles/variables.scss' as vars;
-// Modal Flotante Simple - Solo para imagen
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(6px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    animation: fadeIn 0.3s ease forwards;
-    cursor: pointer;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  
-  /* Contenedor con animación de scale up */
-  .modal-container {
-    position: relative;
-    max-width: 90%;
-    max-height: 90%;
-    animation: scaleUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    cursor: default;
-    transform-origin: center center;
-  }
-  
-  @keyframes scaleUp {
-    from {
-      opacity: 0;
-      transform: scale(0.8);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-  
-  /* Botón con animación de aparición */
-  .modal-close-btn {
-    position: absolute;
-    top: -40px;
-    right: -10px;
-    background: white;
-    border: none;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 18px;
-    color: #333;
-    z-index: 10;
-    animation: slideIn 0.3s 0.2s ease-out forwards;
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  
-  @keyframes slideIn {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .modal-close-btn:hover {
-    background: #ff4444;
-    color: white;
-    transform: scale(1.1);
-    transition: all 0.2s;
-  }
-  
-  /* Imagen con animación de aparición */
-  .modal-image {
-    max-width: 100%;
-    max-height: 85vh;
-    display: block;
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    animation: imageFadeIn 0.5s ease-out;
-  }
-  
-  @keyframes imageFadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-/***/
-.fichaproduct__container {
-    width: 100%;
-    overflow: hidden;
-}
-
-.product-header {
-    background-color: vars.$text-color2; /* Color verde */
-    color: white;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    border-radius: 2rem 2rem 0 0rem;
-}
-
-.logo {
-    width: 100px; /* Ajusta el tamaño del logo */
-    margin-right: 20px;
-}
-
-.slogan {
-    font-style: italic;
-    font-size: 14px;
-}
-
-.product-content {
-    display: flex;
-}
-
-.product-image {
-    width: 60%;
-    padding: 20px;
-}
-
-.product-image img {
-    max-width: 100%;
-    height: auto;
-    position: relative;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.product-details {
-    width: 40%;
-    border: 1px solid vars.$bordes-claros;
-    border-radius: 2rem;
-}
-
-.product-title {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-}
-
-.more-products {
-    color: vars.$menu-color-seconday;
-    text-decoration: none;
-    font-size: 1.4rem;
-    display: block;
-    text-align: center;
-}
-
-.price {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 0rem;
-    padding: 2rem;
-}
-
-.usd {
-    font-size: 2.2em;
-    color: vars.$menu-color;
-}
-
-.bs {
-    font-size: 1.5em;
-    color: vars.$menu-color;
-}
-
-.product-data {
-    list-style: none;
-    text-align: left;
-    padding: 0;
-    margin: 0;
-}
-
-.product-data li {
-    font-size: 1.3rem;
-    color: vars.$menu-color;
-}
-
-.quantity {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0rem 2rem 0rem 2rem;
-}
-
-.quantity-input {
-    width: 12rem;
-    padding: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 1rem;
-}
-
-.stock {
-    font-size: 1.4rem;
-    color: vars.$menu-color;
-}
-
-
-/***********************/
-
-
 /**//************MAIN CONTENT BIENVENIDO AL PORTAL*********************/
 .content__general {
     width: 100%;
     overflow: hidden;
     z-index: 1;
     overflow-y: hidden;
+    background: url('/assets/images/montain.jpeg') center/cover no-repeat;
 }
 
 
@@ -360,10 +143,11 @@
 .card-title {
     border-bottom: 1px solid vars.$lineas-separetor;
     padding-bottom: 10px;
-  }
+}
+
 /* Efecto difuminado del carrusel de publicidad principal*/
 .text-primary{
-    color: vars.$menu-color !important;
+    color: vars.$background-fondo !important;
 }
 .rounded {
     background-color: vars.$text-color2;
@@ -393,7 +177,7 @@
     padding: 1rem;
 }
 .slide {
-    background-color: white;
+    background-color: vars.$background-fondo;
     border-radius: 10px;
     display: flex;
     overflow: hidden;
@@ -429,9 +213,6 @@
     background: #FFF;
 }
 
-.carousel img {
-
-}
 .carousel-buttons {
     position: absolute;
     top: 50%;
@@ -483,194 +264,6 @@
     padding: 0rem 4rem;
 }
 
-.product-card {
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    position: relative;
-    overflow: hidden;
-    height: 35vh;
-    margin: 10px;
-    border: none;
-}
-
-.discount-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: vars.$text-color2;
-    color: vars.$background-fondo;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-weight: bold;
-    font-size: 1rem;
-}
-
-.product-price {
-    text-align: center;
-    font-size: 1.8rem;
-    font-weight: bold;
-    margin-top: 5px;
-    color: vars.$menu-color;
-}
-
-.product-info {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    font-size: 1rem;
-    color: vars.$background-fondo;
-}
-.desca__product{
-    font-size: 1.2rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    text-overflow: ellipsis;
-    white-space: normal;
-    max-height: 3rem;
-}
-.exis__text {
-    color: #676666;
-    text-align: center;
-}
-.product-actions {
-    gap: 0.5rem;
-    padding: 10px;
-    background-color: vars.$text-color2;
-}
-
-
-.ofertas__layout {
-    display: flex;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    justify-content: flex-start;
-    align-items: center;
-}
-/*.ofertas__carrusel {
-    width: auto;
-    position: relative;
-    overflow: hidden;
-    height: 100%;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    scroll-snap-type: x mandatory;
-}*/
-
-.ofertas__carrusel-low {
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-    height: 100%;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    scroll-snap-type: x mandatory;
-}
-.image-product__container-v2 {
-    width: 100%;
-    margin-bottom: 1rem;
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
-.ofertas-title {
-    border-bottom: 3px solid vars.$text-color2;
-    padding-bottom: 5px;
-    display: inline-block;
-    width: fit-content;
-}
-.img__product-principal-v2 {
-    max-width: 50%;
-
-}
-
-/*nuevo nuevo nuevo***/
-
-/**/
-.carrito__checkout-button{
-    width: 80%;
-    padding: 10px 20px;
-    border: none;
-    background-color: vars.$menu-color;
-    color: white;
-    border-radius: 1rem;
-    margin: 1rem auto;
-    display: block;
-}
-.carrito__checkout-button-agg{
-    width: 80%;
-    padding: 10px 20px;
-    border: none;
-    background-color: vars.$text-color2;
-    color: white;
-    border-radius: 1rem;
-    margin: 1rem auto;
-    display: block;
-}
-.cana__container-v2 {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    align-items: center;
-    margin-top: 3rem;
-}
-.preca__antes{
-    font-size: 1.9rem;
-    text-decoration: line-through; 
-}
-.preca__antes2{
-    font-size: 1.3rem;
-    text-decoration: line-through; 
-}
-.cana__input-v2 {
-    width: 40%;
-    border-radius: 0.5rem;
-    border: none;
-    text-align: center;
-    font-size: 2rem;
-    padding: 0.35rem;
-    transition: border-color 0.3s ease;
-    font-weight: bold;
-    color: black;
-}
-
-.cana__input-v2:focus {
-    border-color: vars.$principal-color-hover;
-    outline: none;
-}
-
-.send__button-v2 {
-    width: 40%;
-    background-color: vars.$background-fondo;
-    color: vars.$menu-color;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    font-size: 2.4rem;
-    padding: 0rem;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.send__button-v2:hover {
-    transform: scale(1.05);
-}
-
-/* Estilos para los botones de navegación */
-.carousel-arrow-buttons {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem;
-}
-
 .arrow-button {
     background-color: vars.$text-color2;
     color: vars.$background-fondo;
@@ -698,7 +291,7 @@
     transform: translateY(-50%);
     font-size: 1.5rem;
     background-color: rgba(0, 0, 0, 0.5);
-    color: white;
+    color: vars.$background-fondo;
     border: none;
     padding: 1rem;
     cursor: pointer;

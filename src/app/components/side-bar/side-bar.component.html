@@ -1,15 +1,51 @@
 <section class="menu__general"  id="menu" [class.open]="portalcliLogicaService.isMenuOpen">
     <div class="menu__content">
-        <img src="./../../../assets/images/bannerlogoeros.png" style="width: 20rem;position: relative;margin: 0 auto;" alt="">
 
         <ul class="nav flex-column menu__nav">
-            <li class="nav-item" >
+            <li class="nav-item">
                 <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/home')">
-                    <i class="fas fa-home"></i><span *ngIf="portalcliLogicaService.isMenuOpen"> Inicio</span>
+                    <i class="fas fa-home"></i>
+                    <span *ngIf="portalcliLogicaService.isMenuOpen"> Inicio</span>
                 </a>
             </li>
+            
+            <li class="nav-item">
+                <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/encomiendas')">
+                    <i class="fas fa-box-open"></i>
+                    <span *ngIf="portalcliLogicaService.isMenuOpen"> Encomiendas</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/miperfil')">
+                    <i class="fas fa-user-circle"></i>
+                    <span *ngIf="portalcliLogicaService.isMenuOpen"> Perfil</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/historialencomiendas')">
+                    <i class="fas fa-boxes"></i>
+                    <span *ngIf="portalcliLogicaService.isMenuOpen"> Paquetes</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/destinatarios')">
+                    <i class="fas fa-address-book"></i>
+                    <span *ngIf="portalcliLogicaService.isMenuOpen"> Destinatarios</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link menu__link" href="javascript:void(0)" (click)="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span *ngIf="portalcliLogicaService.isMenuOpen"> Cerrar sesión</span>
+                </a>
+            </li>
+        </ul>
 
-            <!-- <li class="nav-item">
+                    <!-- <li class="nav-item">
                 <a class="nav-link menu__link" href="#" data-bs-toggle="collapse" data-bs-target="#pedidosDropdown" aria-expanded="false">
                     <i class="fas fa-shopping-cart"></i><span *ngIf="portalcliLogicaService.isMenuOpen"> Toma de pedidos</span> <i class="fas fa-solid fa-angle-down menu__dropdown-icon"></i>
                 </a>
@@ -29,11 +65,6 @@
                 </div>
             </li> -->
 
-            <li class="nav-item">
-                <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/miperfil')">
-                    <i class="fas fa-user"></i><span *ngIf="portalcliLogicaService.isMenuOpen"> Encomiendas</span>
-                </a>
-            </li>
 
             <!-- <li class="nav-item">
                 <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/pagos')">
@@ -43,19 +74,7 @@
                 </a>
             </li> -->
 
-            <li class="nav-item">
-                <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/miperfil')">
-                    <i class="fas fa-user"></i><span *ngIf="portalcliLogicaService.isMenuOpen"> Perfil</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/historialpedidos')">
-                    <i class="fas fa-history"></i><span *ngIf="portalcliLogicaService.isMenuOpen"> Historial de pedidos</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/reclamos')">
                     <i class="fas fa-exclamation-circle"></i>
                     <span *ngIf="portalcliLogicaService.isMenuOpen"> Reclamos</span>
@@ -64,20 +83,11 @@
                         NUEVO!
                     </span>
                 </a>
-            </li>
+            </li> -->
 
-
-            <li class="nav-item">
-                <a class="nav-link menu__link" href="javascript:void(0)" (click)="logout()">
-                    <i class="fas fa-sign-out-alt"></i><span *ngIf="portalcliLogicaService.isMenuOpen"> Cerrar sesión</span>
-                </a>
-            </li>
-        </ul>
-
-
-        <div class="menu__footer" *ngIf="portalcliLogicaService.isMenuOpen">
+        <!-- <div class="menu__footer" *ngIf="portalcliLogicaService.isMenuOpen">
             Insuaminca, + cerca de ti
-        </div>
+        </div> -->
     </div>
 </section>
 

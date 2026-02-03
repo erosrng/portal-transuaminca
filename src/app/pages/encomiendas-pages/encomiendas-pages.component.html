@@ -1,0 +1,273 @@
+<app-nav-bar></app-nav-bar>
+
+<div class="main-layout">
+  <app-side-bar></app-side-bar>
+
+  <div class="content-wrapper">
+
+    <div class="col-12">
+
+      <div class="col-12">
+          <div class="card__info">
+              <app-clicard></app-clicard>
+          </div>
+      </div>
+
+    </div>
+
+    <form [formGroup]="encomiendaForm" (ngSubmit)="onSubmit()" class="encomienda-container mt-5">
+      
+      <div class="section-block">
+        <div class="section-header">
+          <h2>Información de entrega</h2>
+        </div>
+
+        <div class="form-section">
+          <div class="form-grid">
+            <mat-form-field appearance="outline" class="full-width custom-mat-field">
+              <mat-label>Destinatario (Nombre o RIF)</mat-label>
+              <input type="text" matInput [formControl]="clienteControl" [matAutocomplete]="autoDest">
+              <mat-icon matSuffix>search</mat-icon>
+              <mat-autocomplete #autoDest="matAutocomplete" [displayWith]="displayFn">
+                <mat-option *ngFor="let cliente of filteredOptions | async" [value]="cliente" (onSelectionChange)="onClienteSeleccionado(cliente)">
+                  <div class="opt-container">
+                    <strong>({{cliente.cliente}})</strong> {{cliente.nombre}}
+                    <br>
+                    <small>RIF: {{cliente.rifci}} | Ruta: {{cliente.ruta}}</small>
+                  </div>
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error *ngIf="encomiendaForm.get('destinatario')?.hasError('required')">El destinatario es obligatorio</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Nombre</mat-label>
+              <input matInput formControlName="nombre" readonly class="input-readonly">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Ruta</mat-label>
+              <input matInput formControlName="ruta" readonly class="input-readonly">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width custom-mat-field">
+              <mat-label>Dirección</mat-label>
+              <input matInput formControlName="direccion" readonly class="input-readonly">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Origen</mat-label>
+              <input type="text" matInput [formControl]="origenControl" [matAutocomplete]="autoOri" placeholder="Ciudad de salida">
+              <mat-icon matSuffix>search</mat-icon>
+              <mat-autocomplete #autoOri="matAutocomplete" [displayWith]="displayCiudad">
+                <mat-option *ngFor="let c of filteredCiudadesOrigen | async" [value]="c" (onSelectionChange)="onCiudadOrigenSeleccionada(c)">
+                  {{c.ciudad}}
+                </mat-option>
+              </mat-autocomplete>
+
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Destino</mat-label>
+              <input type="text" matInput [formControl]="destinoControl" [matAutocomplete]="autoDes" placeholder="Ciudad de llegada">
+              <mat-icon matSuffix>search</mat-icon>
+                <mat-autocomplete #autoDes="matAutocomplete" [displayWith]="displayCiudad">
+                  <mat-option *ngFor="let c of filteredCiudadesDestino | async" [value]="c" (onSelectionChange)="onCiudadDestinoSeleccionada(c)">
+                    {{c.ciudad}}
+                  </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width custom-mat-field">
+              <mat-label>Sucursal</mat-label>
+              <mat-select formControlName="sucursal">
+                <mat-option *ngFor="let s of sucursales" [value]="s.codigo">{{s.sucursal}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-block mt-20">
+        <div class="section-header">
+          <h2>Datos de envío</h2>
+        </div>
+
+        <div class="form-section">
+          <div class="form-grid mt-10">
+            <mat-form-field appearance="outline" class="full-width custom-mat-field">
+              <mat-label>Contenido</mat-label>
+              <input matInput formControlName="contenido">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Peso (Kg)</mat-label>
+              <input matInput type="number" formControlName="peso" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+              (keydown)="filterNonNumeric($event)">
+              <span matSuffix>Kg</span>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Tipo de envío</mat-label>
+              <mat-select formControlName="tipoEnvio">
+                <mat-option value="Bulto(s)">Bulto(s)</mat-option>
+                <mat-option value="Sobre(s)">Sobre(s)</mat-option>
+                
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Cantidad</mat-label>
+              <input matInput type="number" formControlName="cantidad" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+              (keydown)="filterNonNumeric($event)">
+            </mat-form-field>
+
+            <mat-checkbox formControlName="resguardar" color="primary">
+              Deseo resguardar este paquete (Seguro de mercancía)
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-block mt-20">
+        <div class="section-header">
+          <h2>Datos de facturación</h2>
+        </div>
+
+        <div class="form-section">
+          <div class="form-grid">
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Factura</mat-label>
+              <input matInput formControlName="factura">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Valor mercancía ($)</mat-label>
+              <mat-icon matPrefix>attach_money</mat-icon>
+              <input matInput 
+                     type="text" 
+                     placeholder="0,00"
+                     class="monto__input"
+                     (input)="formatCurrency($event)"
+                     (blur)="onBlurCurrency($event)"
+                     formControlName="valorMercanciaDolar">
+            </mat-form-field>
+
+            <!-- En tu formulario, reemplaza la sección de archivo con esto: -->
+            <div class="file-upload-wrapper full-width" [formGroup]="encomiendaForm">
+              <!-- Etiqueta con asterisco rojo -->
+              <label class="file-label">
+                Factura Digital 
+                <span class="required-mark" aria-hidden="true">*</span>
+                <span class="sr-only">(Campo requerido)</span>
+              </label>
+              
+              <!-- Área de arrastrar y soltar -->
+              <!-- <div class="drag-drop-area"
+                  [class.drag-over]="isDragOver"
+                  [class.has-file]="archivoComprobante"
+                  [class.input-error]="formSubmitted && !archivoComprobante"
+                  (click)="fileUpload.click()"
+                  (dragover)="onDragOver($event)"
+                  (dragleave)="onDragLeave($event)"
+                  (drop)="onDrop($event)">
+                
+                <mat-icon class="upload-icon">
+                  {{ archivoComprobante ? 'check_circle' : 'cloud_upload' }}
+                </mat-icon>
+                
+                <div class="upload-text">
+                  <span *ngIf="!archivoComprobante" class="placeholder-text">
+                    <strong>Haz clic o arrastra tu archivo aquí</strong>
+                  </span>
+                  <span *ngIf="archivoComprobante" class="file-info">
+                    <strong>{{ getFileName() }}</strong>
+                    <small class="file-size">{{ getFileSize() }}</small>
+                  </span>
+                  <small class="hint-text">Formatos: JPG, PNG (Máx. 5MB)</small>
+                </div>
+                
+                <button type="button" class="btn-select" mat-raised-button color="primary">
+                  <mat-icon>folder_open</mat-icon>
+                  Seleccionar archivo
+                </button>
+              </div> -->
+              
+              <div class="drag-drop-area"
+                  [class.drag-over]="isDragOver"
+                  [class.has-file]="archivoComprobante"
+                  [class.input-error]="formSubmitted && !archivoComprobante"
+                  (click)="fileUpload.click()"
+                  (dragover)="onDragOver($event)"
+                  (dragleave)="onDragLeave($event)"
+                  (drop)="onDrop($event)"> 
+                
+                <mat-icon class="upload-icon" [style.color]="isPdfFile(archivoComprobante) ? '#f44336' : ''">
+                  {{ archivoComprobante ? (isPdfFile(archivoComprobante) ? 'picture_as_pdf' : 'check_circle') : 'cloud_upload' }}
+                </mat-icon>
+                
+                <div class="upload-text">
+                  <span *ngIf="!archivoComprobante" class="placeholder-text">
+                    <strong>Haz clic o arrastra tu factura aquí</strong>
+                  </span>
+                  <span *ngIf="archivoComprobante" class="file-info">
+                    <strong>{{ getFileName() }}</strong>
+                    <small class="file-size">{{ getFileSize() }}</small>
+                  </span>
+                  <small class="hint-text">Formatos permitidos: PDF (Máx. 5MB)</small>
+                </div>
+                
+                <input #fileUpload type="file" (change)="onFileSelected($event)" accept=".pdf" style="display: none;">
+
+                <button type="button" class="btn-select" mat-raised-button color="primary">
+                  <mat-icon>folder_open</mat-icon>
+                  {{ archivoComprobante ? 'Cambiar archivo' : 'Seleccionar archivo' }}
+                </button>
+              </div>
+
+              <!-- Input de archivo oculto -->
+              <input type="file" 
+                    #fileUpload 
+                    (change)="onFileSelected($event)" 
+                    accept=".pdf" 
+                    style="display: none;"
+                    required>
+              
+              <!-- Mensajes de error -->
+              <div class="error-container" *ngIf="formSubmitted">
+                <small class="error-msg" *ngIf="!archivoComprobante">
+                  <mat-icon>error</mat-icon>
+                  Debe adjuntar una imagen de la factura para continuar.
+                </small>
+                <small class="error-msg" *ngIf="archivoComprobante && fileError">
+                  <mat-icon>error</mat-icon>
+                  {{ fileError }}
+                </small>
+              </div>
+            </div>
+    
+            <!----ESTIMADO A COBRAR-->
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Total a cobrar ($)</mat-label>
+              <mat-icon matPrefix>attach_money</mat-icon>
+              <input matInput 
+                     type="text" 
+                     placeholder="0,00"
+                     class="monto__input input-readonly"
+                     readonly
+                     formControlName="netoD">
+              <mat-hint>Calculado automáticamente según tarifa, puede variar al cargarse en sistema</mat-hint>
+            </mat-form-field>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn-submit">ENVIAR ENCOMIENDA</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+<app-footer></app-footer>
