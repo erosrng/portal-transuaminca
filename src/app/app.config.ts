@@ -45,13 +45,25 @@ export const PROTEO_URL_ALONEINTER = 'http://transuaminca.proteoerp.org/transuam
 
 //PRUEBA TRANSUAMINCA
 //Transuaminca
-export const API_URL = 'http://transuaminca.proteoerp.org/transu/api/';
+/* export const API_URL = 'http://transuaminca.proteoerp.org/transu/api/';
 export const URLSOLA = 'http://transuaminca.proteoerp.org/';
 export const PROTEO_URL_ALONE = 'http://transuaminca.proteoerp.org/transu/';
 
 export const API_URLINTER = 'http://transuaminca.proteoerp.org/transu/api/';
 export const URLSOLAINTER = 'http://transuaminca.proteoerp.org/';
-export const PROTEO_URL_ALONEINTER = 'http://transuaminca.proteoerp.org/transu/';
+export const PROTEO_URL_ALONEINTER = 'http://transuaminca.proteoerp.org/transu/'; */
+
+
+
+//PROXY
+export const API_URL = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/transu/api/';
+export const URLSOLA = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/';
+export const PROTEO_URL_ALONE = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/transu/';
+
+export const API_URLINTER = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/transu/api/';
+export const URLSOLAINTER = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/';
+export const PROTEO_URL_ALONEINTER = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/transu/';
+
 
 //export const API_URL = 'https://d2wnvkodoh477y.cloudfront.net/practica/api/'; 
 export const appConfig: ApplicationConfig = {
