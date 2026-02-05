@@ -1,15 +1,15 @@
 import {
-  BidiModule
-} from "./chunk-527BK6SM.js";
-import {
   _CdkPrivateStyleLoader,
   _bindEventWithOptions
-} from "./chunk-6RPVILFR.js";
+} from "./chunk-3HJGUOFY.js";
+import {
+  BidiModule
+} from "./chunk-527BK6SM.js";
 import {
   Platform,
   coerceElement,
   coerceNumberProperty
-} from "./chunk-MLI6XZAK.js";
+} from "./chunk-M7MEUB77.js";
 import {
   DOCUMENT
 } from "./chunk-45ANH3K6.js";
@@ -3136,7 +3136,6 @@ var MatCommonModule = class _MatCommonModule {
 })();
 
 export {
-  coerceArray,
   isFakeMousedownFromScreenReader,
   isFakeTouchstartFromScreenReader,
   BACKSPACE,
@@ -3159,6 +3158,7 @@ export {
   FocusMonitor,
   CdkMonitorFocus,
   _VisuallyHiddenLoader,
+  coerceArray,
   BreakpointObserver,
   ObserversModule,
   InteractivityChecker,
@@ -3176,4 +3176,4 @@ export {
   MATERIAL_SANITY_CHECKS,
   MatCommonModule
 };
-//# sourceMappingURL=chunk-C2FKF5N7.js.map
+//# sourceMappingURL=chunk-E5F6VTNT.js.map

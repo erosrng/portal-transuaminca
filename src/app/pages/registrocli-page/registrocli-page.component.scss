@@ -37,24 +37,25 @@
 .login-card {
     display: flex;
     width: 80%;
-    height: 740px; 
+    height: 90%; 
     background-color: vars.$background-fondo;
     border-radius: 40px; 
     box-shadow: 0 20px 50px rgba(0,0,0,0.3);
     overflow: hidden;
     position: relative;
     z-index: 1;
-    padding: 1rem;
+    padding: 3rem;
 }
 
 /* --- LADO IZQUIERDO (Formulario) --- */
 .portal__left {
     flex: 1;
     padding: 3rem;
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
+    overflow: auto;
     background: vars.$background-fondo;
 }
 
