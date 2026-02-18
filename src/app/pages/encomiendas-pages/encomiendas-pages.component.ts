@@ -584,23 +584,29 @@ export class EncomiendasPagesComponent implements OnInit, OnDestroy {
         let value = formValues[key];
 
         if (key === 'valorMercanciaDolar' && value) {
+          const numDolar = this.parseCurrency(value);
           const valorDolar = parseFloat(value);
           const valorBolivares = valorDolar * this.dolarcambio;
           formData.append('valorMercancia', valorBolivares.toFixed(2));
+          formData.append(key, numDolar.toFixed(2));
+          return; 
         }
 
-        if (key === 'netoD') {
-          value = this.parseCurrency(value);
-          const netoDolar = parseFloat(value);
-          const netoBS = netoDolar * this.dolarcambio;
+        if (key === 'netoD' && value) {
+          const numNetoD = this.parseCurrency(value);
+          const netoBS = numNetoD * this.dolarcambio;
           formData.append('netoBs', netoBS.toFixed(2));
+          formData.append(key, numNetoD.toFixed(2));
+          return;
         }
 
-        if (key === 'seguroD') {
-          value = this.parseCurrency(value);
-          const seguroDolar = parseFloat(value);
-          const seguroBS = seguroDolar * this.dolarcambio;
+        // 3. Limpiamos seguroD y calculamos seguroBs
+        if (key === 'seguroD' && value) {
+          const numSeguroD = this.parseCurrency(value);
+          const seguroBS = numSeguroD * this.dolarcambio;
           formData.append('seguroBs', seguroBS.toFixed(2));
+          formData.append(key, numSeguroD.toFixed(2));
+          return;
         }
 
         if (key === 'resguardar') {
