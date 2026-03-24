@@ -118,7 +118,8 @@
 
             <mat-form-field appearance="outline" class="custom-mat-field">
               <mat-label>Cantidad</mat-label>
-              <input matInput type="number" formControlName="cantidad" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+              <input matInput type="number" formControlName="cantidad" 
+              oninput="this.value = this.value.replace(/[^0-9]/g, '');"
               (keydown)="filterNonNumeric($event)">
             </mat-form-field>
 

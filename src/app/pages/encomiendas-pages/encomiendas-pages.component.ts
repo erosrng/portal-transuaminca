@@ -252,9 +252,9 @@ export class EncomiendasPagesComponent implements OnInit, OnDestroy {
       contenido: ['', [Validators.required, Validators.minLength(5)]],
       resguardar: [false],
       // Datos de envío
-      peso: [null, [Validators.required, Validators.min(0.1), Validators.max(1000)]],
+      peso: [null, [Validators.required, Validators.min(0.1), Validators.max(9999)]],
       tipoEnvio: ['', Validators.required],
-      cantidad: [1, [Validators.required, Validators.min(1), Validators.max(100)]],
+      cantidad: [1, [Validators.required, Validators.min(1), Validators.max(9999)]],
 
       // Datos de facturación
       factura: ['', Validators.required],
@@ -680,9 +680,7 @@ export class EncomiendasPagesComponent implements OnInit, OnDestroy {
           </div>
         `,
         confirmButtonText: 'Aceptar',
-        showCancelButton: true,
-        cancelButtonText: 'Imprimir guía',
-        cancelButtonColor: '#3085d6'
+        showCancelButton: true
       }).then((result) => {
         if (result.isConfirmed || result.dismiss === Swal.DismissReason.cancel) {
           this.resetForm();
