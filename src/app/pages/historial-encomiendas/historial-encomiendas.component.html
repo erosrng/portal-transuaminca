@@ -13,11 +13,47 @@
       </div>
     </div>
 
+    <div class="card shadow-sm border-0 mb-4 p-3 bg-light">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label small fw-bold text-muted">Buscador</label>
+          <div class="input-group">
+            <span class="input-group-text bg-white text-muted">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </span>
+            <input type="text" class="form-control" 
+                   placeholder="Nro Encomienda, Cliente o Factura..." 
+                   [(ngModel)]="searchTerm" (input)="aplicarFiltros()">
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <label class="form-label small fw-bold text-muted">Fecha Desde</label>
+          <input type="date" class="form-control" [(ngModel)]="fechaDesde" (change)="aplicarFiltros()">
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label small fw-bold text-muted">Fecha Hasta</label>
+          <input type="date" class="form-control" [(ngModel)]="fechaHasta" (change)="aplicarFiltros()">
+        </div>
+
+        <div class="col-md-2 d-grid">
+          <button class="btn btn-outline-secondary" (click)="limpiarFiltros()">
+            <i class="fa-solid fa-eraser me-2"></i>Limpiar
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div class="table-header-info d-flex justify-content-between align-items-center mb-3">
-      <span class="text-muted">Mostrando <strong>{{getPaginatedData().length}}</strong> de <strong>{{historialPedidos.length}}</strong> registros</span>
+      <span class="text-muted">
+        Mostrando <strong>{{getPaginatedData().length}}</strong> de <strong>{{historialFiltrado.length}}</strong> registros
+        <span *ngIf="searchTerm || fechaDesde || fechaHasta" class="badge rounded-pill bg-primary ms-2">Filtro activo</span>
+      </span>
+      
       <div class="d-flex align-items-center">
-        <span class="me-2">Mostrar</span>
-        <select class="form-select form-select-sm select-custom" (change)="onPageSizeChange($event)">
+        <span class="me-2 text-muted small">Registros por página:</span>
+        <select class="form-select form-select-sm select-custom" style="width: auto;" (change)="onPageSizeChange($event)">
           <option [value]="10">10</option>
           <option [value]="20">20</option>
           <option [value]="50">50</option>
@@ -30,53 +66,72 @@
         <table class="table table-hover align-middle mb-0">
           <thead>
             <tr>
-              <th>Encomienda</th>
-              <th>Descripción</th>
+              <th class="ps-4">Encomienda</th>
+              <th>Ref. Factura</th>
               <th>Fecha</th>
               <th>Destinatario</th>
               <th>Tracking</th>
-              <th>Factura</th>
-              <th>Etiqueta</th>
-              <th>Imp Guía</th>
+              <th>Estatus Fact.</th>
+              <th class="text-center">Etiqueta</th>
+              <th class="text-center pe-4">Imp Guía</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let pedido of getPaginatedData()">
-              <td class="text-center-custom">{{ pedido.numero }}</td>
-              <td class="small">{{ pedido.nrofact || 'N/E' }}</td>
+              <td class="ps-4 fw-bold text-primary">{{ pedido.numero }}</td>
+              <td class="small text-muted">{{ pedido.nrofact || 'N/E' }}</td>
               <td>{{ pedido.fecha | date:'dd-MM-yyyy' }}</td>
-              <td class="text-start-custom">({{pedido.codcli_des}}) {{ pedido.nomcli_des }}</td>
-              <td>
-                <span class="badge-tracking">EN TRÁNSITO</span>
+              <td class="text-start-custom">
+                <div class="d-flex flex-column">
+                  <span class="fw-bold text-dark">{{ pedido.nomcli_des }}</span>
+                  <small class="text-muted">Cod: {{pedido.codcli_des}}</small>
+                </div>
               </td>
               <td>
-                <span class="text-muted small fw-bold">{{ pedido.factura || 'POR FACTURAR' }}</span>
+                <span class="badge-tracking" [class.in-transit]="pedido.reparto">
+                  {{ pedido.reparto ? 'EN TRÁNSITO' : 'PENDIENTE' }}
+                </span>
+              </td>
+              <td>
+                <span [class]="pedido.factura ? 'text-success fw-bold small' : 'text-danger small italic'">
+                  {{ pedido.factura || 'POR FACTURAR' }}
+                </span>
               </td>
               
-              <td>
+              <td class="text-center">
                 <button class="btn-action" (click)="imprimirEtiquetas(pedido.numero)" title="Imprimir Etiqueta">
-                  <i class="fa-solid fa-bookmark"></i>
+                  <i class="fa-solid fa-bookmark text-warning"></i>
                 </button>
               </td>
 
-              <td>
-                <button class="btn-action" (click)="abrirReparto(pedido.reparto)" title="Ver Guía">
-                  <i class="fa-solid fa-truck-fast"></i>
+              <td class="text-center pe-4">
+                <button class="btn-action" (click)="abrirReparto(pedido.reparto)" 
+                        [disabled]="!pedido.reparto"
+                        [title]="pedido.reparto ? 'Ver Guía de Reparto' : 'Sin Reparto aún'">
+                  <i class="fa-solid fa-truck-fast" [class.text-muted]="!pedido.reparto"></i>
                 </button>
               </td>
             </tr>
-            <tr *ngIf="historialPedidos.length === 0">
-              <td colspan="9" class="py-5 text-muted">No se encontraron registros de encomiendas.</td>
+
+            <tr *ngIf="historialFiltrado.length === 0">
+              <td colspan="8" class="py-5">
+                <div class="text-center text-muted">
+                  <i class="fa-solid fa-magnifying-glass fa-3x mb-3 opacity-25"></i>
+                  <p class="mb-0">No se encontraron registros que coincidan con los filtros.</p>
+                  <button class="btn btn-link btn-sm" (click)="limpiarFiltros()">Mostrar todo el historial</button>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <div class="d-flex justify-content-end mt-3">
-      <mat-paginator [length]="historialPedidos.length"
+    <div class="d-flex justify-content-end mt-3 mb-5">
+      <mat-paginator [length]="historialFiltrado.length"
                      [pageSize]="pageSize"
                      [hidePageSize]="true"
+                     [showFirstLastButtons]="true"
                      (page)="onPageChange($event)">
       </mat-paginator>
     </div>

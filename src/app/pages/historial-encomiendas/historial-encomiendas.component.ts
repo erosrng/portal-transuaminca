@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatTableModule, MatTableDataSource } from '@angular/material/table';
-import { MatPaginatorModule, MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SideBarComponent } from "../../components/side-bar/side-bar.component";
 import { NavBarComponent } from "../../components/nav-bar/nav-bar.component";
@@ -28,9 +31,9 @@ interface Encomienda {
   selector: 'app-historial-encomiendas',
   standalone: true,
   imports: [
-    MatSidenavModule, MatIconModule, CommonModule,
-    SideBarComponent, NavBarComponent, FooterComponent,
-    MatTableModule, MatPaginatorModule
+    CommonModule, FormsModule, MatSidenavModule, MatIconModule, 
+    MatTableModule, MatPaginatorModule, MatFormFieldModule, MatInputModule,
+    SideBarComponent, NavBarComponent, FooterComponent
   ],
   templateUrl: './historial-encomiendas.component.html',
   styleUrl: './historial-encomiendas.component.scss'
@@ -38,6 +41,13 @@ interface Encomienda {
 export class HistorialEncomiendasComponent implements OnInit {
   isLoading = false;
   historialPedidos: Encomienda[] = [];
+  historialFiltrado: Encomienda[] = [];
+  
+  // Variables de Filtro
+  searchTerm: string = '';
+  fechaDesde: string = '';
+  fechaHasta: string = '';
+
   pageSize = 10;
   pageIndex = 0;
 
@@ -60,17 +70,56 @@ export class HistorialEncomiendasComponent implements OnInit {
       .subscribe({
         next: (res) => {
           this.historialPedidos = res.data || [];
+          this.aplicarFiltros(); // Inicializa el array filtrado
           Swal.close();
         },
         error: () => {
-          Swal.fire('Error', 'Error al obtener datos', 'error');
+          Swal.fire('Error', 'No se pudo obtener el historial', 'error');
         }
       });
   }
 
+  aplicarFiltros() {
+    this.pageIndex = 0; // Reiniciar paginación al filtrar
+    const term = this.searchTerm.toLowerCase().trim();
+    
+    this.historialFiltrado = this.historialPedidos.filter(p => {
+      // 1. Filtro de búsqueda general
+      const matchSearch = 
+        p.numero?.toLowerCase().includes(term) || 
+        p.nomcli_des?.toLowerCase().includes(term) ||
+        p.nrofact?.toLowerCase().includes(term) ||
+        p.factura?.toLowerCase().includes(term);
+
+      // 2. Filtro de fechas
+      // Convertimos la fecha del pedido (YYYY-MM-DD) a objeto Date para comparar
+      const fechaP = new Date(p.fecha + 'T00:00:00'); 
+      const desde = this.fechaDesde ? new Date(this.fechaDesde + 'T00:00:00') : null;
+      const hasta = this.fechaHasta ? new Date(this.fechaHasta + 'T00:00:00') : null;
+
+      let matchFecha = true;
+      if (desde && hasta) {
+        matchFecha = fechaP >= desde && fechaP <= hasta;
+      } else if (desde) {
+        matchFecha = fechaP >= desde;
+      } else if (hasta) {
+        matchFecha = fechaP <= hasta;
+      }
+
+      return matchSearch && matchFecha;
+    });
+  }
+
+  limpiarFiltros() {
+    this.searchTerm = '';
+    this.fechaDesde = '';
+    this.fechaHasta = '';
+    this.aplicarFiltros();
+  }
+
   getPaginatedData(): Encomienda[] {
     const start = this.pageIndex * this.pageSize;
-    return this.historialPedidos.slice(start, start + this.pageSize);
+    return this.historialFiltrado.slice(start, start + this.pageSize);
   }
 
   onPageChange(event: PageEvent) {
@@ -89,6 +138,10 @@ export class HistorialEncomiendasComponent implements OnInit {
   }
 
   abrirReparto(reparto: string) {
+    if (!reparto) {
+      Swal.fire('Info', 'Esta encomienda aún no tiene un reparto asignado', 'info');
+      return;
+    }
     const url = `${PROTEO_URL_ALONEINTER}formatos/ver/REPARTO2/${reparto}`;
     window.open(url, '_blank');
   }
