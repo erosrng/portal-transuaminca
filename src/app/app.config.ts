@@ -13,23 +13,23 @@ import Aura from '@primeuix/themes/aura';
 // ***********************************************
 
 //URL PARA TRABAJAR
-export const API_URL = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/transuaminca/api/';
+/* export const API_URL = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/transuaminca/api/';
 export const URLSOLA = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/';
 export const PROTEO_URL_ALONE = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/transuaminca/';
 
 export const API_URLINTER = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/transuaminca/api/';
 export const URLSOLAINTER = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/';
-export const PROTEO_URL_ALONEINTER = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/transuaminca/'; 
+export const PROTEO_URL_ALONEINTER = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/transuaminca/';  */
 
 
 //PROXY PRACTICA
-/* export const API_URL = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/transu/api/';
+export const API_URL = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/transu/api/';
 export const URLSOLA = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/';
 export const PROTEO_URL_ALONE = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/transu/';
 
 export const API_URLINTER = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/transu/api/';
 export const URLSOLAINTER = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/';
-export const PROTEO_URL_ALONEINTER = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/transu/'; */
+export const PROTEO_URL_ALONEINTER = 'https://ancient-meadow-8bfe.proteo-api.workers.dev/transu/';
 
 
 //export const API_URL = 'https://d2wnvkodoh477y.cloudfront.net/practica/api/'; 

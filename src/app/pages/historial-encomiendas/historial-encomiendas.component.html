@@ -88,8 +88,8 @@
                 </div>
               </td>
               <td>
-                <span class="badge-tracking" [class.in-transit]="pedido.reparto">
-                  {{ pedido.reparto ? 'EN TRÁNSITO' : 'PENDIENTE' }}
+                <span class="badge-tracking" [class.in-transit]="pedido.entregado">
+                  {{ pedido.entregado ? 'EN TRÁNSITO' : 'ENTREGADO' }}
                 </span>
               </td>
               <td>

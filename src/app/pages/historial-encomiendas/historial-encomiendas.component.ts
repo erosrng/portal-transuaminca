@@ -24,6 +24,7 @@ interface Encomienda {
   nrofact: string;
   factura: string;
   reparto: string;
+  entregado: string;
   totald: number;
 }
 
