@@ -73,6 +73,16 @@
     font-weight: 700;
     font-size: 1.3rem;
   }
+
+  .badge-tracking-transit {
+    background-color: rgba(245, 158, 11, 0.15);
+    color: #f59e0b !important;                             // Naranja brillante
+    border-color: rgba(245, 158, 11, 0.25) !important;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.3rem;
+  }
   
   .btn-action {
     background: none;
@@ -89,3 +99,5 @@
   ::ng-deep .mat-mdc-paginator {
     background: transparent !important;
   }
+
+  

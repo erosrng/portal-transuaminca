@@ -71,6 +71,7 @@
               <th>Fecha</th>
               <th>Destinatario</th>
               <th>Tracking</th>
+              <th>F. Entrega</th>
               <th>Estatus Fact.</th>
               <th class="text-center">Etiqueta</th>
               <th class="text-center pe-4">Imp Guía</th>
@@ -88,8 +89,15 @@
                 </div>
               </td>
               <td>
-                <span class="badge-tracking" [class.in-transit]="pedido.entregado">
-                  {{ pedido.entregado ? 'EN TRÁNSITO' : 'ENTREGADO' }}
+                <span class="badge-tracking" 
+                      [ngClass]="pedido.entregado ? 'badge-tracking' : 'badge-tracking-transit'">
+                    {{ pedido.entregado ? 'ENTREGADO' : 'EN TRÁNSITO' }}
+                </span>
+
+              </td>
+              <td>
+                <span class="badge-tracking">
+                  {{ pedido.entregado}}
                 </span>
               </td>
               <td>
