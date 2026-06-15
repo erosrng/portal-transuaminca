@@ -1,42 +1,85 @@
-<section class="menu__general"  id="menu" [class.open]="portalcliLogicaService.isMenuOpen">
+<section class="menu__general" id="menu" [class.open]="portalcliLogicaService.isMenuOpen">
     <div class="menu__content">
 
         <ul class="nav flex-column menu__nav">
+
             <li class="nav-item">
                 <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/home')">
                     <i class="fas fa-home"></i>
                     <span *ngIf="portalcliLogicaService.isMenuOpen"> Inicio</span>
                 </a>
             </li>
-            
-            <li class="nav-item">
-                <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/encomiendas')">
+
+            <!-- Grupo Encomiendas -->
+            <li class="nav-item menu__group">
+                <a class="nav-link menu__link menu__group-header" href="javascript:void(0)" (click)="toggleEncomiendasDropdown()">
                     <i class="fas fa-box-open"></i>
                     <span *ngIf="portalcliLogicaService.isMenuOpen"> Encomiendas</span>
+                    <i class="fas fa-chevron-down menu__chevron" 
+                       *ngIf="portalcliLogicaService.isMenuOpen"
+                       [class.rotated]="showEncomiendasDropdown"></i>
                 </a>
+                <div class="menu__submenu" *ngIf="portalcliLogicaService.isMenuOpen" 
+                     [class.expanded]="showEncomiendasDropdown">
+                    <ul class="nav flex-column">
+                        <li class="nav-item menu__sub-item">
+                            <a class="nav-link menu__link menu__sub-link" href="javascript:void(0)" (click)="navigateTo('/encomiendas')">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Nueva Encomienda</span>
+                            </a>
+                        </li>
+                        <li class="nav-item menu__sub-item">
+                            <a class="nav-link menu__link menu__sub-link" href="javascript:void(0)" (click)="navigateTo('/historialencomiendas')">
+                                <i class="fas fa-history"></i>
+                                <span>Historial</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
-            
+
+            <!-- Grupo Retiros -->
+            <li class="nav-item menu__group">
+                <a class="nav-link menu__link menu__group-header" href="javascript:void(0)" (click)="toggleRetirosDropdown()">
+                    <i class="fas fa-truck"></i>
+                    <span *ngIf="portalcliLogicaService.isMenuOpen"> Retiros</span>
+                    <i class="fas fa-chevron-down menu__chevron" 
+                       *ngIf="portalcliLogicaService.isMenuOpen"
+                       [class.rotated]="showRetirosDropdown"></i>
+                </a>
+                <div class="menu__submenu" *ngIf="portalcliLogicaService.isMenuOpen"
+                     [class.expanded]="showRetirosDropdown">
+                    <ul class="nav flex-column">
+                        <li class="nav-item menu__sub-item">
+                            <a class="nav-link menu__link menu__sub-link" href="javascript:void(0)" (click)="navigateTo('/retiros')">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Nuevo Retiro</span>
+                            </a>
+                        </li>
+                        <li class="nav-item menu__sub-item">
+                            <a class="nav-link menu__link menu__sub-link" href="javascript:void(0)" (click)="navigateTo('/historialretiros')">
+                                <i class="fas fa-history"></i>
+                                <span>Historial</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/miperfil')">
                     <i class="fas fa-user-circle"></i>
                     <span *ngIf="portalcliLogicaService.isMenuOpen"> Perfil</span>
                 </a>
             </li>
-            
-            <li class="nav-item">
-                <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/historialencomiendas')">
-                    <i class="fas fa-boxes"></i>
-                    <span *ngIf="portalcliLogicaService.isMenuOpen"> Paquetes</span>
-                </a>
-            </li>
-            
+
             <li class="nav-item">
                 <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/destinatarios')">
                     <i class="fas fa-address-book"></i>
                     <span *ngIf="portalcliLogicaService.isMenuOpen"> Destinatarios</span>
                 </a>
             </li>
-            
+
             <li class="nav-item">
                 <a class="nav-link menu__link" href="javascript:void(0)" (click)="logout()">
                     <i class="fas fa-sign-out-alt"></i>
@@ -45,49 +88,6 @@
             </li>
         </ul>
 
-                    <!-- <li class="nav-item">
-                <a class="nav-link menu__link" href="#" data-bs-toggle="collapse" data-bs-target="#pedidosDropdown" aria-expanded="false">
-                    <i class="fas fa-shopping-cart"></i><span *ngIf="portalcliLogicaService.isMenuOpen"> Toma de pedidos</span> <i class="fas fa-solid fa-angle-down menu__dropdown-icon"></i>
-                </a>
-                <div class="collapse menu__dropdown-content" id="pedidosDropdown">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link menu__dropdown-link" href="javascript:void(0)" (click)="navigateTo('/pedidos')">
-                                <i class="fas fa-boxes"></i><span *ngIf="portalcliLogicaService.isMenuOpen"> Inventario</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link menu__dropdown-link" href="javascript:void(0)" (click)="navigateTo('/tomaexcel')">
-                                <i class="fas fa-file-excel"></i><span *ngIf="portalcliLogicaService.isMenuOpen"> Por Excel</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li> -->
-
-
-            <!-- <li class="nav-item">
-                <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/pagos')">
-                    <i class="fas fa-money-bill-wave"></i>
-                    <span *ngIf="portalcliLogicaService.isMenuOpen"> Pagos</span>
-                    <span class="badge bg-danger ms-2" *ngIf="portalcliLogicaService.isMenuOpen">NUEVO!</span>
-                </a>
-            </li> -->
-
-            <!-- <li class="nav-item">
-                <a class="nav-link menu__link" href="javascript:void(0)" (click)="navigateTo('/reclamos')">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <span *ngIf="portalcliLogicaService.isMenuOpen"> Reclamos</span>
-                    <span class="translate-middle badge rounded-pill bg-danger nuevo-badge"
-                    *ngIf="portalcliLogicaService.isMenuOpen">
-                        NUEVO!
-                    </span>
-                </a>
-            </li> -->
-
-        <!-- <div class="menu__footer" *ngIf="portalcliLogicaService.isMenuOpen">
-            Insuaminca, + cerca de ti
-        </div> -->
     </div>
 </section>
 

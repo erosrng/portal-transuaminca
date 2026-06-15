@@ -1,0 +1,290 @@
+<app-nav-bar></app-nav-bar>
+
+<div class="main-layout">
+  <app-side-bar></app-side-bar>
+
+  <div class="content-wrapper">
+
+    <form [formGroup]="retiroForm" (ngSubmit)="onSubmit()" class="retiro-container mt-5">
+
+      <!-- SECCIÓN 1: INFORMACIÓN GENERAL -->
+      <div class="section-block">
+        <div class="section-header">
+          <h2>Información General</h2>
+        </div>
+
+        <div class="form-section">
+          <div class="form-grid">
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Sucursal</mat-label>
+              <mat-select formControlName="sucursal">
+                <mat-option *ngFor="let s of sucursales" [value]="s.codigo">{{s.sucursal}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="isInvalid('sucursal')">La sucursal es obligatoria</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Despacho</mat-label>
+              <mat-select formControlName="despacho">
+                <mat-option value="S">Sí</mat-option>
+                <mat-option value="N">No</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Prioridad</mat-label>
+              <mat-select formControlName="prioridad">
+                <mat-option value="N">Normal</mat-option>
+                <mat-option value="A">Alta</mat-option>
+                <mat-option value="U">Urgente</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Tipo</mat-label>
+              <mat-select formControlName="tipo">
+                <mat-option value="B">Bulto</mat-option>
+                <mat-option value="S">Sobre</mat-option>
+              </mat-select>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Solicitante</mat-label>
+              <input matInput formControlName="solicitante" readonly class="input-readonly">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width custom-mat-field">
+              <mat-label>Nombre del solicitante</mat-label>
+              <input matInput formControlName="nomSolicitante" readonly class="input-readonly">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Origen</mat-label>
+              <input type="text" matInput [formControl]="origenControl" [matAutocomplete]="autoOri" placeholder="Ciudad de origen">
+              <mat-icon matSuffix>search</mat-icon>
+              <mat-autocomplete #autoOri="matAutocomplete" [displayWith]="displayCiudad">
+                <mat-option *ngFor="let c of filteredCiudadesOrigen | async" [value]="c" (onSelectionChange)="onCiudadOrigenSeleccionada(c)">
+                  {{c.ciudad}}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error *ngIf="isInvalid('origen')">El origen es obligatorio</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Destino</mat-label>
+              <input type="text" matInput [formControl]="destinoControl" [matAutocomplete]="autoDes" placeholder="Ciudad de destino">
+              <mat-icon matSuffix>search</mat-icon>
+              <mat-autocomplete #autoDes="matAutocomplete" [displayWith]="displayCiudad">
+                <mat-option *ngFor="let c of filteredCiudadesDestino | async" [value]="c" (onSelectionChange)="onCiudadDestinoSeleccionada(c)">
+                  {{c.ciudad}}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error *ngIf="isInvalid('destino')">El destino es obligatorio</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECCIÓN 2: DATOS DE RETIRO -->
+      <div class="section-block mt-20">
+        <div class="section-header">
+          <h2>Datos de Retiro</h2>
+        </div>
+
+        <div class="form-section">
+          <div class="form-grid">
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Envía (RIF o código)</mat-label>
+              <input type="text" matInput [formControl]="enviaControl" [matAutocomplete]="autoEnv">
+              <mat-icon matSuffix>search</mat-icon>
+              <mat-autocomplete #autoEnv="matAutocomplete" [displayWith]="displayFn">
+                <mat-option *ngFor="let c of filteredEnvia | async" [value]="c" (onSelectionChange)="onEnviaSeleccionado(c)">
+                  <div class="opt-container">
+                    <strong>({{c.cliente}})</strong> {{c.nombre}}<br>
+                    <small>RIF: {{c.rifci}} | Ruta: {{c.ruta}}</small>
+                  </div>
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error *ngIf="isInvalid('envia')">El remitente es obligatorio</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Ruta de retiro</mat-label>
+              <input matInput formControlName="rutaRetiro" readonly class="input-readonly">
+            </mat-form-field>
+
+
+
+            <mat-form-field appearance="outline" class="full-width custom-mat-field">
+              <mat-label>Nombre (Envía)</mat-label>
+              <input matInput formControlName="nomEnvia" readonly class="input-readonly">
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECCIÓN 3: DATOS DE ENTREGA -->
+      <div class="section-block mt-20">
+        <div class="section-header">
+          <h2>Datos de Entrega</h2>
+        </div>
+
+        <div class="form-section">
+          <div class="form-grid">
+
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Recibe (RIF o código)</mat-label>
+              <input type="text" matInput [formControl]="recibeControl" [matAutocomplete]="autoRec">
+              <mat-icon matSuffix>search</mat-icon>
+              <mat-autocomplete #autoRec="matAutocomplete" [displayWith]="displayFn">
+                <mat-option *ngFor="let c of filteredRecibe | async" [value]="c" (onSelectionChange)="onRecibeSeleccionado(c)">
+                  <div class="opt-container">
+                    <strong>({{c.cliente}})</strong> {{c.nombre}}<br>
+                    <small>RIF: {{c.rifci}} | Ruta: {{c.ruta}}</small>
+                  </div>
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error *ngIf="isInvalid('recibe')">El destinatario es obligatorio</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Ruta de entrega</mat-label>
+              <input matInput formControlName="rutaEntrega" readonly class="input-readonly">
+            </mat-form-field>
+
+
+
+            <mat-form-field appearance="outline" class="full-width custom-mat-field">
+              <mat-label>Nombre (Recibe)</mat-label>
+              <input matInput formControlName="nomRecibe" readonly class="input-readonly">
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECCIÓN 4: DIRECCIONES -->
+      <div class="section-block mt-20">
+        <div class="section-header">
+          <h2>Direcciones</h2>
+        </div>
+
+        <div class="form-section">
+          <div class="form-grid">
+            <mat-form-field appearance="outline" class="full-width custom-mat-field">
+              <mat-label>Dirección de retiro</mat-label>
+              <textarea matInput formControlName="direcRetiro" rows="3" placeholder="Dirección donde se realiza el retiro"></textarea>
+              <mat-error *ngIf="isInvalid('direcRetiro')">La dirección de retiro es obligatoria</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width custom-mat-field">
+              <mat-label>Dirección de entrega</mat-label>
+              <textarea matInput formControlName="direcEntrega" rows="3" placeholder="Dirección donde se entrega"></textarea>
+              <mat-error *ngIf="isInvalid('direcEntrega')">La dirección de entrega es obligatoria</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECCIÓN 5: CONTENIDO DEL ENVÍO -->
+      <div class="section-block mt-20">
+        <div class="section-header">
+          <h2>Contenido del Envío</h2>
+        </div>
+
+        <div class="form-section">
+          <div class="form-grid">
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Factura</mat-label>
+              <input matInput formControlName="factura" placeholder="Número de factura">
+              <mat-error *ngIf="isInvalid('factura')">La factura es obligatoria</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>Monto o valor declarado</mat-label>
+              <mat-icon matPrefix>attach_money</mat-icon>
+              <input matInput type="number" formControlName="monto" placeholder="0,00" step="0.01">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="custom-mat-field">
+              <mat-label>N. Bultos</mat-label>
+              <input matInput type="number" formControlName="numBultos" min="1">
+              <mat-error *ngIf="isInvalid('numBultos')">Debe indicar al menos 1 bulto</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width custom-mat-field">
+              <mat-label>Contenido</mat-label>
+              <input matInput formControlName="contenido" placeholder="Describa el contenido del envío">
+              <mat-error *ngIf="isInvalid('contenido')">El contenido es obligatorio</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- SECCIÓN 9: FACTURA DIGITAL -->
+      <div class="section-block mt-20">
+        <div class="section-header">
+          <h2>Factura Digital</h2>
+        </div>
+
+        <div class="form-section">
+          <div class="file-upload-wrapper full-width" [formGroup]="retiroForm">
+            <label class="file-label">
+              Factura Digital
+              <span class="required-mark" aria-hidden="true">*</span>
+            </label>
+
+            <div class="drag-drop-area"
+                [class.drag-over]="isDragOver"
+                [class.has-file]="archivoComprobante"
+                [class.input-error]="formSubmitted && !archivoComprobante"
+                (click)="fileUpload.click()"
+                (dragover)="onDragOver($event)"
+                (dragleave)="onDragLeave($event)"
+                (drop)="onDrop($event)">
+
+              <mat-icon class="upload-icon" [style.color]="isPdfFile(archivoComprobante) ? '#f44336' : ''">
+                {{ archivoComprobante ? (isPdfFile(archivoComprobante) ? 'picture_as_pdf' : 'check_circle') : 'cloud_upload' }}
+              </mat-icon>
+
+              <div class="upload-text">
+                <span *ngIf="!archivoComprobante" class="placeholder-text">
+                  <strong>Haz clic o arrastra tu factura aquí</strong>
+                </span>
+                <span *ngIf="archivoComprobante" class="file-info">
+                  <strong>{{ getFileName() }}</strong>
+                  <small class="file-size">{{ getFileSize() }}</small>
+                </span>
+                <small class="hint-text">Formatos permitidos: PDF (Máx. 5MB)</small>
+              </div>
+
+              <input #fileUpload type="file" (change)="onFileSelected($event)" accept=".pdf" style="display: none;">
+
+              <button type="button" class="btn-select" mat-raised-button color="primary">
+                <mat-icon>folder_open</mat-icon>
+                {{ archivoComprobante ? 'Cambiar archivo' : 'Seleccionar archivo' }}
+              </button>
+            </div>
+
+            <div class="error-container" *ngIf="formSubmitted">
+              <small class="error-msg" *ngIf="!archivoComprobante">
+                <mat-icon>error</mat-icon>
+                Debe adjuntar la factura digital para continuar.
+              </small>
+              <small class="error-msg" *ngIf="archivoComprobante && fileError">
+                <mat-icon>error</mat-icon>
+                {{ fileError }}
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn-submit">SOLICITAR RETIRO</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+<app-footer></app-footer>

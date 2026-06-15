@@ -1,210 +1,447 @@
 @use '../../../styles/variables.scss' as vars;
-:root {
-    --bg-dark-teal: #032b35; /* Fondo oscuro de la página */
-    --primary-blue: #0e3655; /* Azul oscuro del botón y logo */
-    --input-bg: #f2f4f7;     /* Gris claro de los inputs */
-    --text-dark: #1d1d1d;
-    --text-gray: #6b6b6b;
-    --white: #ffffff;
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slowZoom {
+  from { transform: scale(1.1); }
+  to { transform: scale(1.18); }
 }
 
 .portal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    position: relative; /* Necesario para el fondo absoluto */
-    overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100dvh;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
 
-    /* CAPA DE FONDO DIFUMINADA */
-    &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: url('/assets/images/HOME.jpeg') center/cover no-repeat;
-        filter: blur(8px) brightness(0.7);
-        transform: scale(1.1); 
-        z-index: -1; 
-    }
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('/assets/images/HOME.jpeg') center/cover no-repeat;
+    filter: blur(8px) brightness(0.6);
+    transform: scale(1.1);
+    z-index: -1;
+    animation: slowZoom 25s ease-in-out infinite alternate;
+  }
 }
-/* La Tarjeta Flotante Central */
+
 .login-card {
-    display: flex;
-    width: 80%;
-    height: 90%; 
-    background-color: vars.$background-fondo;
-    border-radius: 40px; 
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-    overflow: hidden;
-    position: relative;
-    z-index: 1;
-    padding: 3rem;
+  display: flex;
+  width: min(92%, 1000px);
+  height: min(85%, 700px);
+  background: vars.$background-fondo;
+  border-radius: 28px;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  animation: fadeInUp 0.7s ease-out;
 }
 
-/* --- LADO IZQUIERDO (Formulario) --- */
 .portal__left {
-    flex: 1;
-    padding: 3rem;
-    /* display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center; */
-    overflow: auto;
-    background: vars.$background-fondo;
+  flex: 1;
+  padding: 2.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  background: vars.$menu-color;
+  overflow-y: auto;
 }
 
 .login-content {
-    width: 100%;
-    text-align: center;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  text-align: center;
 }
 
-.login-brand {
-    color: vars.$menu-color;
-    font-weight: 900;
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+.brand-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 0.3rem;
 }
 
-.login-title {
-    color: var(--text-dark);
-    font-size: 3.5rem;
-    font-weight: 999;
-    line-height: 1.1;
-    margin-bottom: 17.5rem;
+.brand-logo-img {
+  width: 32px;
+  height: auto;
+  flex-shrink: 0;
+  filter: brightness(0) invert(1);
 }
 
-
-.separator-text {
-    font-size: 0.85rem;
-    color: var(--text-dark);
-    font-weight: 600;
+.brand-name {
+  color: vars.$background-fondo;
+  font-weight: 900;
+  font-size: 1.6rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
-/* ESTILOS DE LOS INPUTS (Override de Angular Material) */
-.form-group {
-    margin-bottom: 1rem;
+.accent-line {
+  width: 40px;
+  height: 3px;
+  background: vars.$gold-accent;
+  border-radius: 2px;
+  margin: 0.6rem auto 1rem;
 }
 
-/* Forzar estilo píldora gris */
-::ng-deep .custom-input .mat-mdc-form-field-flex {
-    background-color: vars.$bordes-claros !important;
-    border-radius: 50px !important; /* Forma de píldora */
-    padding: 0 20px !important;
-    height: 55px;
-    align-items: center;
+.form-title {
+  color: rgba(vars.$background-fondo, 0.55);
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
-/* Ocultar underline/outline por defecto de Material */
-::ng-deep .custom-input .mdc-line-ripple { display: none !important; }
-::ng-deep .custom-input .mdc-notched-outline { display: none !important; }
-
-/* Texto del input */
-::ng-deep .custom-input input.mat-mdc-input-element {
-    font-weight: 500;
-    color: #333;
+.client-name {
+  color: vars.$background-fondo;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  padding: 0.4rem;
+  background: rgba(vars.$gold-accent, 0.1);
+  border-radius: 8px;
 }
 
-/* Placeholder */
-::ng-deep .custom-input .mat-mdc-input-element::placeholder {
-    color: #999;
-    font-weight: 400;
+.msg-rif {
+  text-align: center;
+  font-size: 1.15rem;
+  margin-bottom: 0.6rem;
 }
 
-/* Botón de Submit */
+.rif-row {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+
+  .rif-fields {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .btn-verify {
+    flex-shrink: 0;
+    min-width: 100px;
+    height: 48px;
+    background: vars.$gold-accent !important;
+    color: vars.$menu-color !important;
+    border-radius: 50px !important;
+    font-weight: 700 !important;
+    font-size: 1.2rem !important;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease !important;
+    border: 1.5px solid vars.$gold-accent !important;
+
+    &:hover:not(:disabled) {
+      background: transparent !important;
+      color: vars.$gold-accent !important;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+    }
+  }
+}
+
+::ng-deep .reg-input .mat-mdc-form-field-flex {
+  background: rgba(vars.$background-fondo, 0.08) !important;
+  border-radius: 50px !important;
+  padding: 0 16px !important;
+  height: 48px;
+  align-items: center;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+::ng-deep .reg-input .mat-mdc-form-field-flex:focus-within {
+  background: rgba(vars.$background-fondo, 0.15) !important;
+  box-shadow: 0 0 0 2px vars.$gold-accent;
+}
+
+::ng-deep .reg-input .mdc-line-ripple { display: none !important; }
+
+::ng-deep .reg-input .mdc-notched-outline__leading,
+::ng-deep .reg-input .mdc-notched-outline__notch,
+::ng-deep .reg-input .mdc-notched-outline__trailing {
+  border-color: transparent !important;
+}
+
+::ng-deep .reg-input .mdc-notched-outline--notched .mdc-notched-outline__notch {
+  border-color: transparent !important;
+}
+
+::ng-deep .reg-input input.mat-mdc-input-element {
+  font-weight: 400;
+  font-size: 1.3rem;
+  color: vars.$background-fondo;
+}
+
+::ng-deep .reg-input .mat-mdc-input-element::placeholder {
+  color: rgba(vars.$background-fondo, 0.45);
+  font-weight: 300;
+  font-size: 1.3rem;
+}
+
+::ng-deep .reg-input .mat-mdc-select-value-text {
+  color: vars.$background-fondo !important;
+}
+
+::ng-deep .reg-input .mat-mdc-select-arrow {
+  color: rgba(vars.$background-fondo, 0.5) !important;
+}
+
+::ng-deep .reg-input .mdc-floating-label {
+  color: rgba(vars.$background-fondo, 0.55) !important;
+  font-size: 1.3rem !important;
+}
+
+::ng-deep .reg-input .mdc-floating-label--float-above {
+  color: rgba(vars.$background-fondo, 0.75) !important;
+}
+
+::ng-deep .reg-input .mat-mdc-icon-button {
+  color: rgba(vars.$background-fondo, 0.6) !important;
+}
+
+.reg-input-full {
+  margin-bottom: 0.3rem;
+}
+
 .btn_primary {
-    width: 80%;
-    padding: 1rem;
-    background-color: vars.$menu-color;
-    color: vars.$background-fondo;
-    border: none;
-    border-radius: 50px; /* Píldora */
-    font-size: 1.8rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    margin-top: 1rem;
+  width: 100%;
+  padding: 0.9rem;
+  background: vars.$gold-accent;
+  color: vars.$menu-color;
+  border: 1.5px solid vars.$gold-accent;
+  border-radius: 50px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.3rem;
+  letter-spacing: 0.5px;
+
+  &:hover:not(:disabled) {
+    background: transparent;
+    color: vars.$gold-accent;
+    border-color: vars.$gold-accent;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
 }
 
-.btn_primary:hover {
-    background-color: #082236;
-}
-
-/* Footer Links */
 .login-footer {
-    margin-top: 1.5rem;
+  margin-top: 0.8rem;
+  text-align: center;
 }
 
 .footer-text {
-    color: var(--text-gray);
-    font-size: 1.4rem;
+  color: rgba(vars.$background-fondo, 0.55);
+  font-size: 1.25rem;
+  font-weight: 400;
 }
 
-.login-link-bold {
-    color: #000;
-    font-weight: 700;
-    text-decoration: none;
-    margin-left: 5px;
-}
+.login-link {
+  color: vars.$background-fondo;
+  font-weight: 700;
+  text-decoration: none;
+  margin-left: 4px;
+  position: relative;
+  transition: color 0.3s ease;
 
-/* --- LADO DERECHO (Imagen) --- */
-.portal__right {
-    flex: 1.3; /* Ocupa un poco más de espacio */
-    position: relative;
-    background: url('/assets/images/HOME.jpeg') center/cover no-repeat; 
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end; /* Contenido abajo */
-    padding: 3rem;
-    color: white;
-    border-radius: 4rem;
-}
-
-/* Capa oscura sutil sobre la imagen */
-.portal__right::before {
+  &::after {
     content: '';
     position: absolute;
-    top: 0;
+    bottom: -2px;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5));
-    border-radius: 4rem;
+    width: 0;
+    height: 1.5px;
+    background: vars.$gold-accent;
+    transition: width 0.3s ease;
+  }
+
+  &:hover {
+    color: vars.$gold-accent;
+    &::after { width: 100%; }
+  }
 }
 
-/* Logo superpuesto arriba */
-.brand-overlay-logo {
+.portal__right {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  background: url('/assets/images/HOME.jpeg') center/cover no-repeat;
+  overflow: hidden;
+
+  &::before {
+    content: '';
     position: absolute;
-    top: 0px;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(vars.$menu-color, 0.5) 0%,
+      rgba(vars.$menu-color, 0.05) 40%,
+      rgba(vars.$menu-color, 0.3) 70%,
+      rgba(vars.$menu-color, 0.7) 100%
+    );
+    z-index: 1;
+  }
+}
+
+.brand-overlay-logo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.login__logo {
+  width: 28%;
+  max-width: 120px;
+  opacity: 0.25;
+  filter: brightness(0) invert(1);
+}
+
+.right-brand {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 2;
+  text-align: right;
+}
+
+.right-brand-name {
+  color: rgba(vars.$background-fondo, 0.8);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+}
+
+.right-brand-sub {
+  color: rgba(vars.$background-fondo, 0.45);
+  font-size: 0.95rem;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(vars.$menu-color, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 1024px) {
+  .portal__left {
+    padding: 2rem;
+  }
+
+  .login-content {
+    max-width: 440px;
+  }
+
+  .portal__right {
+    flex: 0.9;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-card {
+    flex-direction: column;
+    height: auto;
+    max-height: none;
+    border-radius: 20px;
+    width: min(96%, 500px);
+  }
+
+  .portal__right {
+    height: 180px;
+    flex: none;
+    order: -1;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .portal__left {
+    padding: 1.5rem;
+    overflow-y: visible;
+  }
+
+  .login-content {
+    max-width: 100%;
+  }
+
+  .rif-row {
+    flex-direction: column;
+
+    .btn-verify {
+      width: 100%;
+    }
+  }
+
+  .brand-overlay-logo {
+    display: none;
+  }
+
+  .right-brand {
+    bottom: 1.2rem;
+    right: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .portal {
+    height: auto;
+    min-height: 100dvh;
+    padding: 0.5rem;
+  }
+
+  .login-card {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+    border-radius: 16px;
+  }
 
-.login__logo{
-    width: 23%;
-}
+  .portal__right {
+    height: 140px;
+  }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-    .login-card {
-        flex-direction: column;
-        height: auto;
-        border-radius: 20px;
-    }
-    .portal__right {
-        height: 250px;
-        order: -1; /* Imagen arriba en móvil */
-    }
-    .portal__left {
-        padding: 2rem;
-    }
+  .portal__left {
+    padding: 1.2rem;
+  }
+
+  .brand-name {
+    font-size: 1.4rem;
+  }
+
+  .rif-fields {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .right-brand {
+    display: none;
+  }
 }

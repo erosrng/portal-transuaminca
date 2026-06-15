@@ -1,0 +1,168 @@
+<app-nav-bar></app-nav-bar>
+
+<div class="main-layout">
+  <app-side-bar></app-side-bar>
+  
+  <div class="container-fluid content-area">
+    <div class="row mb-4">
+      <div class="col-12">
+        <h2 class="section-title">
+          <i class="fa-solid fa-truck me-2"></i>Seguimiento de Retiros
+        </h2>
+        <p class="text-muted">Consulta el estado actual e historial de tus órdenes de retiro.</p>
+      </div>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4 p-3 bg-light">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label small fw-bold text-muted">Buscador</label>
+          <div class="input-group">
+            <span class="input-group-text bg-white text-muted">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </span>
+            <input type="text" class="form-control" 
+                   placeholder="Nro Retiro, Cliente o Factura..." 
+                   [(ngModel)]="searchTerm" (input)="aplicarFiltros()">
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <label class="form-label small fw-bold text-muted">Fecha Desde</label>
+          <input type="date" class="form-control" [(ngModel)]="fechaDesde" (change)="aplicarFiltros()">
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label small fw-bold text-muted">Fecha Hasta</label>
+          <input type="date" class="form-control" [(ngModel)]="fechaHasta" (change)="aplicarFiltros()">
+        </div>
+
+        <div class="col-md-2 d-grid">
+          <button class="btn btn-outline-secondary" (click)="limpiarFiltros()">
+            <i class="fa-solid fa-eraser me-2"></i>Limpiar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-header-info d-flex justify-content-between align-items-center mb-3">
+      <span class="text-muted">
+        Mostrando <strong>{{getPaginatedData().length}}</strong> de <strong>{{historialFiltrado.length}}</strong> registros
+        <span *ngIf="searchTerm || fechaDesde || fechaHasta" class="badge rounded-pill bg-primary ms-2">Filtro activo</span>
+      </span>
+      
+      <div class="d-flex align-items-center">
+        <span class="me-2 text-muted small">Registros por página:</span>
+        <select class="form-select form-select-sm select-custom" style="width: auto;" (change)="onPageSizeChange($event)">
+          <option [value]="10">10</option>
+          <option [value]="20">20</option>
+          <option [value]="50">50</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="custom-table-card shadow-sm">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th class="ps-4">Retiro</th>
+              <th>Prioridad</th>
+              <th>Planif.</th>
+              <th>F. Planif.</th>
+              <th>Factura</th>
+              <th>Monto</th>
+              <th>Fecha</th>
+              <th>Origen</th>
+              <th>Destino</th>
+              <th>Estatus</th>
+              <!-- <th class="text-center pe-4">Imprimir</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let retiro of getPaginatedData()">
+              <td class="ps-4 fw-bold text-primary">{{ retiro.numero }}</td>
+              
+              <td>
+                <span class="badge-priority" 
+                      [ngClass]="retiro.prioridad === 'A' ? 'priority-alta' : 'priority-normal'">
+                  <i class="fa-solid" [ngClass]="retiro.prioridad === 'A' ? 'fa-exclamation-triangle' : 'fa-check-circle'"></i>
+                  {{ retiro.prioridad === 'A' ? 'Alta' : 'Normal' }}
+                </span>
+              </td>
+
+              <td>
+                <span class="badge-plan" 
+                      [ngClass]="retiro.planificada === 'S' ? 'plan-si' : 'plan-no'">
+                  <i class="fa-solid" [ngClass]="retiro.planificada === 'S' ? 'fa-calendar-check' : 'fa-calendar-times'"></i>
+                  {{ retiro.planificada === 'S' ? 'Sí' : 'No' }}
+                </span>
+              </td>
+
+              <td class="small">
+                {{ retiro.fplanifica && retiro.fplanifica !== '0000-00-00' ? (retiro.fplanifica | date:'dd-MM-yyyy') : '—' }}
+              </td>
+
+              <td class="small text-muted">{{ retiro.nrofact || 'N/E' }}</td>
+              
+              <td class="fw-semibold">
+                {{ retiro.monto ? (retiro.monto | number:'1.2-2') : '0.00' }}
+              </td>
+              
+              <td>{{ retiro.fecha | date:'dd-MM-yyyy' }}</td>
+
+              <td class="text-start-custom">
+                <div class="d-flex flex-column">
+                  <span class="fw-bold text-dark">{{ retiro.nomcli_org }}</span>
+                  <small class="text-muted text-truncate" [title]="retiro.direcret">{{ retiro.direcret }}</small>
+                </div>
+              </td>
+
+              <td class="text-start-custom">
+                <div class="d-flex flex-column">
+                  <span class="fw-bold text-dark">{{ retiro.nomcli_des }}</span>
+                  <small class="text-muted text-truncate" [title]="retiro.direcent">{{ retiro.direcent }}</small>
+                </div>
+              </td>
+
+              <td>
+                <span class="badge-status" [ngClass]="getEstatusClass(retiro.estatus)">
+                  <i class="fa-solid" 
+                     [ngClass]="retiro.estatus === 'P' ? 'fa-clock' : (retiro.estatus === 'R' ? 'fa-check' : 'fa-check-double')"></i>
+                  {{ getEstatusLabel(retiro.estatus) }}
+                </span>
+              </td>
+
+              <!-- <td class="text-center pe-4">
+                <button class="btn-action" (click)="imprimirOrden(retiro.numero)" title="Imprimir Orden de Retiro">
+                  <i class="fa-solid fa-print text-primary"></i>
+                </button>
+              </td> -->
+            </tr>
+
+            <tr *ngIf="historialFiltrado.length === 0">
+              <td colspan="11" class="py-5">
+                <div class="text-center text-muted">
+                  <i class="fa-solid fa-truck fa-3x mb-3 opacity-25"></i>
+                  <p class="mb-0">No se encontraron registros que coincidan con los filtros.</p>
+                  <button class="btn btn-link btn-sm" (click)="limpiarFiltros()">Mostrar todo el historial</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end mt-3 mb-5">
+      <mat-paginator [length]="historialFiltrado.length"
+                     [pageSize]="pageSize"
+                     [hidePageSize]="true"
+                     [showFirstLastButtons]="true"
+                     (page)="onPageChange($event)">
+      </mat-paginator>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

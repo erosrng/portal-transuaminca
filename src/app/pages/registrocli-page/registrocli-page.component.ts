@@ -48,7 +48,7 @@ export class RegistrocliPageComponent implements OnInit {
     public authService: AuthService,
     private spinner: NgxSpinnerService,
     private http: HttpClient,
-    private router: Router
+    public router: Router
   ) {}
 
   ngOnInit(): void {

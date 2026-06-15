@@ -20,7 +20,7 @@
   margin-bottom: 2rem;
 }
 
-.encomienda-container {
+.retiro-container {
   width: 100%;
   margin: 0 auto;
 }
@@ -77,6 +77,30 @@
   }
 }
 
+.placeholder-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(vars.$gold-accent, 0.06);
+  border-radius: 12px;
+  border: 1px dashed vars.$gold-accent;
+
+  mat-icon {
+    font-size: 32px;
+    height: 32px;
+    width: 32px;
+    color: vars.$gold-accent;
+  }
+
+  p {
+    margin: 0;
+    color: vars.$text-claro;
+    font-size: 1.3rem;
+    font-style: italic;
+  }
+}
+
 ::ng-deep .custom-mat-field {
   .mat-mdc-form-field-flex {
     background: vars.$background-fondo !important;
@@ -96,6 +120,11 @@
   .input-readonly {
     color: vars.$text-claro !important;
     font-weight: 400;
+  }
+
+  .neto-field {
+    font-weight: 700 !important;
+    color: vars.$menu-color !important;
   }
 }
 
@@ -283,21 +312,6 @@
   }
 }
 
-::ng-deep .mat-mdc-checkbox {
-  .mdc-checkbox__native-control:enabled:checked ~ .mdc-checkbox__background {
-    background-color: vars.$gold-accent !important;
-    border-color: vars.$gold-accent !important;
-  }
-
-  .mdc-checkbox__background {
-    border-color: vars.$text-claro !important;
-  }
-
-  .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate) ~ .mdc-checkbox__background {
-    border-color: vars.$text-claro !important;
-  }
-}
-
 @media (max-width: 768px) {
   .content-wrapper {
     padding: 1rem;
@@ -315,9 +329,5 @@
       height: 32px;
       width: 32px;
     }
-  }
-
-  .btn-select span {
-    display: none;
   }
 }

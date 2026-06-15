@@ -1,33 +1,19 @@
-<!---Pantalla principal---->
 <section class="navbar__general">
-
     <nav class="navbar__content navbar__primary">
 
         <div class="navbar__hamburger">
             <i id="hamburger" class="hamburguer__icon fa-solid fa-bars" (click)="toggleMenu()"></i>
-            <h1 class="navbar__title" (click)="toggleMenu()">TRANSUAMINCA</h1>
-            <small class="navbar__subtitle">+ cerca de ti</small>
+            <div class="navbar__brand">
+                <h1 class="navbar__title" (click)="toggleMenu()">TRANSUAMINCA</h1>
+                <small class="navbar__subtitle">+ cerca de ti</small>
+            </div>
         </div>
 
         <div class="navbar__links">
-            <div class="container-fluid container__details">
-                <p class="nom_user">
-                    <i class="fas fa-user"></i> &nbsp;
-                    Usuario: {{ getNombreClienteSeleccionado() }} <i *ngIf="clientes" class="fas fa-solid fa-angle-down"></i>
-                </p>
-
-                <!-- 
-                <div class="container text-center">
-                    <div class="row flex-nowrap">
-                        <div class="col details__cli">
-                            BCV<br>
-                            {{ authService.getTasa() }}
-                        </div>
-
-                    </div>
-                </div> -->
-
-            </div>
+            <p class="nom_user">
+                <i class="fas fa-user"></i>
+                {{ getNombreClienteSeleccionado() }} <i *ngIf="clientes" class="fas fa-solid fa-angle-down"></i>
+            </p>
         </div>
 
     </nav>
