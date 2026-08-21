@@ -134,7 +134,7 @@ export class HistorialEncomiendasComponent implements OnInit {
   }
 
   imprimirEtiquetas(numero: string) {
-    const url = `${PROTEO_URL_ALONEINTER}formatos/ver/ENCOETIC/${numero}/id`;
+    const url = `${PROTEO_URL_ALONEINTER}formatos/ver/ENCOETIC2/${numero}/id`;
     window.open(url, '_blank');
   }
 
