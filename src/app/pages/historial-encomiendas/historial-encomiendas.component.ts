@@ -133,8 +133,13 @@ export class HistorialEncomiendasComponent implements OnInit {
     this.pageIndex = 0;
   }
 
-  imprimirEtiquetas(numero: string) {
+  imprimirEtiquetaTermica(numero: string) {
     const url = `${PROTEO_URL_ALONEINTER}formatos/ver/ENCOETIC2/${numero}/id`;
+    window.open(url, '_blank');
+  }
+
+  imprimirEtiquetaNormal(numero: string) {
+    const url = `${PROTEO_URL_ALONEINTER}formatos/ver/ENCOETIC/${numero}/id`;
     window.open(url, '_blank');
   }
 

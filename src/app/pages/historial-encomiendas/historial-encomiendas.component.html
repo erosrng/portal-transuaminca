@@ -107,8 +107,11 @@
               </td>
               
               <td class="text-center">
-                <button class="btn-action" (click)="imprimirEtiquetas(pedido.numero)" title="Imprimir Etiqueta">
-                  <i class="fa-solid fa-bookmark text-warning"></i>
+                <button class="btn-action" (click)="imprimirEtiquetaTermica(pedido.numero)" title="Imprimir Etiqueta Térmica (Impresora)">
+                  <i class="fa-solid fa-barcode text-info"></i>
+                </button>
+                <button class="btn-action ms-2" (click)="imprimirEtiquetaNormal(pedido.numero)" title="Imprimir Etiqueta Normal">
+                  <i class="fa-solid fa-tag text-warning"></i>
                 </button>
               </td>
 
