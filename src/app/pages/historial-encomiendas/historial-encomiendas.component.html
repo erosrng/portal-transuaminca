@@ -107,12 +107,18 @@
               </td>
               
               <td class="text-center">
-                <button class="btn-action" (click)="imprimirEtiquetaTermica(pedido.numero)" title="Imprimir Etiqueta Térmica (Impresora)">
-                  <i class="fa-solid fa-barcode text-info"></i>
-                </button>
-                <button class="btn-action ms-2" (click)="imprimirEtiquetaNormal(pedido.numero)" title="Imprimir Etiqueta Normal">
-                  <i class="fa-solid fa-tag text-warning"></i>
-                </button>
+                <div class="d-flex justify-content-center gap-2">
+                  <button class="btn btn-etiqueta btn-etiqueta-termica" (click)="imprimirEtiquetaTermica(pedido.numero)"
+                          title="Etiqueta para impresora térmica (código de barras, formato 2)">
+                    <i class="fa-solid fa-barcode"></i>
+                    <span>Térmica</span>
+                  </button>
+                  <button class="btn btn-etiqueta btn-etiqueta-normal" (click)="imprimirEtiquetaNormal(pedido.numero)"
+                          title="Etiqueta normal (tamaño estándar)">
+                    <i class="fa-solid fa-tag"></i>
+                    <span>Normal</span>
+                  </button>
+                </div>
               </td>
 
               <td class="text-center pe-4">

@@ -95,6 +95,49 @@
       transform: translateY(-2px);
     }
   }
+
+  .btn-etiqueta {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.2;
+    transition: all 0.2s ease;
+
+    i {
+      font-size: 1.4rem;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  .btn-etiqueta-termica {
+    background-color: #e0f2fe;
+    color: #0369a1;
+
+    &:hover {
+      background-color: #bae6fd;
+      border-color: #7dd3fc;
+    }
+  }
+
+  .btn-etiqueta-normal {
+    background-color: #fef9c3;
+    color: #a16207;
+
+    &:hover {
+      background-color: #fef08a;
+      border-color: #fde047;
+    }
+  }
   
   ::ng-deep .mat-mdc-paginator {
     background: transparent !important;
