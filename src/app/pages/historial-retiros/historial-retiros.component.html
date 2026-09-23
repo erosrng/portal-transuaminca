@@ -70,6 +70,7 @@
               <th>Prioridad</th>
               <th>Planif.</th>
               <th>F. Planif.</th>
+              <th>F. Retiro</th>
               <th>Factura</th>
               <th>Monto</th>
               <th>Fecha</th>
@@ -101,6 +102,10 @@
 
               <td class="small">
                 {{ retiro.fplanifica && retiro.fplanifica !== '0000-00-00' ? (retiro.fplanifica | date:'dd-MM-yyyy') : '—' }}
+              </td>
+
+              <td class="small">
+                {{ retiro.frecibido && retiro.frecibido !== '0000-00-00' ? (retiro.frecibido | date:'dd-MM-yyyy') : '—' }}
               </td>
 
               <td class="small text-muted">{{ retiro.nrofact || 'N/E' }}</td>
