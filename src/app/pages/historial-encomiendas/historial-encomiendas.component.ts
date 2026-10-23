@@ -25,6 +25,7 @@ interface Encomienda {
   factura: string;
   reparto: string;
   entregado: string;
+  contenido: string;
   totald: number;
 }
 
@@ -90,7 +91,8 @@ export class HistorialEncomiendasComponent implements OnInit {
         p.numero?.toLowerCase().includes(term) || 
         p.nomcli_des?.toLowerCase().includes(term) ||
         p.nrofact?.toLowerCase().includes(term) ||
-        p.factura?.toLowerCase().includes(term);
+        p.factura?.toLowerCase().includes(term) ||
+        p.contenido?.toLowerCase().includes(term);
 
       // 2. Filtro de fechas
       // Convertimos la fecha del pedido (YYYY-MM-DD) a objeto Date para comparar

@@ -70,6 +70,7 @@
               <th>Ref. Factura</th>
               <th>Fecha</th>
               <th>Destinatario</th>
+              <th>Contenido</th>
               <th>Tracking</th>
               <th>F. Entrega</th>
               <th>Estatus Fact.</th>
@@ -87,6 +88,11 @@
                   <span class="fw-bold text-dark">{{ pedido.nomcli_des }}</span>
                   <small class="text-muted">Cod: {{pedido.codcli_des}}</small>
                 </div>
+              </td>
+              <td class="text-content-custom">
+                <span [title]="pedido.contenido || 'Sin contenido registrado'">
+                  {{ pedido.contenido || '—' }}
+                </span>
               </td>
               <td>
                 <span class="badge-tracking" 
@@ -131,7 +137,7 @@
             </tr>
 
             <tr *ngIf="historialFiltrado.length === 0">
-              <td colspan="8" class="py-5">
+              <td colspan="10" class="py-5">
                 <div class="text-center text-muted">
                   <i class="fa-solid fa-magnifying-glass fa-3x mb-3 opacity-25"></i>
                   <p class="mb-0">No se encontraron registros que coincidan con los filtros.</p>
